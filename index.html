@@ -1,0 +1,85 @@
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Snipettor</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Optional font awersome -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css" rel="stylesheet"  crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet"  crossorigin="anonymous">
+      </head>
+      <body>
+    <form id="snipettor-save-form" class="navbar-form pull-left">
+      Title: &nbsp;<input id="hashtagsinput" type="text" class="span2" style="width: 550px;"><br>
+      Tags: <input data-role="tagsinput" type="text" class="span2" style="width: 550px;"><br>
+      <button type="submit" class="btn">Delete</button><button type="submit" class="btn">Create</button> <br><br>
+
+ </form>
+
+    
+        <script src="http://code.jquery.com/jquery.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+<script>
+	var payload = {
+		title: "My first snippet",
+		tags: "snippet, test",
+		description: "Description to edit",
+		data: [{
+			url: "https://github.com/umlsynco/diagrams/README.md",
+			line: 10,
+			comment: "Please, see this line"
+		},{
+			url: "https://github.com/umlsynco/diagrams/README.md",
+			line: 11,
+			comment: "Please, see this line"
+		},{
+			url: "https://github.com/umlsynco/diagrams/README.md",
+			line: 12,
+			comment: "Please, see this line"
+		}]
+	};
+	$(document).ready(function() {
+		for (var r=0; r< payload.data.length; ++r) {
+  var item = payload.data[r];
+  var github_prefix = "https://github.com/";
+  var url_path = item.url.substr(github_prefix.length);
+
+  var user = url_path.substr(0, url_path.indexOf("/"));
+  url_path = url_path.substr(url_path.indexOf("/")+1);
+
+  var repo = url_path.substr(0, url_path.indexOf("/"));
+  url_path = url_path.substr(url_path.indexOf("/")+1);
+
+  var panelTemplate ='\
+  <div class="panel panel-default">\
+    <div class="panel-heading">\
+      <h3 class="panel-title">\
+	    <ul class="breadcrumb" style="margin-bottom: 0px;">\
+          <li><a href="https://github.com"><p><i class="icon-github"></i>Github</p></a></li>\
+          <li><a href="#">'+user+'</a> <span class="divider"></span></li>\
+          <li><a href="#">'+repo+'</a> <span class="divider"></span></li>\
+          <li><a href="#">'+url_path+'</a> <span class="divider"></span></li>\
+          <li><a href="#">L#'+item.line+'</a></li>\
+        </ul>\
+      </h3>\
+    </div>\
+    <div class="panel-body">'+ item.comment +'</div>\
+  </div>';
+  $(panelTemplate).appendTo("#snipettor-save-form");
+		}
+	});
+</script>
+      </body>
+    </html>
+
