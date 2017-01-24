@@ -16,16 +16,7 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css" rel="stylesheet"  crossorigin="anonymous">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet"  crossorigin="anonymous">
-      </head>
-      <body>
-    <form id="snipettor-save-form" class="navbar-form pull-left">
-      Title: &nbsp;<input id="hashtagsinput" type="text" class="span2" style="width: 550px;"><br>
-      Tags: <input data-role="tagsinput" type="text" class="span2" style="width: 550px;"><br>
-      <button type="submit" class="btn">Delete</button><button type="submit" class="btn">Create</button> <br><br>
 
- </form>
-
-    
         <script src="http://code.jquery.com/jquery.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -65,13 +56,15 @@
   <div class="panel panel-default">\
     <div class="panel-heading">\
       <h3 class="panel-title">\
-	    <ul class="breadcrumb" style="margin-bottom: 0px;">\
-          <li><a href="https://github.com"><p><i class="icon-github"></i>Github</p></a></li>\
+	    <ul class="breadcrumb" style="margin-bottom: 0px;float:left;">\
+          <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
           <li><a href="#">'+user+'</a> <span class="divider"></span></li>\
           <li><a href="#">'+repo+'</a> <span class="divider"></span></li>\
           <li><a href="#">'+url_path+'</a> <span class="divider"></span></li>\
           <li><a href="#">L#'+item.line+'</a></li>\
         </ul>\
+    <button href="#"  class="btn btn-xlarge" style="float:right;"/><i class="fa fa-chevron-down" ></i></button>\
+    <button href="#"  class="btn btn-xlarge" style="float:right;" /><i class="fa fa-chevron-up" ></i></button>\
       </h3>\
     </div>\
     <div class="panel-body">'+ item.comment +'</div>\
@@ -79,6 +72,103 @@
   $(panelTemplate).appendTo("#snipettor-save-form");
 		}
 	});
+</script>
+      </head>
+      <body>
+
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Snipettor</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li><a href="#"><i class="fa fa-github fa-2x"></i></a></li>
+      <li><a href="#"><i class="fa fa-google fa-2x"></i></a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Working snippets <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Snippet 1</a></li>
+          <li><a href="#">Snippet 2</a></li>
+          <li><a href="#">Snippet 3</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Create new</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Fork snippet</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="col-sm-3 col-md-3">
+        <form class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search snippet" name="q">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Settings</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Google</a></li>
+          <li><a href="#">GitHub</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-1 col-md-2 col-lg-3">
+    </div>
+    <div class="col-sm-10 col-md-8 col-lg-6">
+      <h1>Save current snippet please!</h1>
+      <form id="snipettor-save-form" class="navbar-form pull-left">
+        <button type="submit" class="btn">Delete</button><button type="submit" class="btn">Create</button> <br><br>
+
+    	<div class="raw">
+            <label for="title">Title*	</label><br>
+            <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" style="width: 550px;"><br>
+        </div><br>
+        <div class="raw">
+            <label for="tags">Tags*</label><br>
+            <input type="text" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">
+        </div>
+        <div class="raw">
+            <label for="description">Description*</label><br>
+            <textarea class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;"></textarea>
+        </div>
+        <br>
+      </form>
+    </div>
+    <div class="col-sm-1 col-md-2 col-lg-3">
+    </div>
+</div>
+</div>    
+
+<script src="https://www.gstatic.com/firebasejs/3.6.7/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCLHGFmt-KvEV7pHmaYC2xQHz2Ary-f8X0",
+    authDomain: "snipettor.firebaseapp.com",
+    databaseURL: "https://snipettor.firebaseio.com",
+    storageBucket: "snipettor.appspot.com",
+    messagingSenderId: "1024573617684"
+  };
+  firebase.initializeApp(config);
 </script>
       </body>
     </html>
