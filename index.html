@@ -63,13 +63,28 @@
           <li><a href="#">'+url_path+'</a> <span class="divider"></span></li>\
           <li><a href="#">L#'+item.line+'</a></li>\
         </ul>\
-    <button href="#"  class="btn btn-xlarge" style="float:right;"/><i class="fa fa-chevron-down" ></i></button>\
-    <button href="#"  class="btn btn-xlarge" style="float:right;" /><i class="fa fa-chevron-up" ></i></button>\
+        <button href="#"  class="btn btn-xlarge" style="float:right;"/><i class="fa fa-chevron-down" ></i></button>\
+        <button href="#"  class="btn btn-xlarge" style="float:right;" /><i class="fa fa-chevron-up" ></i></button>\
       </h3>\
     </div>\
-    <div class="panel-body">'+ item.comment +'</div>\
+    <div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p>'+ item.comment +'</div>\
   </div>';
-  $(panelTemplate).appendTo("#snipettor-save-form");
+  var item = $(panelTemplate).appendTo("#snipettor-save-form");
+  // Sort the comment items
+  item.find(".fa-chevron-up").click(function() {
+	  alert("level UP");
+  });
+  item.find(".fa-chevron-down").click(function() {
+	  alert("level down");
+  });
+  // edit the text of comment
+  item.find(".fa-edit").click(function() {
+	  var parent = $(this).parent().parent();
+	  parent.append("<textarea style='width:100%;'></textarea>");
+	  parent.find("textarea").blur(function() {
+		  parent.find("textarea").remove();
+	  });
+  });
 		}
 	});
 </script>
