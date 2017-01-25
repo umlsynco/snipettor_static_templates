@@ -21,73 +21,6 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
-<script>
-	var payload = {
-		title: "My first snippet",
-		tags: "snippet, test",
-		description: "Description to edit",
-		data: [{
-			url: "https://github.com/umlsynco/diagrams/README.md",
-			line: 10,
-			comment: "Please, see this line"
-		},{
-			url: "https://github.com/umlsynco/diagrams/README.md",
-			line: 11,
-			comment: "Please, see this line"
-		},{
-			url: "https://github.com/umlsynco/diagrams/README.md",
-			line: 12,
-			comment: "Please, see this line"
-		}]
-	};
-	$(document).ready(function() {
-		for (var r=0; r< payload.data.length; ++r) {
-  var item = payload.data[r];
-  var github_prefix = "https://github.com/";
-  var url_path = item.url.substr(github_prefix.length);
-
-  var user = url_path.substr(0, url_path.indexOf("/"));
-  url_path = url_path.substr(url_path.indexOf("/")+1);
-
-  var repo = url_path.substr(0, url_path.indexOf("/"));
-  url_path = url_path.substr(url_path.indexOf("/")+1);
-
-  var panelTemplate ='\
-  <div class="panel panel-default">\
-    <div class="panel-heading">\
-      <h3 class="panel-title">\
-	    <ul class="breadcrumb" style="margin-bottom: 0px;float:left;">\
-          <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
-          <li><a href="#">'+user+'</a> <span class="divider"></span></li>\
-          <li><a href="#">'+repo+'</a> <span class="divider"></span></li>\
-          <li><a href="#">'+url_path+'</a> <span class="divider"></span></li>\
-          <li><a href="#">L#'+item.line+'</a></li>\
-        </ul>\
-        <button href="#"  class="btn btn-xlarge" style="float:right;"/><i class="fa fa-chevron-down" ></i></button>\
-        <button href="#"  class="btn btn-xlarge" style="float:right;" /><i class="fa fa-chevron-up" ></i></button>\
-      </h3>\
-    </div>\
-    <div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p>'+ item.comment +'</div>\
-  </div>';
-  var item = $(panelTemplate).appendTo("#snipettor-save-form");
-  // Sort the comment items
-  item.find(".fa-chevron-up").click(function() {
-	  alert("level UP");
-  });
-  item.find(".fa-chevron-down").click(function() {
-	  alert("level down");
-  });
-  // edit the text of comment
-  item.find(".fa-edit").click(function() {
-	  var parent = $(this).parent().parent();
-	  parent.append("<textarea style='width:100%;'></textarea>");
-	  parent.find("textarea").blur(function() {
-		  parent.find("textarea").remove();
-	  });
-  });
-		}
-	});
-</script>
       </head>
       <body>
 
@@ -148,25 +81,7 @@
   <div class="row">
     <div class="col-sm-1 col-md-2 col-lg-3">
     </div>
-    <div class="col-sm-10 col-md-8 col-lg-6">
-      <h1>Save current snippet please!</h1>
-      <form id="snipettor-save-form" class="navbar-form pull-left">
-        <button type="submit" class="btn">Delete</button><button type="submit" class="btn">Create</button> <br><br>
-
-    	<div class="raw">
-            <label for="title">Title*	</label><br>
-            <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" style="width: 550px;"><br>
-        </div><br>
-        <div class="raw">
-            <label for="tags">Tags*</label><br>
-            <input type="text" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">
-        </div>
-        <div class="raw">
-            <label for="description">Description*</label><br>
-            <textarea class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;"></textarea>
-        </div>
-        <br>
-      </form>
+    <div id="main-content" class="col-sm-10 col-md-8 col-lg-6">
     </div>
     <div class="col-sm-1 col-md-2 col-lg-3">
     </div>
@@ -185,6 +100,240 @@
   };
   firebase.initializeApp(config);
 </script>
+
+<script>
+    // Create Base64 Object
+    var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}};
+
+ 
+  var storageApi = {
+        init: function() {
+                // make firebase initialization here
+                this.auth = firebase.auth();
+                this.database = firebase.database();
+                this.storage = firebase.storage();
+                // Initiates Firebase auth and listen to auth state changes.
+                this.auth.onAuthStateChanged(this._onAuthStateChanged.bind(this));
+        },
+            //
+            // Helper method to handle sign-in change behaviour
+            //
+            _onAuthStateChanged: function(user) {
+                this.user = user;
+                if (this.authCallback) {
+                    // probably it could trigger firebase:auth event
+                    this.authCallback(user);
+                }
+            },
+        _getMessageRef: function(type) {
+           if (type == 'content') {
+             if (!this.umlsRef) {
+               this.umlsRef = this.database.ref('messages');
+             }
+             return this.umlsRef;
+           }
+        },
+        saveContent: function(payload, callback) {
+                var messagesRef = this._getMessageRef('content');
+                if (!messagesRef)
+                    callback(null);
+
+                var currentUser = this.auth.currentUser;
+                messagesRef.push({
+                    version: 0, // default is 0
+                    name: currentUser ? currentUser.displayName : "unknown",
+                    title: payload.title, // UML title
+                    tags: payload.tags || [], // uml/class etc or markdown
+                    description: payload.description || "", // uml/class etc or markdown
+                    items: payload.items, // JSON description
+                }).then(function(snapshot) {
+                    if (callback) {
+                      callback(snapshot.path);
+                    }
+                }.bind(this)).catch(function(error) {
+                    var text = 'Error writing new message to Firebase Database';
+                    console.error(text, error);
+                    callback(null, text);
+                });
+
+        },
+            //
+            // Load content by key
+            //
+            loadContent: function(uid, version, callback) {
+                var that = this;
+                var handler = function(snapshot) {
+                    if (callback)
+                        callback(snapshot.val());
+                        var xxx = snapshot.val();
+                        console.dir(xxx);
+                };
+                var handler2 = function(snapshot) {
+                    if (callback) {
+                        var xxx = snapshot.val();
+                        for (var x in xxx) {
+                          console.log(x);
+                          console.dir(xxx[x]);
+                          callback(xxx[x]);
+                        }
+                    }
+                };
+
+                if (version) {
+                  console.log("LOADING: messages/" + uid + "/" + version);
+                  var ref = this.database.ref('messages/' + uid+"/"+version);
+                  ref.limitToFirst(1).once("value").then(handler2);
+                }
+                else {
+                  this.messagesRef = this.database.ref('messages/' + uid).once('value').then(handler);
+                }
+            },
+            searchContent: function(query, callback) {
+               this.database.ref('messages').limitToFirst(10).once('value').then(function(complete) {
+                   callback(complete.val());
+               })
+
+            }
+  }; // StorageApi
+ 
+  var container = null;
+	$(document).ready(function() {
+        var content = window.location.href.split("?");
+  //
+  // initialize firebase auth provider
+  //
+  storageApi.init();
+  
+  console.dir(content);
+
+        if (content.length > 1) {
+        content = content[1];
+        if (content.indexOf("save") >=0 ) {
+            var content = content.substr(5);
+            content = content.substr(0, content.length -1);
+            content = "" + Base64.decode(content);
+            container = JSON.parse(content);
+        
+            if (!container) {
+              return;
+            }
+
+            showContent(container);
+        } // save
+        if (content.indexOf("open") >=0 ) {
+            var content = content.substr(5);
+            storageApi.loadContent("-" + content.substr(0, content.length -1), null, function(data) {
+                console.dir(data);
+                showContent(data);
+            });
+        }
+} else { // content is not a query
+    storageApi.searchContent(null, function(content) {
+        showSearchResult(content);
+    });
+}
+
+function addSaveForm(payload) {
+    $('<form id="snipettor-save-form" class="navbar-form pull-left">\
+        <button type="submit" class="btn">Delete</button>&nbsp;&nbsp;&nbsp;<button type="submit" class="btn">Save</button> <br><br>\
+    	<div class="raw">\
+            <label for="title">Title*	</label><br>\
+            <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" style="width: 550px;" value="'+payload.title+'"><br>\
+        </div><br>\
+        <div class="raw">\
+            <label for="tags">Tags*</label><br>\
+            <input type="text" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">\
+        </div>\
+        <div class="raw">\
+            <label for="description">Description*</label><br>\
+            <textarea class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;"></textarea>\
+        </div>\
+        <br>\
+      </form>').appendTo("#main-content");
+}
+
+function showSearchResult(searchData) {
+    for (var x in searchData) {
+        var description = searchData[x];
+        $('<div class="container">\
+  <h2>Play  / expand</h2>\
+  <div class="panel panel-default">\
+    <div class="panel-heading">'+description.title+'</div>\
+    <div class="panel-body">'+description.description+'</div>\
+  </div>\
+</div>').appendTo("#main-content");
+    }
+    
+}
+
+function showContent(payload) {
+  addSaveForm(payload);
+
+		for (var r=0; r< payload.items.length; ++r) {
+  var item = payload.items[r];
+  var github_prefix = "https://github.com/";
+  var url_path = item.url.substr(github_prefix.length);
+
+  var user = url_path.substr(0, url_path.indexOf("/"));
+  url_path = url_path.substr(url_path.indexOf("/")+1);
+
+  var repo = url_path.substr(0, url_path.indexOf("/"));
+  url_path = url_path.substr(url_path.indexOf("/")+1);
+
+  var panelTemplate ='\
+  <div class="panel panel-default">\
+    <div class="panel-heading" style="background-image: none;">\
+      <h3 class="panel-title">\
+	    <ul class="breadcrumb" style="margin-bottom: 0px;">\
+          <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
+          <li><a href="#">'+user+'</a> <span class="divider"></span></li>\
+          <li><a href="#">'+repo+'</a> <span class="divider"></span></li>\
+          <li><a href="#">'+url_path+'</a> <span class="divider"></span></li>\
+          <li><a href="#">L#'+item.line+'</a></li>\
+        </ul>\
+        <i class="fa fa-chevron-down" style="float:right;"></i>\
+        <i class="fa fa-chevron-up" style="float:right;"></i>\
+      </h3>\
+    </div>\
+    <div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p>'+ item.comment +'</div>\
+  </div>';
+    //
+    var item = $(panelTemplate).appendTo("#snipettor-save-form");
+  
+    // Sort the comment items
+    item.find(".fa-chevron-up").click(function() {
+	    alert("level UP");
+    });
+    item.find(".fa-chevron-down").click(function() {
+	    alert("level down");
+    });
+    // edit the text of comment
+    item.find(".fa-edit").click(function() {
+	  var parent = $(this).parent().parent();
+	  parent.append("<textarea style='width:100%;'></textarea>");
+	  parent.find("textarea").blur(function() {
+		  parent.find("textarea").remove();
+	  });
+    });
+  }  // for
+
+  //
+  // Save content to the firebase storage
+  //
+  $("#snipettor-save-form").submit(function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      storageApi.saveContent(payload, function(path) {
+          var uniquePath = path.toString().split("/")[2];
+          uniquePath = uniquePath.substr(1);
+          window.location.href = "/?open=" + uniquePath;
+      });
+  });
+} // show Content method
+
+	}); // document ready
+</script>
+
       </body>
     </html>
 
