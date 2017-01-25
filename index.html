@@ -189,7 +189,7 @@
                 }
             },
             searchContent: function(query, callback) {
-               this.database.ref('messages').limitToFirst(10).once('value').then(function(complete) {
+               this.database.ref('messages').limitToFirst(100).once('value').then(function(complete) {
                    callback(complete.val());
                })
 
@@ -324,6 +324,8 @@ function showContent(payload) {
       e.preventDefault();
       e.stopPropagation();
       storageApi.saveContent(payload, function(path) {
+          window.dispatchEvent(new CustomEvent("onSaveSnippet", {detail: "data"}));
+
           var uniquePath = path.toString().split("/")[2];
           uniquePath = uniquePath.substr(1);
           window.location.href = "/?open=" + uniquePath;
