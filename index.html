@@ -435,12 +435,16 @@
                     e.preventDefault();
                     e.stopPropagation();
                     storageApi.saveContent(payload, function(path) {
-                        window.dispatchEvent(new CustomEvent("onSaveSnippet", {
-                            detail: "data"
-                        }));
-
                         var uniquePath = path.toString().split("/")[2];
                         uniquePath = uniquePath.substr(1);
+                        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                            detail: {
+                                action: "saved-draft",
+                                payload: {
+                                    uid: uniquePath
+                                }
+                            }
+                        }));
                         window.location.href = "/?open=" + uniquePath;
                     });
                 });
