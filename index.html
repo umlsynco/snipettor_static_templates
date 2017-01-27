@@ -289,11 +289,25 @@
             //
             // Show the latest content only
             //
-            searchContent: function(query, callback) {
-                this.database.ref('messages').limitToFirst(100).once('value').then(function(complete) {
+            searchContent: function(queryText, callback) {
+              if (queryText) {
+                this.database.ref('messages')
+                .limitToLast(20)
+                .orderByChild('title')
+                .startAt(queryText)
+                .endAt(queryText+"\uf8ff")
+                .once('value')
+                .then(function(complete) {
                     callback(complete.val());
-                })
-
+                });
+              } else {
+                this.database.ref('messages')
+                .limitToLast(20)
+                .once('value')
+                .then(function(complete) {
+                    callback(complete.val());
+                });
+              }
             }
         }; // StorageApi
 
@@ -321,13 +335,20 @@
 
                     showContent(container);
                 } // save
-                if (content.indexOf("open") >= 0) {
+                else if (content.indexOf("open") >= 0) {
                     var content = content.substr(5);
                     storageApi.loadContent("-" + content.substr(0, content.length - 1), null, function(data) {
                         console.dir(data);
                         showContent(data);
                     });
                 }
+                else if (content.indexOf("search") >= 0) {
+                    var content = content.substr(7, content.length - 8);
+                    storageApi.searchContent(content, function(content) {
+                      showSearchResult(content);
+                    });
+                }
+
             } else { // content is not a query
                 storageApi.searchContent(null, function(content) {
                     showSearchResult(content);
@@ -336,7 +357,7 @@
 
             function addSaveForm(payload) {
                 $(
-                    '<form id="snipettor-save-form" class="navbar-form pull-left">\
+                    '<form id="snipettor-save-form" action="#" class="navbar-form pull-left">\
     <button type="submit" class="btn">Delete</button>&nbsp;&nbsp;&nbsp;<button type="submit" class="btn">Save</button> <br><br>\
   <div class="raw">\
         <label for="title">Title*	</label><br>\
@@ -360,15 +381,33 @@
             function showSearchResult(searchData) {
                 for (var x in searchData) {
                     var description = searchData[x];
+                    var xxx = x.substr(1);
                     $('<div class="container">\
-<h2>Play  / expand</h2>\
+<h2 ><div class="input-group" style="display:flex;"><a class="snippetor-play-snippet" uid="'+x+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp; <a class="snippetor-detail-snippet" href="/?open='+xxx+'"><p><i class="fa fa-edit">&nbsp;Details</i></p></a></div></h2>\
 <div class="panel panel-default">\
 <div class="panel-heading">' + description.title + '</div>\
 <div class="panel-body">' + description.description +
                         '</div>\
 </div>\
-</div>').appendTo("#main-content");
+</div>').prependTo("#main-content");
                 }
+                $(".snippetor-play-snippet").click(function(){
+                  var uid = $(this).attr("uid");
+                  var payload = searchData[uid];
+                  if (!uid)
+                    return;
+
+                  uid = uid.substr(1);
+                  payload.uid = uid; // save current unique ID
+                        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                            detail: {
+                                action: "open-snippet",
+                                data: payload
+                            }
+                        }));
+
+                });
+                
 
             }
 
@@ -446,9 +485,12 @@
                                 }
                             }
                         }));
-                        window.location.href = "/?open=" + uniquePath;
+                        setTimeout(function() {
+                          window.location.href = "/?open=" + uniquePath;
+                        }, 100);
                     });
-                        return false;                    
+
+                    return false;
                 });
             } // show Content method
 
