@@ -279,7 +279,7 @@
                 };
 
                 if (version) {
-                    console.log("LOADING: messages/" + uid + "/" + version);
+                    console.log("LOADING: window/" + uid + "/" + version);
                     var ref = this.database.ref('messages/' + uid + "/" + version);
                     ref.limitToFirst(1).once("value").then(handler2);
                 } else {
@@ -338,6 +338,119 @@
             }
         }; // StorageApi
 
+        var extensionRemoteApi = {
+            handlers: null,
+            openSnippet: function(payload) {
+              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                detail: {
+                  action: "open-snippet",
+                  data: payload
+                }
+              }));
+            },
+            onSavedSnippet: function(payload) {
+              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                detail: {
+                  action: "saved-draft",
+                  payload: payload
+                }
+              }));
+
+            },
+            init: function(handlers) {
+              extensionRemoteApi.handlers = handlers;
+              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                detail: {
+                  action: "GetInitialState"
+                }
+              }));
+
+        window.addEventListener("onSnippetChange", function(evt) {
+            var payload = evt.detail;
+            if (payload.action == "save") {
+                extensionRemoteApi.handlers.onSaveSnippet(payload);
+            } else if (payload.action == "create") {
+                extensionRemoteApi.handlers.onCreateSnippet(payload);
+            } else if (payload.action == "open") {
+                extensionRemoteApi.handlers.onOpenSnippet(payload);
+            } else {
+                alert("Unknow snippet action: " + payload.action);
+            }
+        });
+
+        window.addEventListener("onSnippetItemChange", function(evt) {
+            var payload = evt.detail;
+            if (payload.action == "add") {
+                extensionRemoteApi.handlers.onAddItem(payload);
+            } else if (payload.action == "remove") {
+                extensionRemoteApi.handlers.onRemoveItem(payload);
+            } else if (payload.action == "change") {
+                extensionRemoteApi.handlers.onChangeItem(payload);
+            } else if (payload.action == "swap") {
+                extensionRemoteApi.handlers.onSwapItem(payload);
+            } else {
+                alert("Unknow snippet action: " + payload.action);
+            }
+        });
+
+            },
+            //
+            // Assign current tab to the concreate snippet or snippet draft
+            // @param payload - index of the selected item, (-1) is to unsubscribe
+            //
+            selectSnippet: function(index) {
+              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                detail: {
+                  action: "select-snippet",
+                  payload: index
+                }
+              }));
+            },
+            //
+            // Update current snippet data:
+            // title, hash-tags or description 
+            //
+            updateSnippet: function(payload) {
+              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                detail: {
+                  action: "update-snippet",
+                  payload: payload
+                }
+              }));
+            },
+            //
+            // Update the concreate snippet item's description
+            // 1. update - update description
+            // 2. delete - item removed
+            // 3. position - change item position
+            //
+            updateSnippetItem: function(idx, action, payload) {
+              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                detail: {
+                  action: action + "-snippet-item",
+                  payload: payload
+                }
+              }));
+            }
+        };
+        
+        
+        var handlers = {
+            onSaveSnippet: function(payload) {
+            },
+            onCreateSnippet: function(payload){
+            },
+            onOpenSnippet: function(payload) {
+            },
+            onAddItem: function(payload) {
+            }
+            onRemoveItem: function(payload) {
+            }
+            onChangeItem: function(payload) {
+            }
+            onSwapItem: function(payload) {
+        }};
+
         var container = null;
         $(document).ready(function() {
             var content = window.location.href.split("?");
@@ -385,8 +498,7 @@
             }
 
             function addSaveForm(payload) {
-                $(
-                    '<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '')+ '" class="navbar-form pull-left">\
+                $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '')+ '" class="navbar-form pull-left">\
     <button type="button" class="btn"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
     '+ (payload.uid ? '': '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') + '\
     <button type="submit" class="btn"><i class="fa fa-save">&nbsp;Save</i></button>&nbsp;&nbsp;&nbsp;\
@@ -431,13 +543,8 @@
 
                   uid = uid.substr(1);
                   payload.uid = uid; // save current unique ID
-                        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                            detail: {
-                                action: "open-snippet",
-                                data: payload
-                            }
-                        }));
 
+                  extensionRemoteApi.openSnippet(payload);
                 });
                 
 
@@ -512,14 +619,9 @@
                     storageApi.saveContent(payload, function(path) {
                         var uniquePath = path.toString().split("/")[2];
                         uniquePath = uniquePath.substr(1);
-                        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                            detail: {
-                                action: "saved-draft",
-                                payload: {
-                                    uid: uniquePath
-                                }
-                            }
-                        }));
+                        // handle snippet save
+                        extensionRemoteApi.onSavedSnippet({uid: uniquePath});
+                        
                         setTimeout(function() {
                           window.location.href = "/?open=" + uniquePath;
                         }, 100);
@@ -528,14 +630,9 @@
                     storageApi.updateContent(uid, payload, function(path) {
                         var uniquePath = path.toString().split("/")[2];
                         uniquePath = uniquePath.substr(1);
-                        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                            detail: {
-                                action: "saved-draft",
-                                payload: {
-                                    uid: uniquePath
-                                }
-                            }
-                        }));
+
+                        // handle snippet saved
+                        extensionRemoteApi.onSavedSnippet({uid: uniquePath});
 
                         setTimeout(function() {
                           window.location.href = "/?open=" + uniquePath;
