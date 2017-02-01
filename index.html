@@ -359,11 +359,6 @@
             },
             init: function(handlers) {
               extensionRemoteApi.handlers = handlers;
-              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                detail: {
-                  action: "GetInitialState"
-                }
-              }));
 
         window.addEventListener("onInit", function(evt) {
 			if (extensionRemoteApi.handlers 
@@ -398,6 +393,14 @@
             }
         });
 
+
+              setTimeout(function() {
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                  detail: {
+                    action: "GetInitialState"
+                  }
+                 }));
+             }, 100);
             },
             //
             // Assign current tab to the concreate snippet or snippet draft
@@ -443,6 +446,8 @@
 
         var handlers = {
        		onInit: function(response) {
+                console.log("ON IIIIIIIIIIIIIINIT !!!");
+                console.dir(response);
 			  uiHandler.updateWorkingSnippets(response.snippets);
 			  if (response.working) 
 			    uiHandler.handleWorkingSnippet(response.working);
@@ -475,6 +480,8 @@
 			 working: -1,
 			 updateWorkingSnippets: function(snippets) {
 				 $("ul#snippetor-select-menu>li.snippet-draft").remove();
+                 console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+                 console.dir(snippets);
 				 for (var i in snippets) {
 					 var sn = snippets[i];
 					 if (sn)
