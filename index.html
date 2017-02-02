@@ -105,6 +105,64 @@
     </script>
 
     <script>
+        function showContentItem(item) {
+                    var github_prefix = "https://github.com/";
+                    var url_path = item.url.substr(github_prefix.length);
+
+                    var user = url_path.substr(0, url_path.indexOf("/"));
+                    url_path = url_path.substr(url_path.indexOf("/") + 1);
+
+                    var repo = url_path.substr(0, url_path.indexOf("/"));
+                    url_path = url_path.substr(url_path.indexOf("/") + 1);
+
+                    var panelTemplate =
+                        '\
+<div class="panel panel-default">\
+    <i class="fa fa-chevron-down fa-3x" style="float: left;position: relative;left: -50px;top: 70px;"></i>\
+    <i class="fa fa-chevron-up fa-3x" style="float: left;left: -93px;position: relative;top: 20px;"></i>\
+<div class="panel-heading" style="background-image: none;">\
+  <h3 class="panel-title">\
+  <ul class="breadcrumb" style="margin-bottom: 0px;">\
+      <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
+      <li><a href="#">' +
+                        user + '</a> <span class="divider"></span></li>\
+      <li><a href="#">' + repo + '</a> <span class="divider"></span></li>\
+      <li><a href="#">' + url_path +
+                        '</a> <span class="divider"></span></li>\
+      <li><a href="#">L#' + item.line +
+                        '</a></li>\
+    </ul>\
+  </h3>\
+</div>\
+<div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p>' +
+                        item.comment + '</div>\
+</div>';
+                    //
+                    var item = $(panelTemplate).appendTo("#snipettor-save-form");
+
+                    // Sort the comment items
+                    item.find(".fa-chevron-up").click(function() {
+                        alert("level UP");
+                    });
+                    item.find(".fa-chevron-down").click(function() {
+                        alert("level down");
+                    });
+                    // edit the text of comment
+                    item.find(".fa-edit").click(function() {
+                        var parent = $(this).parent().parent();
+						if (parent.find("textarea").length > 0) {
+							parent.find("textarea").trigger("blur");
+							return;
+						}
+						  
+
+                        parent.append("<textarea style='width:100%;'></textarea>");
+                        parent.find("textarea").blur(function() {
+                            parent.find("textarea").remove();
+                        });
+                    });
+			};
+
         // Create Base64 Object
         var Base64 = {
             _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -450,8 +508,12 @@
                 console.log("ON IIIIIIIIIIIIIINIT !!!");
                 console.dir(response);
 			  uiHandler.updateWorkingSnippets(response.snippets);
-			  if (response.working) 
+			  if (response.working != undefined)  {
 			    uiHandler.handleWorkingSnippet(response.working);
+			  }
+			  else {
+				  alert("There is nothing to save! Please, select some snippet");
+			  }
 
               handlers.initialized = true;
 			},
@@ -489,7 +551,7 @@
                   return;
 
                 if (payload.working == uiHandler.working) {
-                    console.log("Update UI list of working items please");
+                    showContentItem(payload.item, payload.index);
                 }
                 uiHandler.snippets[payload.working].items.splice(payload.index, 0, payload.item);
             },
@@ -499,7 +561,7 @@
                   return;
 
                 if (payload.working == uiHandler.working) {
-                    console.log("Update UI list of working items please");
+                    removeContentItem(payload.index);
                 }
                 uiHandler.snippets[payload.working].items.splice(payload.index, 1);
             },
@@ -514,7 +576,7 @@
                 uiHandler.snippets[payload.working].items[payload.index] = payload.item;
             },
             onSwapItem: function(payload) {
-                console.log("1");
+                console.log("on swap: " + payload.working + " == " + uiHandler.working);
                 if (!handlers.initialized)
                   return;
 
@@ -527,27 +589,6 @@
                 uiHandler.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
 			}
         };
-
-         uiHandler = {
-			 snippets: [],
-			 working: -1,
-			 updateWorkingSnippets: function(snippets) {
-				 $("ul#snippetor-select-menu>li.snippet-draft").remove();
-                 console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
-                 console.dir(snippets);
-				 for (var i in snippets) {
-					 var sn = snippets[i];
-					 if (sn)
-				       $("ul#snippetor-select-menu").prepend('<li class="snippet-draft"><a href="#">'+sn.title+'</a></li>');
-				 }
-				 uiHandler.snippets = snippets;
-			 },
-			 handleWorkingSnippet: function(id) {
-				 if (uiHandler.snippets.length > id) {
-					 uiHandler.working = id;
-				 }
-			 }
-		 };
 
         var container = null;
         $(document).ready(function() {
@@ -573,7 +614,7 @@
                         return;
                     }
 
-                    showContent(container);
+                    //showContent(container);
                 } // save
                 else if (content.indexOf("open") >= 0) {
                     var content = content.substr(5);
@@ -598,6 +639,8 @@
             }
 
             function addSaveForm(payload) {
+				// remove the previous form and create a new one
+				$("#snipettor-save-form").remove();
                 $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '')+ '" class="navbar-form pull-left">\
     <button type="button" class="btn"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
     '+ (payload.uid ? '': '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') + '\
@@ -646,63 +689,15 @@
 
                   extensionRemoteApi.openSnippet(payload);
                 });
-                
-
             }
 
+
             function showContent(payload) {
+				
                 addSaveForm(payload);
                 for (var r = 0; r < payload.items.length; ++r) {
-                    var item = payload.items[r];
-                    var github_prefix = "https://github.com/";
-                    var url_path = item.url.substr(github_prefix.length);
+                    showContentItem(payload.items[r]);
 
-                    var user = url_path.substr(0, url_path.indexOf("/"));
-                    url_path = url_path.substr(url_path.indexOf("/") + 1);
-
-                    var repo = url_path.substr(0, url_path.indexOf("/"));
-                    url_path = url_path.substr(url_path.indexOf("/") + 1);
-
-                    var panelTemplate =
-                        '\
-<div class="panel panel-default">\
-    <i class="fa fa-chevron-down fa-3x" style="float: left;position: relative;left: -50px;top: 70px;"></i>\
-    <i class="fa fa-chevron-up fa-3x" style="float: left;left: -93px;position: relative;top: 20px;"></i>\
-<div class="panel-heading" style="background-image: none;">\
-  <h3 class="panel-title">\
-  <ul class="breadcrumb" style="margin-bottom: 0px;">\
-      <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
-      <li><a href="#">' +
-                        user + '</a> <span class="divider"></span></li>\
-      <li><a href="#">' + repo + '</a> <span class="divider"></span></li>\
-      <li><a href="#">' + url_path +
-                        '</a> <span class="divider"></span></li>\
-      <li><a href="#">L#' + item.line +
-                        '</a></li>\
-    </ul>\
-  </h3>\
-</div>\
-<div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p>' +
-                        item.comment + '</div>\
-</div>';
-                    //
-                    var item = $(panelTemplate).appendTo("#snipettor-save-form");
-
-                    // Sort the comment items
-                    item.find(".fa-chevron-up").click(function() {
-                        alert("level UP");
-                    });
-                    item.find(".fa-chevron-down").click(function() {
-                        alert("level down");
-                    });
-                    // edit the text of comment
-                    item.find(".fa-edit").click(function() {
-                        var parent = $(this).parent().parent();
-                        parent.append("<textarea style='width:100%;'></textarea>");
-                        parent.find("textarea").blur(function() {
-                            parent.find("textarea").remove();
-                        });
-                    });
                 } // for
 
                 //
@@ -743,6 +738,30 @@
                 return false;
               }); // on sumbit method
             } // show Content method
+
+         uiHandler = {
+			 snippets: [],
+			 working: -1,
+			 updateWorkingSnippets: function(snippets) {
+				 $("ul#snippetor-select-menu>li.snippet-draft").remove();
+                 console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+                 console.dir(snippets);
+				 for (var i in snippets) {
+					 var sn = snippets[i];
+					 if (sn)
+				       $("ul#snippetor-select-menu").prepend('<li class="snippet-draft"><a href="#">'+sn.title+'</a></li>');
+				 }
+				 uiHandler.snippets = snippets;
+			 },
+			 handleWorkingSnippet: function(id) {
+				 console.log("HANDLE : " + id);
+				 if (uiHandler.snippets.length > id) {
+					 uiHandler.working = id;
+					 showContent(uiHandler.snippets[id]);
+				 }
+			 }
+		 };
+
 
         }); // document ready
     </script>
