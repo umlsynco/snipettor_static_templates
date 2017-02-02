@@ -445,15 +445,21 @@
         var uiHandler = {};
 
         var handlers = {
+            initialized: false,
        		onInit: function(response) {
                 console.log("ON IIIIIIIIIIIIIINIT !!!");
                 console.dir(response);
 			  uiHandler.updateWorkingSnippets(response.snippets);
 			  if (response.working) 
 			    uiHandler.handleWorkingSnippet(response.working);
-			    
+
+              handlers.initialized = true;
 			},
             onSaveSnippet: function(payload) {
+                console.log("7");
+                if (!handlers.initialized)
+                  return;
+
 				if (payload.working == uiHandler.working) {
 					uiHandler.onSaveCurrentSnippet(payload.working);
 				}
@@ -462,16 +468,63 @@
 
             },
             onCreateSnippet: function(payload){
+                console.log("6");
+                if (!handlers.initialized)
+                  return;
+
+                uiHandler.snippets[payload.working] = payload.snippet;
+                uiHandler.updateWorkingSnippets(uiHandler.snippets);
             },
             onOpenSnippet: function(payload) {
+                console.log("5");
+                if (!handlers.initialized)
+                  return;
+
+                uiHandler.snippets[payload.working] = payload.snippet;
+                uiHandler.updateWorkingSnippets(uiHandler.snippets);
             },
             onAddItem: function(payload) {
+                console.log("4");
+                if (!handlers.initialized)
+                  return;
+
+                if (payload.working == uiHandler.working) {
+                    console.log("Update UI list of working items please");
+                }
+                uiHandler.snippets[payload.working].items.splice(payload.index, 0, payload.item);
             },
             onRemoveItem: function(payload) {
+                console.log("3");
+                if (!handlers.initialized)
+                  return;
+
+                if (payload.working == uiHandler.working) {
+                    console.log("Update UI list of working items please");
+                }
+                uiHandler.snippets[payload.working].items.splice(payload.index, 1);
             },
             onChangeItem: function(payload) {
+                console.log("2");
+                if (!handlers.initialized)
+                  return;
+
+                if (payload.working == uiHandler.working) {
+                    console.log("Update UI description only");
+                }
+                uiHandler.snippets[payload.working].items[payload.index] = payload.item;
             },
             onSwapItem: function(payload) {
+                console.log("1");
+                if (!handlers.initialized)
+                  return;
+
+                if (payload.working == uiHandler.working) {
+                    console.log("Update UI list of working items please");
+                }
+                var item = uiHandler.snippets[payload.working].items[payload.payload.oldIndex];
+                console.dir(item);
+                uiHandler.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
+                uiHandler.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
 			}
         };
 
@@ -599,7 +652,6 @@
 
             function showContent(payload) {
                 addSaveForm(payload);
-
                 for (var r = 0; r < payload.items.length; ++r) {
                     var item = payload.items[r];
                     var github_prefix = "https://github.com/";
@@ -662,7 +714,9 @@
                   e.stopPropagation();
                     
                   var uid = $(this).attr("uid");
-                  if (uid && uid != "") {
+                  console.log(typeof uid);
+                  console.dir(uid);
+                  if (!uid || uid == "") {
                     storageApi.saveContent(payload, function(path) {
                         var uniquePath = path.toString().split("/")[2];
                         uniquePath = uniquePath.substr(1);
