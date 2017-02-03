@@ -374,8 +374,8 @@
                 extensionRemoteApi.handlers.onAddItem(payload);
             } else if (payload.action == "remove") {
                 extensionRemoteApi.handlers.onRemoveItem(payload);
-            } else if (payload.action == "change") {
-                extensionRemoteApi.handlers.onChangeItem(payload);
+            } else if (payload.action == "update") {
+                extensionRemoteApi.handlers.onUpdateItem(payload);
             } else if (payload.action == "move") {
                 extensionRemoteApi.handlers.onSwapItem(payload);
             } else {
@@ -505,7 +505,7 @@
                 }
                 uiHandler.snippets[payload.working].items.splice(payload.index, 1);
             },
-            onChangeItem: function(payload) {
+            onUpdateItem: function(payload) {
                 console.log("2");
                 if (!handlers.initialized)
                   return;
