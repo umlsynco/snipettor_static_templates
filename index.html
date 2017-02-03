@@ -107,7 +107,7 @@
     <script>
 		var global_action = null;
 		
-        function showContentItem(item) {
+        function showContentItem(item, index, extApi) {
                     var github_prefix = "https://github.com/";
                     var url_path = item.url.substr(github_prefix.length);
 
@@ -123,6 +123,7 @@
     <i class="fa fa-chevron-down fa-3x" style="float: left;position: relative;left: -50px;top: 70px;"></i>\
     <i class="fa fa-chevron-up fa-3x" style="float: left;left: -93px;position: relative;top: 20px;"></i>\
 <div class="panel-heading" style="background-image: none;">\
+<i class="fa fa-close" style="position:absolute; right: 80px;"></i>\
   <h3 class="panel-title">\
   <ul class="breadcrumb" style="margin-bottom: 0px;">\
       <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
@@ -144,10 +145,15 @@
 
                     // Sort the comment items
                     item.find(".fa-chevron-up").click(function() {
-                        alert("level UP");
+                        extApi.updateSnippetItem("move", {oldIndex: 0, newIndex:1});
                     });
                     item.find(".fa-chevron-down").click(function() {
-                        alert("level down");
+                        extApi.updateSnippetItem("move", {oldIndex: 0, newIndex:1});
+                    });
+                    item.find(".fa-close").click(function() {
+                        extApi.updateSnippetItem("delete", {index: 0});
+                        var parent = $(this).parent().parent();
+                        parent.remove();
                     });
                     // edit the text of comment
                     item.find(".fa-edit").click(function() {
@@ -166,7 +172,7 @@
                             parent.find("textarea").remove();
                             if (xxx != text) {
                               parent.find(".snippet-description").text(xxx);
-                              console.log("Trigger on change please");
+                              extApi.updateSnippetItem("update", {comment: xxx});
 						    }
                             parent.find(".snippet-description").show();
                         });
@@ -370,7 +376,7 @@
                 extensionRemoteApi.handlers.onRemoveItem(payload);
             } else if (payload.action == "change") {
                 extensionRemoteApi.handlers.onChangeItem(payload);
-            } else if (payload.action == "swap") {
+            } else if (payload.action == "move") {
                 extensionRemoteApi.handlers.onSwapItem(payload);
             } else {
                 alert("Unknow snippet action: " + payload.action);
@@ -416,7 +422,7 @@
             // 2. delete - item removed
             // 3. position - change item position
             //
-            updateSnippetItem: function(idx, action, payload) {
+            updateSnippetItem: function(action, payload) {
               window.dispatchEvent(new CustomEvent("onSnipettorAction", {
                 detail: {
                   action: action + "-snippet-item",
@@ -485,7 +491,7 @@
                   return;
 
                 if (payload.working == uiHandler.working) {
-                    showContentItem(payload.item, payload.index);
+                    showContentItem(payload.item, payload.index, extensionRemoteApi);
                 }
                 uiHandler.snippets[payload.working].items.splice(payload.index, 0, payload.item);
             },
@@ -620,7 +626,7 @@
 				
                 addSaveForm(payload);
                 for (var r = 0; r < payload.items.length; ++r) {
-                    showContentItem(payload.items[r]);
+                    showContentItem(payload.items[r], null, extensionRemoteApi);
 
                 } // for
 
