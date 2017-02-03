@@ -136,8 +136,8 @@
     </ul>\
   </h3>\
 </div>\
-<div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p>' +
-                        item.comment + '</div>\
+<div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p><span class="snippet-description">' +
+                        item.comment + '</span></div>\
 </div>';
                     //
                     var item = $(panelTemplate).appendTo("#snipettor-save-form");
@@ -152,15 +152,23 @@
                     // edit the text of comment
                     item.find(".fa-edit").click(function() {
                         var parent = $(this).parent().parent();
+
 						if (parent.find("textarea").length > 0) {
 							parent.find("textarea").trigger("blur");
 							return;
 						}
 						  
-
-                        parent.append("<textarea style='width:100%;'></textarea>");
+                        var text = parent.find(".snippet-description").html();
+                        parent.find(".snippet-description").hide();
+                        parent.append("<textarea style='width:100%;'>"+text+"</textarea>");
                         parent.find("textarea").blur(function() {
+							var xxx = parent.find("textarea").val();
                             parent.find("textarea").remove();
+                            if (xxx != text) {
+                              parent.find(".snippet-description").text(xxx);
+                              console.log("Trigger on change please");
+						    }
+                            parent.find(".snippet-description").show();
                         });
                     });
 			};
@@ -507,7 +515,7 @@
                   return;
 
                 if (payload.working == uiHandler.working) {
-                    console.log("Update UI list of working items please");
+                    uiHandler.doSwapItems(payload.payload);
                 }
                 var item = uiHandler.snippets[payload.working].items[payload.payload.oldIndex];
                 console.dir(item);
@@ -676,6 +684,22 @@
 			 },
 			 onSaveCurrentSnippet: function() {
 				 window.location.href = "/";
+			 },
+			 doSwapItems: function(action) {
+				 if (action.oldIndex == action.newIndex)
+				   return;
+
+				 var lis = $('div.panel-default');
+				 console.dir(action);
+				 console.dir(lis);
+                 var ttt = lis.eq(action.oldIndex);
+                 var new_ttt = lis.eq(action.newIndex);
+                 console.dir(ttt);
+                 if (action.newIndex < action.oldIndex) {
+                   new_ttt.before(ttt);
+			     } else {
+                   new_ttt.after(ttt);
+			     }
 			 }
 		 };
 
