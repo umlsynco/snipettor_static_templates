@@ -324,6 +324,15 @@
               }));
 
             },
+            onUnsubscribeSnippet: function(payload) {
+              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                detail: {
+                  action: "unsubscribe",
+                  payload: payload
+                }
+              }));
+
+            },
             init: function(handlers) {
               extensionRemoteApi.handlers = handlers;
 
@@ -414,6 +423,8 @@
         var handlers = {
             initialized: false,
        		onInit: function(response) {
+			  console.log(">onInit");
+			  console.dir(response);
 
 			  uiHandler.updateWorkingSnippets(response.snippets);
 			  if (response.working != undefined)  {
@@ -434,7 +445,13 @@
 				if (payload.working == uiHandler.working) {
 					uiHandler.onSaveCurrentSnippet(payload.working);
 				}
-				uiHandler.snippets.splice(payload.working, 1);
+				// send unsubscribe from the current snippet
+				extensionRemoteApi.onUnsubscribeSnippet(payload.working);
+				setTimeout(function() {
+					window.location.href = "/";
+				}, 100);
+
+				uiHandler.snippets[payload.working] = null;
 				uiHandler.updateWorkingSnippets(uiHandler.snippets);
 
             },
@@ -653,9 +670,12 @@
 			 handleWorkingSnippet: function(id) {
 				 if (uiHandler.snippets.length > id) {
 					 uiHandler.working = id;
-					 if (global_action == "save")
+					 if (global_action == "SAVE")
 					   showContent(uiHandler.snippets[id]);
 				 }
+			 },
+			 onSaveCurrentSnippet: function() {
+				 window.location.href = "/";
 			 }
 		 };
 
