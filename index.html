@@ -105,8 +105,9 @@
     </script>
 
     <script>
-		var global_action = null;
-		
+        var global_action = null;
+        var uiHandler = {};
+        
         function showContentItem(item, index, extApi) {
                     var github_prefix = "https://github.com/";
                     var url_path = item.url.substr(github_prefix.length);
@@ -145,10 +146,20 @@
 
                     // Sort the comment items
                     item.find(".fa-chevron-up").click(function() {
-                        extApi.updateSnippetItem("move", {oldIndex: 0, newIndex:1});
+                        var oldIndex = $(".panel-default").index($(this).parent());
+                        if (oldIndex > 0) {
+  						  var payload = {oldIndex: oldIndex, newIndex:oldIndex-1};
+                          extApi.updateSnippetItem("move", payload);
+                          uiHandler.doSwapItems(payload);
+                        }
                     });
                     item.find(".fa-chevron-down").click(function() {
-                        extApi.updateSnippetItem("move", {oldIndex: 0, newIndex:1});
+                        var oldIndex = $(".panel-default").index($(this).parent());
+                        if (oldIndex < $(".panel-default").length-1) {
+						  var  payload = {oldIndex: oldIndex, newIndex:oldIndex+1};
+                          extApi.updateSnippetItem("move", payload);
+                          uiHandler.doSwapItems(payload);
+                        }
                     });
                     item.find(".fa-close").click(function() {
                         extApi.updateSnippetItem("delete", {index: 0});
@@ -159,25 +170,25 @@
                     item.find(".fa-edit").click(function() {
                         var parent = $(this).parent().parent();
 
-						if (parent.find("textarea").length > 0) {
-							parent.find("textarea").trigger("blur");
-							return;
-						}
-						  
+                        if (parent.find("textarea").length > 0) {
+                            parent.find("textarea").trigger("blur");
+                            return;
+                        }
+                          
                         var text = parent.find(".snippet-description").html();
                         parent.find(".snippet-description").hide();
                         parent.append("<textarea style='width:100%;'>"+text+"</textarea>");
                         parent.find("textarea").blur(function() {
-							var xxx = parent.find("textarea").val();
+                            var xxx = parent.find("textarea").val();
                             parent.find("textarea").remove();
                             if (xxx != text) {
                               parent.find(".snippet-description").text(xxx);
                               extApi.updateSnippetItem("update", {comment: xxx});
-						    }
+                            }
                             parent.find(".snippet-description").show();
                         });
                     });
-			};
+            };
 
         var storageApi = {
             init: function() {
@@ -351,10 +362,10 @@
               extensionRemoteApi.handlers = handlers;
 
         window.addEventListener("onInit", function(evt) {
-			if (extensionRemoteApi.handlers 
-			    && extensionRemoteApi.handlers.onInit)
+            if (extensionRemoteApi.handlers 
+                && extensionRemoteApi.handlers.onInit)
            extensionRemoteApi.handlers.onInit(evt.detail);
-		});
+        });
         window.addEventListener("onSnippetChange", function(evt) {
             var payload = evt.detail;
             if (payload.action == "save") {
@@ -377,7 +388,7 @@
             } else if (payload.action == "update") {
                 extensionRemoteApi.handlers.onUpdateItem(payload);
             } else if (payload.action == "move") {
-                extensionRemoteApi.handlers.onSwapItem(payload);
+                extensionRemoteApi.handlers.onMoveItem(payload);
             } else {
                 alert("Unknow snippet action: " + payload.action);
             }
@@ -432,41 +443,39 @@
             }
         };
         
-        var uiHandler = {};
-
         var handlers = {
             initialized: false,
-       		onInit: function(response) {
-			  console.log(">onInit");
-			  console.dir(response);
+               onInit: function(response) {
+              console.log(">onInit");
+              console.dir(response);
 
-			  uiHandler.updateWorkingSnippets(response.snippets);
-			  if (response.working != undefined)  {
-			    uiHandler.handleWorkingSnippet(response.working);
-			  }
-			  else {
-				  if (global_action == "SAVE")
-				    alert("There is nothing to save! Please, select some snippet");
-			  }
+              uiHandler.updateWorkingSnippets(response.snippets);
+              if (response.working != undefined)  {
+                uiHandler.handleWorkingSnippet(response.working);
+              }
+              else {
+                  if (global_action == "SAVE")
+                    alert("There is nothing to save! Please, select some snippet");
+              }
 
               handlers.initialized = true;
-			},
+            },
             onSaveSnippet: function(payload) {
                 console.log("7");
                 if (!handlers.initialized)
                   return;
 
-				if (payload.working == uiHandler.working) {
-					uiHandler.onSaveCurrentSnippet(payload.working);
-				}
-				// send unsubscribe from the current snippet
-				extensionRemoteApi.onUnsubscribeSnippet(payload.working);
-				setTimeout(function() {
-					window.location.href = "/";
-				}, 100);
+                if (payload.working == uiHandler.working) {
+                    uiHandler.onSaveCurrentSnippet(payload.working);
+                }
+                // send unsubscribe from the current snippet
+                extensionRemoteApi.onUnsubscribeSnippet(payload.working);
+                setTimeout(function() {
+                    window.location.href = "/";
+                }, 100);
 
-				uiHandler.snippets[payload.working] = null;
-				uiHandler.updateWorkingSnippets(uiHandler.snippets);
+                uiHandler.snippets[payload.working] = null;
+                uiHandler.updateWorkingSnippets(uiHandler.snippets);
 
             },
             onCreateSnippet: function(payload){
@@ -515,7 +524,7 @@
                 }
                 uiHandler.snippets[payload.working].items[payload.index] = payload.item;
             },
-            onSwapItem: function(payload) {
+            onMoveItem: function(payload) {
                 console.log("on swap: " + payload.working + " == " + uiHandler.working);
                 if (!handlers.initialized)
                   return;
@@ -527,7 +536,7 @@
                 console.dir(item);
                 uiHandler.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
                 uiHandler.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
-			}
+            }
         };
 
         var container = null;
@@ -543,7 +552,7 @@
             if (content.length > 1) {
                 content = content[1];
                 if (content.indexOf("save") >= 0) {
-					global_action = "SAVE";
+                    global_action = "SAVE";
                     //showContent(container);
                 } // save
                 else if (content.indexOf("open") >= 0) {
@@ -569,26 +578,26 @@
             }
 
             function addSaveForm(payload) {
-				// remove the previous form and create a new one
-				$("#snipettor-save-form").remove();
+                // remove the previous form and create a new one
+                $("#snipettor-save-form").remove();
                 $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '')+ '" class="navbar-form pull-left">\
     <button type="button" class="btn"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
     '+ (payload.uid ? '': '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') + '\
     <button type="submit" class="btn"><i class="fa fa-save">&nbsp;Save</i></button>&nbsp;&nbsp;&nbsp;\
     '+ (payload.uid ? '<button type="submit" class="btn"><i class="fa fa-fork">&nbsp;Fork</i></button>': '')+ ' <br><br>\
   <div class="raw">\
-        <label for="title">Title*	</label><br>\
+        <label for="title">Title*    </label><br>\
         <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" style="width: 550px;" value="' +
                     payload.title +
                     '"><br>\
     </div><br>\
     <div class="raw">\
         <label for="tags">Tags*</label><br>\
-        <input type="text" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">\
+        <input id="snippetor-save-tags" type="text" value="'+( payload.tags) +'" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">\
     </div>\
     <div class="raw">\
         <label for="description">Description*</label><br>\
-        <textarea class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;"></textarea>\
+        <textarea id="snippetor-save-description" class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;">'+payload.description+'</textarea>\
     </div>\
     <br>\
   </form>'
@@ -623,7 +632,7 @@
 
 
             function showContent(payload) {
-				
+                
                 addSaveForm(payload);
                 for (var r = 0; r < payload.items.length; ++r) {
                     showContentItem(payload.items[r], null, extensionRemoteApi);
@@ -638,9 +647,12 @@
                   e.preventDefault();
                   e.stopPropagation();
                     
+                  // Update title tags and description
+                  payload.title = $("#snippetor-save-title").val();
+                  payload.tags = $("#snippetor-save-tags").val();
+                  payload.description = $("#snippetor-save-description").val();
+                  
                   var uid = $(this).attr("uid");
-                  console.log(typeof uid);
-                  console.dir(uid);
                   if (!uid || uid == "") {
                     storageApi.saveContent(payload, function(path) {
                         var uniquePath = path.toString().split("/")[2];
@@ -670,44 +682,44 @@
             } // show Content method
 
          uiHandler = {
-			 snippets: [],
-			 working: -1,
-			 updateWorkingSnippets: function(snippets) {
-				 $("ul#snippetor-select-menu>li.snippet-draft").remove();
-				 for (var i in snippets) {
-					 var sn = snippets[i];
-					 if (sn)
-				       $("ul#snippetor-select-menu").prepend('<li class="snippet-draft"><a href="#">'+sn.title+'</a></li>');
-				 }
-				 uiHandler.snippets = snippets;
-			 },
-			 handleWorkingSnippet: function(id) {
-				 if (uiHandler.snippets.length > id) {
-					 uiHandler.working = id;
-					 if (global_action == "SAVE")
-					   showContent(uiHandler.snippets[id]);
-				 }
-			 },
-			 onSaveCurrentSnippet: function() {
-				 window.location.href = "/";
-			 },
-			 doSwapItems: function(action) {
-				 if (action.oldIndex == action.newIndex)
-				   return;
+             snippets: [],
+             working: -1,
+             updateWorkingSnippets: function(snippets) {
+                 $("ul#snippetor-select-menu>li.snippet-draft").remove();
+                 for (var i in snippets) {
+                     var sn = snippets[i];
+                     if (sn)
+                       $("ul#snippetor-select-menu").prepend('<li class="snippet-draft"><a href="#">'+sn.title+'</a></li>');
+                 }
+                 uiHandler.snippets = snippets;
+             },
+             handleWorkingSnippet: function(id) {
+                 if (uiHandler.snippets.length > id) {
+                     uiHandler.working = id;
+                     if (global_action == "SAVE")
+                       showContent(uiHandler.snippets[id]);
+                 }
+             },
+             onSaveCurrentSnippet: function() {
+                 window.location.href = "/";
+             },
+             doSwapItems: function(action) {
+                 if (action.oldIndex == action.newIndex)
+                   return;
 
-				 var lis = $('div.panel-default');
-				 console.dir(action);
-				 console.dir(lis);
+                 var lis = $('div.panel-default');
+                 console.dir(action);
+                 console.dir(lis);
                  var ttt = lis.eq(action.oldIndex);
                  var new_ttt = lis.eq(action.newIndex);
                  console.dir(ttt);
                  if (action.newIndex < action.oldIndex) {
                    new_ttt.before(ttt);
-			     } else {
+                 } else {
                    new_ttt.after(ttt);
-			     }
-			 }
-		 };
+                 }
+             }
+         };
 
 
         }); // document ready
