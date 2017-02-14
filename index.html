@@ -46,9 +46,6 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Working snippets <b class="caret"></b></a>
                     <ul class="dropdown-menu" id="snippetor-select-menu" >
-                        <li class="snippet-draft"><a href="#">Snippet 1</a></li>
-                        <li class="snippet-draft"><a href="#">Snippet 2</a></li>
-                        <li class="snippet-draft"><a href="#">Snippet 3</a></li>
                         <li class="divider"></li>
                         <li><a href="#">Create new</a></li>
                         <li class="divider"></li>
@@ -162,7 +159,8 @@
                         }
                     });
                     item.find(".fa-close").click(function() {
-                        extApi.updateSnippetItem("delete", {index: 0});
+						var idx = $(".panel-default").index($(this).parent().parent());
+                        extApi.updateSnippetItem("delete", {index: idx});
                         var parent = $(this).parent().parent();
                         parent.remove();
                     });
