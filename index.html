@@ -168,7 +168,10 @@
                     });
                     // edit the text of comment
                     item.find(".fa-edit").click(function() {
+						
+						
                         var parent = $(this).parent().parent();
+                        var elemIndex = $(".panel-default").index(parent.parent());
 
                         if (parent.find("textarea").length > 0) {
                             parent.find("textarea").trigger("blur");
@@ -183,7 +186,7 @@
                             parent.find("textarea").remove();
                             if (xxx != text) {
                               parent.find(".snippet-description").text(xxx);
-                              extApi.updateSnippetItem("update", {comment: xxx});
+                              extApi.updateSnippetItem("update", {idx: elemIndex, item: {comment: xxx}});
                             }
                             parent.find(".snippet-description").show();
                         });
@@ -521,8 +524,12 @@
 
                 if (payload.working == uiHandler.working) {
                     console.log("Update UI description only");
+                    console.dir(payload);
+                    var elem = $(".panel-default:eq(" + payload.payload.idx + ")");
+                    console.dir(elem);
+                    elem.find("span.snippet-description").text(payload.payload.item.comment);
                 }
-                uiHandler.snippets[payload.working].items[payload.index] = payload.item;
+                uiHandler.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
             },
             onMoveItem: function(payload) {
                 console.log("on swap: " + payload.working + " == " + uiHandler.working);
