@@ -145,7 +145,7 @@
                     item.find(".fa-chevron-up").click(function() {
                         var oldIndex = $(".panel-default").index($(this).parent());
                         if (oldIndex > 0) {
-  						  var payload = {oldIndex: oldIndex, newIndex:oldIndex-1};
+                            var payload = {oldIndex: oldIndex, newIndex:oldIndex-1};
                           extApi.updateSnippetItem("move", payload);
                           uiHandler.doSwapItems(payload);
                         }
@@ -153,21 +153,19 @@
                     item.find(".fa-chevron-down").click(function() {
                         var oldIndex = $(".panel-default").index($(this).parent());
                         if (oldIndex < $(".panel-default").length-1) {
-						  var  payload = {oldIndex: oldIndex, newIndex:oldIndex+1};
+                          var  payload = {oldIndex: oldIndex, newIndex:oldIndex+1};
                           extApi.updateSnippetItem("move", payload);
                           uiHandler.doSwapItems(payload);
                         }
                     });
                     item.find(".fa-close").click(function() {
-						var idx = $(".panel-default").index($(this).parent().parent());
+                        var idx = $(".panel-default").index($(this).parent().parent());
                         extApi.updateSnippetItem("delete", {index: idx});
                         var parent = $(this).parent().parent();
                         parent.remove();
                     });
                     // edit the text of comment
                     item.find(".fa-edit").click(function() {
-						
-						
                         var parent = $(this).parent().parent();
                         var elemIndex = $(".panel-default").index(parent.parent());
 
@@ -412,7 +410,7 @@
               window.dispatchEvent(new CustomEvent("onSnipettorAction", {
                 detail: {
                   action: "select-snippet",
-                  payload: index
+                  data: index
                 }
               }));
             },
@@ -694,8 +692,14 @@
                  for (var i in snippets) {
                      var sn = snippets[i];
                      if (sn)
-                       $("ul#snippetor-select-menu").prepend('<li class="snippet-draft"><a href="#">'+sn.title+'</a></li>');
+                       $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="'+i+'"><a href="#">'+sn.title+'</a></li>');
                  }
+                 $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
+                     var idx = $(this).attr("idx");
+                     idx = parseInt(idx);
+                     uiHandler.handleWorkingSnippet(idx);
+                     extensionRemoteApi.selectSnippet(idx);
+                 });
                  uiHandler.snippets = snippets;
              },
              handleWorkingSnippet: function(id) {
