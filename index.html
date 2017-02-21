@@ -64,6 +64,7 @@
                 </form>
             </div>
             <ul class="nav navbar-nav navbar-right">
+				<li><a href="#">LOCAL</a></li>
                 <li><a href="#">Settings</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In <b class="caret"></b></a>
@@ -189,7 +190,7 @@
                     });
             };
 
-        var storageApi = {
+        var storageApiFirebase = {
             init: function() {
                 // make firebase initialization here
                 this.auth = firebase.auth();
@@ -250,7 +251,8 @@
             //
             // Load content by key and version
             //
-            loadContent: function(uid, version, callback) {
+            loadContent: function(uid2, version, callback) {
+				var uid = "-" + uid2;
                 var that = this;
                 var handler = function(snapshot) {
                     if (callback)
@@ -328,14 +330,83 @@
               }
             }
         }; // StorageApi
+        
+        var uidGenerator = function() {
+			var letters = 'abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890';
+			var d = new Date();
+			var uid  = "L" + letters[d.getFullYear() - 2000] + letters[d.getMonth()] + letters[d.getDay()] + letters[d.getHours()] + letters[d.getMinutes()] + letters[d.getSeconds()] + letters[Math.round(d.getMilliseconds() / 100)];
+			while (uid.length < 32) {
+				uid += letters[Math.round(Math.random() * 72)];
+			}
+			return uid;
+		};
+        
+        var storageApiLocalStorage = {
+			uid: "snippetor/",
+			init: function() {
+				localStorage[this.uid] = localStorage[this.uid] || [];
+			},
+			saveContent: function(payload, callback) {
+				var uid = uidGenerator();
+				localStorage[this.uid + uid] = 0;
+				localStorage[this.uid + uid + "/0"] = JSON.stringify(payload);
+				// notify about save
+				callback(uid);
+			},
+			loadContent: function(uid, version, callback) {
+				var v = version || 0;
+				var xxx = localStorage[this.uid + uid + "/" + v];
+				if (xxx)
+				  xxx = JSON.parse(xxx);
+				
+				console.dir(xxx);
+				xxx.uid = uid;
+				xxx.version = v;
+				callback(xxx);
+			},
+			updateContent: function(uid, payload, callback) {
+				if (localStorage[this.uid + uid] != undefined) {
+  				  var path = {uid: uid, version: parseInt(localStorage[this.uid + uid]) + 1};
+  				  localStorage[this.uid + uid] = path.version;
+   				  localStorage[this.uid + uid + "/" + path.version] = JSON.stringify(payload);
+   				  // return the real path
+				  callback(path);
+			    }
+			},
+			_prevSearch: {},
+			searchContent: function(queryText, callback) {
+				var result = new Array();
+				var counter = 0;
+				for (var x in localStorage) {
+					// skip another items
+					if (x.indexOf(this.uid) != 0)
+					  continue;
+
+					var y = localStorage[x];
+					var z = x.split("/");
+					if ((!queryText && z.length == 3) || (queryText && y.indexOf(queryText) >= 0)) {
+					  result.push({uid: z[1], version: z[2], payload:JSON.parse(y)});
+					  if (counter > 36) break;
+					    counter++;
+				     }
+				}
+				setTimeout(function() {
+				  callback(result);
+			  }, 400);
+				
+			}
+		};
+		// TODO: runtime select between firebase and localstorage
+		var LOCAL_ACCESS = true;
+		var storageApi = LOCAL_ACCESS ? storageApiLocalStorage : storageApiFirebase;
 
         var extensionRemoteApi = {
             handlers: null,
-            openSnippet: function(payload) {
+            openSnippet: function(payload, idx) {
               window.dispatchEvent(new CustomEvent("onSnipettorAction", {
                 detail: {
                   action: "open-snippet",
-                  data: payload
+                  data: { payload : payload, index: idx}
                 }
               }));
             },
@@ -560,8 +631,10 @@
                 } // save
                 else if (content.indexOf("open") >= 0) {
                     var content = content.substr(5);
-                    var uid = content.substr(0, content.length - 1);
-                    storageApi.loadContent("-" + uid, null, function(data) {
+                    var uid = content.substr(0, content.length - 1).split("/");
+                    var version = uid[1] || 0;
+                    uid = uid[0];
+                    storageApi.loadContent(uid, version, function(data) {
                         console.dir(data);
                         if (data) data.uid = uid;
                         showContent(data);
@@ -580,11 +653,11 @@
                 });
             }
 
-            function addSaveForm(payload) {
+            function addSaveForm(payload, idx) {
                 // remove the previous form and create a new one
                 $("#snipettor-save-form").remove();
                 $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '')+ '" class="navbar-form pull-left">\
-    <button type="button" class="btn"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
+    <button type="button" class="btn snippetor-details-play"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
     '+ (payload.uid ? '': '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') + '\
     <button type="submit" class="btn"><i class="fa fa-save">&nbsp;Save</i></button>&nbsp;&nbsp;&nbsp;\
     '+ (payload.uid ? '<button type="submit" class="btn"><i class="fa fa-fork">&nbsp;Fork</i></button>': '')+ ' <br><br>\
@@ -605,12 +678,16 @@
     <br>\
   </form>'
                 ).appendTo("#main-content");
+                
+                $("#snipettor-save-form .snippetor-details-play").click(function() {
+                  extensionRemoteApi.openSnippet(payload, idx);
+			  });
             }
 
             function showSearchResult(searchData) {
                 for (var x in searchData) {
-                    var description = searchData[x];
-                    var xxx = x.substr(1);
+                    var description = LOCAL_ACCESS ? searchData[x].payload : searchData[x];
+                    var xxx = LOCAL_ACCESS ? searchData[x].uid : x.substr(1);
                     $('<div class="container">\
 <h2 ><div class="input-group" style="display:flex;"><a class="snippetor-play-snippet" uid="'+x+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp; <a class="snippetor-detail-snippet" href="/?open='+xxx+'"><p><i class="fa fa-edit">&nbsp;Details</i></p></a></div></h2>\
 <div class="panel panel-default">\
@@ -622,11 +699,13 @@
                 }
                 $(".snippetor-play-snippet").click(function(){
                   var uid = $(this).attr("uid");
-                  var payload = searchData[uid];
+                  var payload = LOCAL_ACCESS ? searchData[uid].payload  : searchData[uid];
                   if (!uid)
                     return;
+                  // Drop the "-" prefix for the firebase ??? do we really need it ?
+                  if (!LOCAL_ACCESS)
+                   uid = uid.substr(1);
 
-                  uid = uid.substr(1);
                   payload.uid = uid; // save current unique ID
 
                   extensionRemoteApi.openSnippet(payload);
@@ -634,9 +713,9 @@
             }
 
 
-            function showContent(payload) {
+            function showContent(payload, idx) {
                 
-                addSaveForm(payload);
+                addSaveForm(payload, idx);
                 for (var r = 0; r < payload.items.length; ++r) {
                     showContentItem(payload.items[r], null, extensionRemoteApi);
 
@@ -658,8 +737,12 @@
                   var uid = $(this).attr("uid");
                   if (!uid || uid == "") {
                     storageApi.saveContent(payload, function(path) {
-                        var uniquePath = path.toString().split("/")[2];
-                        uniquePath = uniquePath.substr(1);
+						var uniquePath = path;
+						// TODO: just for the fast debug purpose
+						if (!LOCAL_ACCESS) {
+                          uniquePath = path.toString().split("/")[2];
+                          uniquePath = uniquePath.substr(1);
+					    }
                         // handle snippet save
                         extensionRemoteApi.onSavedSnippet({uid: uniquePath});
                         
@@ -669,14 +752,17 @@
                     });
                   } else {
                     storageApi.updateContent(uid, payload, function(path) {
-                        var uniquePath = path.toString().split("/")[2];
-                        uniquePath = uniquePath.substr(1);
+                        var uniquePath = path.uid;
+                        if (!LOCAL_ACCESS) {
+						  uniquePath = path.toString().split("/")[2];
+                          uniquePath = uniquePath.substr(1);
+					    }
 
                         // handle snippet saved
-                        extensionRemoteApi.onSavedSnippet({uid: uniquePath});
+                        extensionRemoteApi.onSavedSnippet({uid: uniquePath, version: path.version});
 
                         setTimeout(function() {
-                          window.location.href = "/?open=" + uniquePath;
+                          window.location.href = "/?open=" + uniquePath + "/" +path.version + "/";
                         }, 100);
                      }); // update content API
                 }
@@ -706,7 +792,7 @@
                  if (uiHandler.snippets.length > id) {
                      uiHandler.working = id;
                      if (global_action == "SAVE")
-                       showContent(uiHandler.snippets[id]);
+                       showContent(uiHandler.snippets[id], id);
                  }
              },
              onSaveCurrentSnippet: function() {
