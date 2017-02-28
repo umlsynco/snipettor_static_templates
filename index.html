@@ -22,6 +22,34 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+<style>
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+}
+</style>
+
 </head>
 
 <body>
@@ -56,7 +84,7 @@
             <div class="col-sm-3 col-md-3">
                 <form class="navbar-form" role="search">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search snippet" name="q">
+                        <input type="text" class="form-control" placeholder="Search snippet" name="search">
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
@@ -374,7 +402,7 @@
 			    }
 			},
 			_prevSearch: {},
-			searchContent: function(queryText, callback) {
+			searchContent: function(query, callback) {
 				var result = new Array();
 				var counter = 0;
 				for (var x in localStorage) {
@@ -382,10 +410,23 @@
 					if (x.indexOf(this.uid) != 0)
 					  continue;
 
-					var y = localStorage[x];
 					var z = x.split("/");
-					if ((!queryText && z.length == 3) || (queryText && y.indexOf(queryText) >= 0)) {
-					  result.push({uid: z[1], version: z[2], payload:JSON.parse(y)});
+					if (z.length != 3) {
+						console.log("MN: " + x);
+					  continue;
+				    }
+				    console.log("X: " + x);
+
+					var y = localStorage[x];
+					if ((!query.search) || (y.indexOf(query.search) >= 0)) {
+    				  var payload = JSON.parse(y);
+    				  // filter tags
+    				  if (query.tag && (payload.tags.indexOf(query.tag) < 0))
+    				    continue;
+    				  // Add branch based search
+    				  if (query.branch &&  payload.branches && (payload.branches.indexOf(query.branch) < 0))
+    				    continue;
+					  result.push({uid: z[1], version: z[2], payload:payload});
 					  if (counter > 36) break;
 					    counter++;
 				     }
@@ -433,7 +474,7 @@
 
         window.addEventListener("onInit", function(evt) {
             if (extensionRemoteApi.handlers 
-                && extensionRemoteApi.handlers.onInit)
+					&& extensionRemoteApi.handlers.onInit)
            extensionRemoteApi.handlers.onInit(evt.detail);
         });
         window.addEventListener("onSnippetChange", function(evt) {
@@ -641,15 +682,28 @@
                     });
                 }
                 else if (content.indexOf("search") >= 0) {
-                    var content = content.substr(7, content.length - 8);
-                    storageApi.searchContent(content, function(content) {
-                      showSearchResult(content);
+                    var searchString = content.split("&");
+                    var searcher = {};
+                    for (var x=0; x<searchString.length; ++x) {
+						var m = searchString[x].split("=");
+						if (searchString.length - 1 == x) {
+							searcher[m[0]] = m[1].substr(0, m[1].length -1);
+						}
+						else {
+						  searcher[m[0]] = m[1];
+					    }
+					}
+                    if (searcher["search"] == "*")
+                      searcher["search"] = null;
+
+                    storageApi.searchContent(searcher, function(content) {
+                      showSearchResult(searchString, content);
                     });
                 }
 
             } else { // content is not a query
-                storageApi.searchContent(null, function(content) {
-                    showSearchResult(content);
+                storageApi.searchContent({search: null}, function(content) {
+                    showSearchResult({search: null}, content);
                 });
             }
 
@@ -657,6 +711,7 @@
                 // remove the previous form and create a new one
                 $("#snipettor-save-form").remove();
                 $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '')+ '" class="navbar-form pull-left">\
+                <img alt="@baragoz" style="display: inline-block;overflow: hidden;line-height: 1;vertical-align: middle;border-radius: 3px;" height="20" src="https://avatars3.githubusercontent.com/u/6011629?v=3&amp;s=40" width="20">\
     <button type="button" class="btn snippetor-details-play"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
     '+ (payload.uid ? '': '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') + '\
     <button type="submit" class="btn"><i class="fa fa-save">&nbsp;Save</i></button>&nbsp;&nbsp;&nbsp;\
@@ -684,16 +739,62 @@
 			  });
             }
 
-            function showSearchResult(searchData) {
+            function getTagsBubbles(search, tags) {
+				var result = '<div class="panel-heading">';
+				for (var x in tags)
+				  result += '<a href="/?tag='+tags[x]+ '&search=' + (search.search ? search.search : '*' )
+				         +'"><button type="button" class="btn btn-active btn-xs">' + tags[x] + '</button></a>&nbsp;&nbsp;&nbsp;';
+				result += '</div>';
+				return result;
+			}
+
+            function getBranches(search, items) {
+				var uitems = [];
+
+				for (var x in items) {
+					if (items[x].url.indexOf("https://github.com") >= 0) {
+						var rr = items[x].url.split("/");
+						var branch = rr[3] + "/" + rr[4];
+						if (uitems.indexOf(branch) == -1)
+						  uitems.push(branch);
+					}
+				}
+				
+				var result = '<div class="panel-heading">';
+				for (var x in uitems)
+				  result += '<a href="/?branch='+uitems[x] + '&search=' + (search.search ? search.search : '*' )
+				         +'"><button type="button" class="btn btn-active btn-xs">' + uitems[x]
+				         + '</button></a>&nbsp;&nbsp;&nbsp;';
+				result += '</div>';
+				return result;
+			}
+
+            function showSearchResult(searchString, searchData) {
+
+				if (!searchData || searchData.length == 0) {
+					$("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo("#main-content");
+					return;
+				}
                 for (var x in searchData) {
                     var description = LOCAL_ACCESS ? searchData[x].payload : searchData[x];
                     var xxx = LOCAL_ACCESS ? searchData[x].uid : x.substr(1);
-                    $('<div class="container">\
-<h2 ><div class="input-group" style="display:flex;"><a class="snippetor-play-snippet" uid="'+x+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp; <a class="snippetor-detail-snippet" href="/?open='+xxx+'"><p><i class="fa fa-edit">&nbsp;Details</i></p></a></div></h2>\
+                    $('<div class="container" style="width:800px;">\
+<h2 ><div class="input-group" style="display:flex;">\
+  [ Evgeny ]&nbsp;&nbsp;/&nbsp;&nbsp;\
+  <a class="snippetor-play-snippet" uid="'+x+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
+  <a class="snippetor-detail-snippet" href="/?open='+xxx+'"><p><i class="fa fa-edit">&nbsp;Details</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
+  <button type="button" class="btn btn-default btn-circle"><i class="glyphicon">1</i></button> \
+  <button type="button" class="btn btn-active btn-circle"><i class="glyphicon">2</i></button> \
+  <button type="button" class="btn btn-active btn-circle"><i class="glyphicon">3</i></button> \
+  <button type="button" class="btn btn-default btn-circle"><i class="glyphicon">4</i></button> ...\
+  <button type="button" class="btn btn-active btn-circle"><i class="glyphicon">10</i></button>\
+</div></h2>\
 <div class="panel panel-default">\
 <div class="panel-heading">' + description.title + '</div>\
 <div class="panel-body">' + description.description +
                         '</div>\
+' + getTagsBubbles(searchString, description.tags) + '\
+' + getBranches(searchString, description.items) + '\
 </div>\
 </div>').prependTo("#main-content");
                 }
@@ -732,6 +833,7 @@
                   // Update title tags and description
                   payload.title = $("#snippetor-save-title").val();
                   payload.tags = $("#snippetor-save-tags").val();
+                  payload.tags = payload.tags.split(";");
                   payload.description = $("#snippetor-save-description").val();
                   
                   var uid = $(this).attr("uid");
