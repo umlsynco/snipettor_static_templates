@@ -400,6 +400,9 @@
    				  // return the real path
 				  callback(path);
 			    }
+			    else {
+					alert("NO CONTENT : " + uid);
+				}
 			},
 			_prevSearch: {},
 			searchContent: function(query, callback) {
@@ -781,7 +784,7 @@
                     $('<div class="container" style="width:800px;">\
 <h2 ><div class="input-group" style="display:flex;">\
   [ Evgeny ]&nbsp;&nbsp;/&nbsp;&nbsp;\
-  <a class="snippetor-play-snippet" uid="'+x+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
+  <a class="snippetor-play-snippet" uid="'+x+'" xuid="'+xxx+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
   <a class="snippetor-detail-snippet" href="/?open='+xxx+'"><p><i class="fa fa-edit">&nbsp;Details</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
   <button type="button" class="btn btn-default btn-circle"><i class="glyphicon">1</i></button> \
   <button type="button" class="btn btn-active btn-circle"><i class="glyphicon">2</i></button> \
@@ -800,15 +803,15 @@
                 }
                 $(".snippetor-play-snippet").click(function(){
                   var uid = $(this).attr("uid");
+                  var xuid = $(this).attr("xuid");
                   var payload = LOCAL_ACCESS ? searchData[uid].payload  : searchData[uid];
-                  if (!uid)
+                  if (!uid || !xuid)
                     return;
                   // Drop the "-" prefix for the firebase ??? do we really need it ?
                   if (!LOCAL_ACCESS)
-                   uid = uid.substr(1);
+                   xuid = xuid.substr(1);
 
-                  payload.uid = uid; // save current unique ID
-
+                  payload.uid = xuid ; // save current unique ID
                   extensionRemoteApi.openSnippet(payload);
                 });
             }
