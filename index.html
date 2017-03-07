@@ -92,8 +92,12 @@
                 </form>
             </div>
             <ul class="nav navbar-nav navbar-right">
-				<li><a href="#">LOCAL</a></li>
-                <li><a href="#">Settings</a></li>
+				<li><a href="#" style="color:red;">Local storage</a></li>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Local Storage</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -407,6 +411,7 @@
 			_prevSearch: {},
 			searchContent: function(query, callback) {
 				var result = new Array();
+				var result2 = [];
 				var counter = 0;
 				for (var x in localStorage) {
 					// skip another items
@@ -430,12 +435,19 @@
     				  if (query.branch &&  payload.branches && (payload.branches.indexOf(query.branch) < 0))
     				    continue;
 					  result.push({uid: z[1], version: z[2], payload:payload});
+					  var should_increase_counter = (result2[z[1]] == undefined);
+					  result2[z[1]] = result2[z[1]] || [];
+					  result2[z[1]][parseInt(z[2])] = payload;
 					  if (counter > 36) break;
-					    counter++;
+
+					  // avoid previous version handling
+					   if (should_increase_counter) counter++;
 				     }
 				}
+				console.log("FFFFFFFFFFFFFFFF");
+				console.dir(result2);
 				setTimeout(function() {
-				  callback(result);
+				  callback(result2);
 			  }, 400);
 				
 			}
@@ -771,26 +783,31 @@
 				result += '</div>';
 				return result;
 			}
+function showAvailableVersions(search, uid, versions) {
+  var result = "";
+  for (var y in versions)
+    result += '<a href="/?open='+uid+'/'+y+'"><button type="button" class="btn btn-default btn-circle"><i class="glyphicon">'+y+'</i></button></a>';
+  return result;
+}
 
             function showSearchResult(searchString, searchData) {
 
-				if (!searchData || searchData.length == 0) {
+				if (!searchData || Object.keys(searchData).length == 0) {
 					$("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo("#main-content");
 					return;
 				}
                 for (var x in searchData) {
-                    var description = LOCAL_ACCESS ? searchData[x].payload : searchData[x];
-                    var xxx = LOCAL_ACCESS ? searchData[x].uid : x.substr(1);
+					var versions = searchData[x];
+					var item = versions[versions.length -1]; // it should be the latest version
+
+                    var description = LOCAL_ACCESS ? item : searchData[x];
+                    var xxx = LOCAL_ACCESS ? x : x.substr(1);
                     $('<div class="container" style="width:800px;">\
 <h2 ><div class="input-group" style="display:flex;">\
   [ Evgeny ]&nbsp;&nbsp;/&nbsp;&nbsp;\
   <a class="snippetor-play-snippet" uid="'+x+'" xuid="'+xxx+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
   <a class="snippetor-detail-snippet" href="/?open='+xxx+'"><p><i class="fa fa-edit">&nbsp;Details</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
-  <button type="button" class="btn btn-default btn-circle"><i class="glyphicon">1</i></button> \
-  <button type="button" class="btn btn-active btn-circle"><i class="glyphicon">2</i></button> \
-  <button type="button" class="btn btn-active btn-circle"><i class="glyphicon">3</i></button> \
-  <button type="button" class="btn btn-default btn-circle"><i class="glyphicon">4</i></button> ...\
-  <button type="button" class="btn btn-active btn-circle"><i class="glyphicon">10</i></button>\
+  '  + showAvailableVersions(searchString, xxx, searchData[x]) + '\
 </div></h2>\
 <div class="panel panel-default">\
 <div class="panel-heading">' + description.title + '</div>\
@@ -838,7 +855,23 @@
                   payload.tags = $("#snippetor-save-tags").val();
                   payload.tags = payload.tags.split(";");
                   payload.description = $("#snippetor-save-description").val();
-                  
+
+                  ////////////////  UPDATE THE LIST OF BRANCHES --------
+                  var branches = [];
+                  for (var x in payload.items) {
+					  var item = payload.items[x];
+					  if (item.url.indexOf("https://github.com") >= 0) {
+						  var z = item.url.split("/");
+						  z = z[3] + "/" + z[4];
+						  // add unique branch name
+						  if (!(z in branches))
+						    branches.push(z);
+					  }
+				  }
+				  // make dedicated list of branches
+                  payload.branches = branches;
+                  ////////////////  UPDATE THE LIST OF BRANCHES --------
+
                   var uid = $(this).attr("uid");
                   if (!uid || uid == "") {
                     storageApi.saveContent(payload, function(path) {
