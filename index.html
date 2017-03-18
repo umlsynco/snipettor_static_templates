@@ -22,33 +22,35 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
-<style>
-.btn-circle {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 15px;
-}
-.btn-circle.btn-lg {
-  width: 50px;
-  height: 50px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.33;
-  border-radius: 25px;
-}
-.btn-circle.btn-xl {
-  width: 70px;
-  height: 70px;
-  padding: 10px 16px;
-  font-size: 24px;
-  line-height: 1.33;
-  border-radius: 35px;
-}
-</style>
+    <style>
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+        
+        .btn-circle.btn-lg {
+            width: 50px;
+            height: 50px;
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.33;
+            border-radius: 25px;
+        }
+        
+        .btn-circle.btn-xl {
+            width: 70px;
+            height: 70px;
+            padding: 10px 16px;
+            font-size: 24px;
+            line-height: 1.33;
+            border-radius: 35px;
+        }
+    </style>
 
 </head>
 
@@ -73,7 +75,7 @@
                 <li><a href="#"><i class="fa fa-google fa-2x"></i></a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Working snippets <b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="snippetor-select-menu" >
+                    <ul class="dropdown-menu" id="snippetor-select-menu">
                         <li class="divider"></li>
                         <li><a href="#">Create new</a></li>
                         <li class="divider"></li>
@@ -92,7 +94,7 @@
                 </form>
             </div>
             <ul class="nav navbar-nav navbar-right">
-				<li><a href="#" style="color:red;">Local storage</a></li>
+                <li><a href="#" style="color:red;">Local storage</a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Local Storage</a></li>
@@ -137,19 +139,19 @@
     <script>
         var global_action = null;
         var uiHandler = {};
-        
+
         function showContentItem(item, index, extApi) {
-                    var github_prefix = "https://github.com/";
-                    var url_path = item.url.substr(github_prefix.length);
+            var github_prefix = "https://github.com/";
+            var url_path = item.url.substr(github_prefix.length);
 
-                    var user = url_path.substr(0, url_path.indexOf("/"));
-                    url_path = url_path.substr(url_path.indexOf("/") + 1);
+            var user = url_path.substr(0, url_path.indexOf("/"));
+            url_path = url_path.substr(url_path.indexOf("/") + 1);
 
-                    var repo = url_path.substr(0, url_path.indexOf("/"));
-                    url_path = url_path.substr(url_path.indexOf("/") + 1);
+            var repo = url_path.substr(0, url_path.indexOf("/"));
+            url_path = url_path.substr(url_path.indexOf("/") + 1);
 
-                    var panelTemplate =
-                        '\
+            var panelTemplate =
+                '\
 <div class="panel panel-default">\
     <i class="fa fa-chevron-down fa-3x" style="float: left;position: relative;left: -50px;top: 70px;"></i>\
     <i class="fa fa-chevron-up fa-3x" style="float: left;left: -93px;position: relative;top: 20px;"></i>\
@@ -159,68 +161,81 @@
   <ul class="breadcrumb" style="margin-bottom: 0px;">\
       <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
       <li><a href="#">' +
-                        user + '</a> <span class="divider"></span></li>\
+                user + '</a> <span class="divider"></span></li>\
       <li><a href="#">' + repo + '</a> <span class="divider"></span></li>\
       <li><a href="#">' + url_path +
-                        '</a> <span class="divider"></span></li>\
+                '</a> <span class="divider"></span></li>\
       <li><a href="#">L#' + item.line +
-                        '</a></li>\
+                '</a></li>\
     </ul>\
   </h3>\
 </div>\
 <div class="panel-body">  <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p><span class="snippet-description">' +
-                        item.comment + '</span></div>\
+                item.comment + '</span></div>\
 </div>';
-                    //
-                    var item = $(panelTemplate).appendTo("#snipettor-save-form");
+            //
+            var item = $(panelTemplate).appendTo("#snipettor-save-form");
 
-                    // Sort the comment items
-                    item.find(".fa-chevron-up").click(function() {
-                        var oldIndex = $(".panel-default").index($(this).parent());
-                        if (oldIndex > 0) {
-                            var payload = {oldIndex: oldIndex, newIndex:oldIndex-1};
-                          extApi.updateSnippetItem("move", payload);
-                          uiHandler.doSwapItems(payload);
-                        }
-                    });
-                    item.find(".fa-chevron-down").click(function() {
-                        var oldIndex = $(".panel-default").index($(this).parent());
-                        if (oldIndex < $(".panel-default").length-1) {
-                          var  payload = {oldIndex: oldIndex, newIndex:oldIndex+1};
-                          extApi.updateSnippetItem("move", payload);
-                          uiHandler.doSwapItems(payload);
-                        }
-                    });
-                    item.find(".fa-close").click(function() {
-                        var idx = $(".panel-default").index($(this).parent().parent());
-                        extApi.updateSnippetItem("delete", {index: idx});
-                        var parent = $(this).parent().parent();
-                        parent.remove();
-                    });
-                    // edit the text of comment
-                    item.find(".fa-edit").click(function() {
-                        var parent = $(this).parent().parent();
-                        var elemIndex = $(".panel-default").index(parent.parent());
+            // Sort the comment items
+            item.find(".fa-chevron-up").click(function() {
+                var oldIndex = $(".panel-default").index($(this).parent());
+                if (oldIndex > 0) {
+                    var payload = {
+                        oldIndex: oldIndex,
+                        newIndex: oldIndex - 1
+                    };
+                    extApi.updateSnippetItem("move", payload);
+                    uiHandler.doSwapItems(payload);
+                }
+            });
+            item.find(".fa-chevron-down").click(function() {
+                var oldIndex = $(".panel-default").index($(this).parent());
+                if (oldIndex < $(".panel-default").length - 1) {
+                    var payload = {
+                        oldIndex: oldIndex,
+                        newIndex: oldIndex + 1
+                    };
+                    extApi.updateSnippetItem("move", payload);
+                    uiHandler.doSwapItems(payload);
+                }
+            });
+            item.find(".fa-close").click(function() {
+                var idx = $(".panel-default").index($(this).parent().parent());
+                extApi.updateSnippetItem("delete", {
+                    index: idx
+                });
+                var parent = $(this).parent().parent();
+                parent.remove();
+            });
+            // edit the text of comment
+            item.find(".fa-edit").click(function() {
+                var parent = $(this).parent().parent();
+                var elemIndex = $(".panel-default").index(parent.parent());
 
-                        if (parent.find("textarea").length > 0) {
-                            parent.find("textarea").trigger("blur");
-                            return;
-                        }
-                          
-                        var text = parent.find(".snippet-description").html();
-                        parent.find(".snippet-description").hide();
-                        parent.append("<textarea style='width:100%;'>"+text+"</textarea>");
-                        parent.find("textarea").blur(function() {
-                            var xxx = parent.find("textarea").val();
-                            parent.find("textarea").remove();
-                            if (xxx != text) {
-                              parent.find(".snippet-description").text(xxx);
-                              extApi.updateSnippetItem("update", {idx: elemIndex, item: {comment: xxx}});
+                if (parent.find("textarea").length > 0) {
+                    parent.find("textarea").trigger("blur");
+                    return;
+                }
+
+                var text = parent.find(".snippet-description").html();
+                parent.find(".snippet-description").hide();
+                parent.append("<textarea style='width:100%;'>" + text + "</textarea>");
+                parent.find("textarea").blur(function() {
+                    var xxx = parent.find("textarea").val();
+                    parent.find("textarea").remove();
+                    if (xxx != text) {
+                        parent.find(".snippet-description").text(xxx);
+                        extApi.updateSnippetItem("update", {
+                            idx: elemIndex,
+                            item: {
+                                comment: xxx
                             }
-                            parent.find(".snippet-description").show();
                         });
-                    });
-            };
+                    }
+                    parent.find(".snippet-description").show();
+                });
+            });
+        };
 
         var storageApiFirebase = {
             init: function() {
@@ -284,7 +299,7 @@
             // Load content by key and version
             //
             loadContent: function(uid2, version, callback) {
-				var uid = "-" + uid2;
+                var uid = "-" + uid2;
                 var that = this;
                 var handler = function(snapshot) {
                     if (callback)
@@ -315,243 +330,258 @@
             // Update the content and version
             //
             updateContent: function(uid, payload, callback) {
-              var msg = this._getMessageRef('content');
-              if (msg) {
-                var ref = msg.child("-" +uid);
-                ref.child('version').once('value').then(function(x) {
-                  var position = x.val()+1;
-                  ref
-                  .child(position)
-                  .push({data: payload.data, title: payload.title, type: payload.type})
-                  .then(function(snapshot) {
-                      if (callback) {
-                        callback(snapshot.path);
-                      }
-                      ref.update({version: position});
-                  }.bind(this))
-                  .catch(function(error) {
-                      var text = 'Error updating existing content to Firebase Database';
-                      console.error(text, error);
-                      callback(null, text);
-                  });
-                }); // ref get value
-              }
+                var msg = this._getMessageRef('content');
+                if (msg) {
+                    var ref = msg.child("-" + uid);
+                    ref.child('version').once('value').then(function(x) {
+                        var position = x.val() + 1;
+                        ref
+                            .child(position)
+                            .push({
+                                data: payload.data,
+                                title: payload.title,
+                                type: payload.type
+                            })
+                            .then(function(snapshot) {
+                                if (callback) {
+                                    callback(snapshot.path);
+                                }
+                                ref.update({
+                                    version: position
+                                });
+                            }.bind(this))
+                            .catch(function(error) {
+                                var text = 'Error updating existing content to Firebase Database';
+                                console.error(text, error);
+                                callback(null, text);
+                            });
+                    }); // ref get value
+                }
             },
 
             //
             // Show the latest content only
             //
             searchContent: function(queryText, callback) {
-              if (queryText) {
-                this.database.ref('messages')
-                .limitToLast(20)
-                .orderByChild('title')
-                .startAt(queryText)
-                .endAt(queryText+"\uf8ff")
-                .once('value')
-                .then(function(complete) {
-                    callback(complete.val());
-                });
-              } else {
-                this.database.ref('messages')
-                .limitToLast(20)
-                .once('value')
-                .then(function(complete) {
-                    callback(complete.val());
-                });
-              }
+                if (queryText) {
+                    this.database.ref('messages')
+                        .limitToLast(20)
+                        .orderByChild('title')
+                        .startAt(queryText)
+                        .endAt(queryText + "\uf8ff")
+                        .once('value')
+                        .then(function(complete) {
+                            callback(complete.val());
+                        });
+                } else {
+                    this.database.ref('messages')
+                        .limitToLast(20)
+                        .once('value')
+                        .then(function(complete) {
+                            callback(complete.val());
+                        });
+                }
             }
         }; // StorageApi
-        
+
         var uidGenerator = function() {
-			var letters = 'abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890';
-			var d = new Date();
-			var uid  = "L" + letters[d.getFullYear() - 2000] + letters[d.getMonth()] + letters[d.getDay()] + letters[d.getHours()] + letters[d.getMinutes()] + letters[d.getSeconds()] + letters[Math.round(d.getMilliseconds() / 100)];
-			while (uid.length < 32) {
-				uid += letters[Math.round(Math.random() * 72)];
-			}
-			return uid;
-		};
-        
+            var letters = 'abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890';
+            var d = new Date();
+            var uid = "L" + letters[d.getFullYear() - 2000] + letters[d.getMonth()] + letters[d.getDay()] + letters[d.getHours()] + letters[d.getMinutes()] + letters[d.getSeconds()] + letters[Math.round(d.getMilliseconds() / 100)];
+            while (uid.length < 32) {
+                uid += letters[Math.round(Math.random() * 72)];
+            }
+            return uid;
+        };
+
         var storageApiLocalStorage = {
-			uid: "snippetor/",
-			init: function() {
-				localStorage[this.uid] = localStorage[this.uid] || [];
-			},
-			saveContent: function(payload, callback) {
-				var uid = uidGenerator();
-				localStorage[this.uid + uid] = 0;
-				localStorage[this.uid + uid + "/0"] = JSON.stringify(payload);
-				// notify about save
-				callback(uid);
-			},
-			loadContent: function(uid, version, callback) {
-				var v = version || 0;
-				var xxx = localStorage[this.uid + uid + "/" + v];
-				if (xxx)
-				  xxx = JSON.parse(xxx);
-				
-				console.dir(xxx);
-				xxx.uid = uid;
-				xxx.version = v;
-				callback(xxx);
-			},
-			updateContent: function(uid, payload, callback) {
-				if (localStorage[this.uid + uid] != undefined) {
-  				  var path = {uid: uid, version: parseInt(localStorage[this.uid + uid]) + 1};
-  				  localStorage[this.uid + uid] = path.version;
-   				  localStorage[this.uid + uid + "/" + path.version] = JSON.stringify(payload);
-   				  // return the real path
-				  callback(path);
-			    }
-			    else {
-					alert("NO CONTENT : " + uid);
-				}
-			},
-			_prevSearch: {},
-			searchContent: function(query, callback) {
-				var result = new Array();
-				var result2 = [];
-				var counter = 0;
-				for (var x in localStorage) {
-					// skip another items
-					if (x.indexOf(this.uid) != 0)
-					  continue;
+            uid: "snippetor/",
+            init: function() {
+                localStorage[this.uid] = localStorage[this.uid] || [];
+            },
+            saveContent: function(payload, callback) {
+                var uid = uidGenerator();
+                localStorage[this.uid + uid] = 0;
+                localStorage[this.uid + uid + "/0"] = JSON.stringify(payload);
+                // notify about save
+                callback(uid);
+            },
+            loadContent: function(uid, version, callback) {
+                var v = version || 0;
+                var xxx = localStorage[this.uid + uid + "/" + v];
+                if (xxx)
+                    xxx = JSON.parse(xxx);
 
-					var z = x.split("/");
-					if (z.length != 3) {
-						console.log("MN: " + x);
-					  continue;
-				    }
-				    console.log("X: " + x);
+                console.dir(xxx);
+                xxx.uid = uid;
+                xxx.version = v;
+                callback(xxx);
+            },
+            updateContent: function(uid, payload, callback) {
+                if (localStorage[this.uid + uid] != undefined) {
+                    var path = {
+                        uid: uid,
+                        version: parseInt(localStorage[this.uid + uid]) + 1
+                    };
+                    localStorage[this.uid + uid] = path.version;
+                    localStorage[this.uid + uid + "/" + path.version] = JSON.stringify(payload);
+                    // return the real path
+                    callback(path);
+                } else {
+                    alert("NO CONTENT : " + uid);
+                }
+            },
+            _prevSearch: {},
+            searchContent: function(query, callback) {
+                var result = new Array();
+                var result2 = [];
+                var counter = 0;
+                for (var x in localStorage) {
+                    // skip another items
+                    if (x.indexOf(this.uid) != 0)
+                        continue;
 
-					var y = localStorage[x];
-					if ((!query.search) || (y.indexOf(query.search) >= 0)) {
-    				  var payload = JSON.parse(y);
-    				  // filter tags
-    				  if (query.tag && (payload.tags.indexOf(query.tag) < 0))
-    				    continue;
-    				  // Add branch based search
-    				  if (query.branch &&  payload.branches && (payload.branches.indexOf(query.branch) < 0))
-    				    continue;
-					  result.push({uid: z[1], version: z[2], payload:payload});
-					  var should_increase_counter = (result2[z[1]] == undefined);
-					  result2[z[1]] = result2[z[1]] || [];
-					  result2[z[1]][parseInt(z[2])] = payload;
-					  if (counter > 36) break;
+                    var z = x.split("/");
+                    if (z.length != 3) {
+                        console.log("MN: " + x);
+                        continue;
+                    }
+                    console.log("X: " + x);
 
-					  // avoid previous version handling
-					   if (should_increase_counter) counter++;
-				     }
-				}
-				console.log("FFFFFFFFFFFFFFFF");
-				console.dir(result2);
-				setTimeout(function() {
-				  callback(result2);
-			  }, 400);
-				
-			}
-		};
-		// TODO: runtime select between firebase and localstorage
-		var LOCAL_ACCESS = true;
-		var storageApi = LOCAL_ACCESS ? storageApiLocalStorage : storageApiFirebase;
+                    var y = localStorage[x];
+                    if ((!query.search) || (y.indexOf(query.search) >= 0)) {
+                        var payload = JSON.parse(y);
+                        // filter tags
+                        if (query.tag && (payload.tags.indexOf(query.tag) < 0))
+                            continue;
+                        // Add branch based search
+                        if (query.branch && payload.branches && (payload.branches.indexOf(query.branch) < 0))
+                            continue;
+                        result.push({
+                            uid: z[1],
+                            version: z[2],
+                            payload: payload
+                        });
+                        var should_increase_counter = (result2[z[1]] == undefined);
+                        result2[z[1]] = result2[z[1]] || [];
+                        result2[z[1]][parseInt(z[2])] = payload;
+                        if (counter > 36) break;
+
+                        // avoid previous version handling
+                        if (should_increase_counter) counter++;
+                    }
+                }
+                console.log("FFFFFFFFFFFFFFFF");
+                console.dir(result2);
+                setTimeout(function() {
+                    callback(result2);
+                }, 400);
+
+            }
+        };
+        // TODO: runtime select between firebase and localstorage
+        var LOCAL_ACCESS = true;
+        var storageApi = LOCAL_ACCESS ? storageApiLocalStorage : storageApiFirebase;
 
         var extensionRemoteApi = {
             handlers: null,
             openSnippet: function(payload, idx) {
-              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                detail: {
-                  action: "open-snippet",
-                  data: { payload : payload, index: idx}
-                }
-              }));
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                    detail: {
+                        action: "open-snippet",
+                        data: {
+                            payload: payload,
+                            index: idx
+                        }
+                    }
+                }));
             },
             onSavedSnippet: function(payload) {
-              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                detail: {
-                  action: "saved-draft",
-                  payload: payload
-                }
-              }));
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                    detail: {
+                        action: "saved-draft",
+                        payload: payload
+                    }
+                }));
 
             },
             onUnsubscribeSnippet: function(payload) {
-              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                detail: {
-                  action: "unsubscribe",
-                  payload: payload
-                }
-              }));
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                    detail: {
+                        action: "unsubscribe",
+                        payload: payload
+                    }
+                }));
 
             },
             init: function(handlers) {
-              extensionRemoteApi.handlers = handlers;
+                extensionRemoteApi.handlers = handlers;
 
-        window.addEventListener("onInit", function(evt) {
-            if (extensionRemoteApi.handlers 
-					&& extensionRemoteApi.handlers.onInit)
-           extensionRemoteApi.handlers.onInit(evt.detail);
-        });
-        window.addEventListener("onSnippetChange", function(evt) {
-            var payload = evt.detail;
-            if (payload.action == "save") {
-                extensionRemoteApi.handlers.onSaveSnippet(payload);
-            } else if (payload.action == "create") {
-                extensionRemoteApi.handlers.onCreateSnippet(payload);
-            } else if (payload.action == "open") {
-                extensionRemoteApi.handlers.onOpenSnippet(payload);
-            } else {
-                alert("Unknow snippet action: " + payload.action);
-            }
-        });
+                window.addEventListener("onInit", function(evt) {
+                    if (extensionRemoteApi.handlers &&
+                        extensionRemoteApi.handlers.onInit)
+                        extensionRemoteApi.handlers.onInit(evt.detail);
+                });
+                window.addEventListener("onSnippetChange", function(evt) {
+                    var payload = evt.detail;
+                    if (payload.action == "save") {
+                        extensionRemoteApi.handlers.onSaveSnippet(payload);
+                    } else if (payload.action == "create") {
+                        extensionRemoteApi.handlers.onCreateSnippet(payload);
+                    } else if (payload.action == "open") {
+                        extensionRemoteApi.handlers.onOpenSnippet(payload);
+                    } else {
+                        alert("Unknow snippet action: " + payload.action);
+                    }
+                });
 
-        window.addEventListener("onSnippetItemChange", function(evt) {
-            var payload = evt.detail;
-            if (payload.action == "add") {
-                extensionRemoteApi.handlers.onAddItem(payload);
-            } else if (payload.action == "remove") {
-                extensionRemoteApi.handlers.onRemoveItem(payload);
-            } else if (payload.action == "update") {
-                extensionRemoteApi.handlers.onUpdateItem(payload);
-            } else if (payload.action == "move") {
-                extensionRemoteApi.handlers.onMoveItem(payload);
-            } else {
-                alert("Unknow snippet action: " + payload.action);
-            }
-        });
+                window.addEventListener("onSnippetItemChange", function(evt) {
+                    var payload = evt.detail;
+                    if (payload.action == "add") {
+                        extensionRemoteApi.handlers.onAddItem(payload);
+                    } else if (payload.action == "remove") {
+                        extensionRemoteApi.handlers.onRemoveItem(payload);
+                    } else if (payload.action == "update") {
+                        extensionRemoteApi.handlers.onUpdateItem(payload);
+                    } else if (payload.action == "move") {
+                        extensionRemoteApi.handlers.onMoveItem(payload);
+                    } else {
+                        alert("Unknow snippet action: " + payload.action);
+                    }
+                });
 
 
-              setTimeout(function() {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                  detail: {
-                    action: "GetInitialState"
-                  }
-                 }));
-             }, 100);
+                setTimeout(function() {
+                    window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                        detail: {
+                            action: "GetInitialState"
+                        }
+                    }));
+                }, 100);
             },
             //
             // Assign current tab to the concreate snippet or snippet draft
             // @param payload - index of the selected item, (-1) is to unsubscribe
             //
             selectSnippet: function(index) {
-              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                detail: {
-                  action: "select-snippet",
-                  data: index
-                }
-              }));
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                    detail: {
+                        action: "select-snippet",
+                        data: index
+                    }
+                }));
             },
             //
             // Update current snippet data:
             // title, hash-tags or description 
             //
             updateSnippet: function(payload) {
-              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                detail: {
-                  action: "update-snippet",
-                  payload: payload
-                }
-              }));
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                    detail: {
+                        action: "update-snippet",
+                        payload: payload
+                    }
+                }));
             },
             //
             // Update the concreate snippet item's description
@@ -560,36 +590,35 @@
             // 3. position - change item position
             //
             updateSnippetItem: function(action, payload) {
-              window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                detail: {
-                  action: action + "-snippet-item",
-                  payload: payload
-                }
-              }));
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                    detail: {
+                        action: action + "-snippet-item",
+                        payload: payload
+                    }
+                }));
             }
         };
-        
+
         var handlers = {
             initialized: false,
-               onInit: function(response) {
-              console.log(">onInit");
-              console.dir(response);
+            onInit: function(response) {
+                console.log(">onInit");
+                console.dir(response);
 
-              uiHandler.updateWorkingSnippets(response.snippets);
-              if (response.working != undefined)  {
-                uiHandler.handleWorkingSnippet(response.working);
-              }
-              else {
-                  if (global_action == "SAVE")
-                    alert("There is nothing to save! Please, select some snippet");
-              }
+                uiHandler.updateWorkingSnippets(response.snippets);
+                if (response.working != undefined) {
+                    uiHandler.handleWorkingSnippet(response.working);
+                } else {
+                    if (global_action == "SAVE")
+                        alert("There is nothing to save! Please, select some snippet");
+                }
 
-              handlers.initialized = true;
+                handlers.initialized = true;
             },
             onSaveSnippet: function(payload) {
                 console.log("7");
                 if (!handlers.initialized)
-                  return;
+                    return;
 
                 if (payload.working == uiHandler.working) {
                     uiHandler.onSaveCurrentSnippet(payload.working);
@@ -604,10 +633,10 @@
                 uiHandler.updateWorkingSnippets(uiHandler.snippets);
 
             },
-            onCreateSnippet: function(payload){
+            onCreateSnippet: function(payload) {
                 console.log("6");
                 if (!handlers.initialized)
-                  return;
+                    return;
 
                 uiHandler.snippets[payload.working] = payload.snippet;
                 uiHandler.updateWorkingSnippets(uiHandler.snippets);
@@ -615,7 +644,7 @@
             onOpenSnippet: function(payload) {
                 console.log("5");
                 if (!handlers.initialized)
-                  return;
+                    return;
 
                 uiHandler.snippets[payload.working] = payload.snippet;
                 uiHandler.updateWorkingSnippets(uiHandler.snippets);
@@ -623,7 +652,7 @@
             onAddItem: function(payload) {
                 console.log("4");
                 if (!handlers.initialized)
-                  return;
+                    return;
 
                 if (payload.working == uiHandler.working) {
                     showContentItem(payload.item, payload.index, extensionRemoteApi);
@@ -633,7 +662,7 @@
             onRemoveItem: function(payload) {
                 console.log("3");
                 if (!handlers.initialized)
-                  return;
+                    return;
 
                 if (payload.working == uiHandler.working) {
                     removeContentItem(payload.index);
@@ -643,7 +672,7 @@
             onUpdateItem: function(payload) {
                 console.log("2");
                 if (!handlers.initialized)
-                  return;
+                    return;
 
                 if (payload.working == uiHandler.working) {
                     console.log("Update UI description only");
@@ -657,7 +686,7 @@
             onMoveItem: function(payload) {
                 console.log("on swap: " + payload.working + " == " + uiHandler.working);
                 if (!handlers.initialized)
-                  return;
+                    return;
 
                 if (payload.working == uiHandler.working) {
                     uiHandler.doSwapItems(payload.payload);
@@ -676,7 +705,7 @@
             // initialize firebase auth provider
             //
             storageApi.init();
-            
+
             extensionRemoteApi.init(handlers);
 
             if (content.length > 1) {
@@ -695,42 +724,48 @@
                         if (data) data.uid = uid;
                         showContent(data);
                     });
-                }
-                else if (content.indexOf("search") >= 0) {
+                } else if (content.indexOf("search") >= 0) {
                     var searchString = content.split("&");
                     var searcher = {};
-                    for (var x=0; x<searchString.length; ++x) {
-						var m = searchString[x].split("=");
-						if (searchString.length - 1 == x) {
-							searcher[m[0]] = m[1].substr(0, m[1].length -1);
-						}
-						else {
-						  searcher[m[0]] = m[1];
-					    }
-					}
+                    for (var x = 0; x < searchString.length; ++x) {
+                        var m = searchString[x].split("=");
+                        if (searchString.length - 1 == x) {
+                            searcher[m[0]] = m[1].substr(0, m[1].length - 1);
+                        } else {
+                            searcher[m[0]] = m[1];
+                        }
+                    }
                     if (searcher["search"] == "*")
-                      searcher["search"] = null;
+                        searcher["search"] = null;
 
                     storageApi.searchContent(searcher, function(content) {
-                      showSearchResult(searchString, content);
+                        showSearchResult(searchString, content);
                     });
                 }
 
             } else { // content is not a query
-                storageApi.searchContent({search: null}, function(content) {
-                    showSearchResult({search: null}, content);
+                storageApi.searchContent({
+                    search: null
+                }, function(content) {
+                    showSearchResult({
+                        search: null
+                    }, content);
                 });
             }
 
             function addSaveForm(payload, idx) {
                 // remove the previous form and create a new one
                 $("#snipettor-save-form").remove();
-                $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '')+ '" class="navbar-form pull-left">\
+                $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '') +
+                    '" class="navbar-form pull-left">\
                 <img alt="@baragoz" style="display: inline-block;overflow: hidden;line-height: 1;vertical-align: middle;border-radius: 3px;" height="20" src="https://avatars3.githubusercontent.com/u/6011629?v=3&amp;s=40" width="20">\
     <button type="button" class="btn snippetor-details-play"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
-    '+ (payload.uid ? '': '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') + '\
+    ' +
+                    (payload.uid ? '' : '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') +
+                    '\
     <button type="submit" class="btn"><i class="fa fa-save">&nbsp;Save</i></button>&nbsp;&nbsp;&nbsp;\
-    '+ (payload.uid ? '<button type="submit" class="btn"><i class="fa fa-fork">&nbsp;Fork</i></button>': '')+ ' <br><br>\
+    ' + (payload.uid ? '<button type="submit" class="btn"><i class="fa fa-fork">&nbsp;Fork</i></button>' : '') +
+                    ' <br><br>\
   <div class="raw">\
         <label for="title">Title*    </label><br>\
         <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" style="width: 550px;" value="' +
@@ -739,75 +774,82 @@
     </div><br>\
     <div class="raw">\
         <label for="tags">Tags*</label><br>\
-        <input id="snippetor-save-tags" type="text" value="'+( payload.tags || "") +'" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">\
+        <input id="snippetor-save-tags" type="text" value="' + (payload.tags || "") +
+                    '" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">\
     </div>\
     <div class="raw">\
         <label for="description">Description*</label><br>\
-        <textarea id="snippetor-save-description" class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;">'+(payload.description || "") +'</textarea>\
+        <textarea id="snippetor-save-description" class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;">' +
+                    (payload.description || "") + '</textarea>\
     </div>\
     <br>\
   </form>'
                 ).appendTo("#main-content");
-                
+
                 $("#snipettor-save-form .snippetor-details-play").click(function() {
-                  extensionRemoteApi.openSnippet(payload, idx);
-			  });
+                    extensionRemoteApi.openSnippet(payload, idx);
+                });
             }
 
             function getTagsBubbles(search, tags) {
-				var result = '<div class="panel-heading">';
-				for (var x in tags)
-				  result += '<a href="/?tag='+tags[x]+ '&search=' + (search.search ? search.search : '*' )
-				         +'"><button type="button" class="btn btn-active btn-xs">' + tags[x] + '</button></a>&nbsp;&nbsp;&nbsp;';
-				result += '</div>';
-				return result;
-			}
+                var result = '<div class="panel-heading">';
+                for (var x in tags)
+                    result += '<a href="/?tag=' + tags[x] + '&search=' + (search.search ? search.search : '*') +
+                    '"><button type="button" class="btn btn-active btn-xs">' + tags[x] + '</button></a>&nbsp;&nbsp;&nbsp;';
+                result += '</div>';
+                return result;
+            }
 
             function getBranches(search, items) {
-				var uitems = [];
+                var uitems = [];
 
-				for (var x in items) {
-					if (items[x].url.indexOf("https://github.com") >= 0) {
-						var rr = items[x].url.split("/");
-						var branch = rr[3] + "/" + rr[4];
-						if (uitems.indexOf(branch) == -1)
-						  uitems.push(branch);
-					}
-				}
-				
-				var result = '<div class="panel-heading">';
-				for (var x in uitems)
-				  result += '<a href="/?branch='+uitems[x] + '&search=' + (search.search ? search.search : '*' )
-				         +'"><button type="button" class="btn btn-active btn-xs">' + uitems[x]
-				         + '</button></a>&nbsp;&nbsp;&nbsp;';
-				result += '</div>';
-				return result;
-			}
-function showAvailableVersions(search, uid, versions) {
-  var result = "";
-  for (var y in versions)
-    result += '<a href="/?open='+uid+'/'+y+'"><button type="button" class="btn btn-default btn-circle"><i class="glyphicon">'+y+'</i></button></a>';
-  return result;
-}
+                for (var x in items) {
+                    if (items[x].url.indexOf("https://github.com") >= 0) {
+                        var rr = items[x].url.split("/");
+                        var branch = rr[3] + "/" + rr[4];
+                        if (uitems.indexOf(branch) == -1)
+                            uitems.push(branch);
+                    }
+                }
+
+                var result = '<div class="panel-heading">';
+                for (var x in uitems)
+                    result += '<a href="/?branch=' + uitems[x] + '&search=' + (search.search ? search.search : '*') +
+                    '"><button type="button" class="btn btn-active btn-xs">' + uitems[x] +
+                    '</button></a>&nbsp;&nbsp;&nbsp;';
+                result += '</div>';
+                return result;
+            }
+
+            function showAvailableVersions(search, uid, versions) {
+                var result = "";
+                for (var y in versions)
+                    result += '<a href="/?open=' + uid + '/' + y + '"><button type="button" class="btn btn-default btn-circle"><i class="glyphicon">' + y + '</i></button></a>';
+                return result;
+            }
 
             function showSearchResult(searchString, searchData) {
 
-				if (!searchData || Object.keys(searchData).length == 0) {
-					$("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo("#main-content");
-					return;
-				}
+                if (!searchData || Object.keys(searchData).length == 0) {
+                    $("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo("#main-content");
+                    return;
+                }
                 for (var x in searchData) {
-					var versions = searchData[x];
-					var item = versions[versions.length -1]; // it should be the latest version
+                    var versions = searchData[x];
+                    var item = versions[versions.length - 1]; // it should be the latest version
 
                     var description = LOCAL_ACCESS ? item : searchData[x];
                     var xxx = LOCAL_ACCESS ? x : x.substr(1);
+                    var xuid = versions.length - 1;
                     $('<div class="container" style="width:800px;">\
 <h2 ><div class="input-group" style="display:flex;">\
   [ Evgeny ]&nbsp;&nbsp;/&nbsp;&nbsp;\
-  <a class="snippetor-play-snippet" uid="'+x+'" xuid="'+xxx+'"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
-  <a class="snippetor-detail-snippet" href="/?open='+xxx+'"><p><i class="fa fa-edit">&nbsp;Details</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
-  '  + showAvailableVersions(searchString, xxx, searchData[x]) + '\
+  <a class="snippetor-play-snippet" uid="' + xxx + '" xuid="' + xuid +
+                        '"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
+  <a class="snippetor-detail-snippet" href="/?open=' + xxx +
+                        '"><p><i class="fa fa-edit">&nbsp;Details</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
+  ' + showAvailableVersions(searchString, xxx, searchData[x]) +
+                        '\
 </div></h2>\
 <div class="panel panel-default">\
 <div class="panel-heading">' + description.title + '</div>\
@@ -818,24 +860,31 @@ function showAvailableVersions(search, uid, versions) {
 </div>\
 </div>').prependTo("#main-content");
                 }
-                $(".snippetor-play-snippet").click(function(){
-                  var uid = $(this).attr("uid");
-                  var xuid = $(this).attr("xuid");
-                  var payload = LOCAL_ACCESS ? searchData[uid].payload  : searchData[uid];
-                  if (!uid || !xuid)
-                    return;
-                  // Drop the "-" prefix for the firebase ??? do we really need it ?
-                  if (!LOCAL_ACCESS)
-                   xuid = xuid.substr(1);
+                $(".snippetor-play-snippet").click(function() {
+                    var uid = $(this).attr("uid");
+                    var xuid = parseInt( $(this).attr("xuid"));
+                    console.log("UUUUUUUUUU :   " + uid + "     XUID: " + xuid);
+                    
+                    var payload = LOCAL_ACCESS ? searchData[uid][xuid] : searchData[uid];
+                    console.dir(payload);
 
-                  payload.uid = xuid ; // save current unique ID
-                  extensionRemoteApi.openSnippet(payload);
+                    if (!uid || xuid == undefined)
+                        return;
+                    // Drop the "-" prefix for the firebase ??? do we really need it ?
+                    if (!LOCAL_ACCESS)
+                        uid = uid.substr(1);
+
+                    payload.uid = uid; // save current unique ID
+                    payload.version = xuid;
+                    console.dir(payload);
+                    console.log("OOOOOOOOOOOPEN : " + uid);
+                    extensionRemoteApi.openSnippet(payload);
                 });
             }
 
 
             function showContent(payload, idx) {
-                
+
                 addSaveForm(payload, idx);
                 for (var r = 0; r < payload.items.length; ++r) {
                     showContentItem(payload.items[r], null, extensionRemoteApi);
@@ -847,112 +896,117 @@ function showAvailableVersions(search, uid, versions) {
                 //
                 $("#snipettor-save-form").submit(function(e) {
 
-                  e.preventDefault();
-                  e.stopPropagation();
-                    
-                  // Update title tags and description
-                  payload.title = $("#snippetor-save-title").val();
-                  payload.tags = $("#snippetor-save-tags").val();
-                  payload.tags = payload.tags.split(";");
-                  payload.description = $("#snippetor-save-description").val();
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                  ////////////////  UPDATE THE LIST OF BRANCHES --------
-                  var branches = [];
-                  for (var x in payload.items) {
-					  var item = payload.items[x];
-					  if (item.url.indexOf("https://github.com") >= 0) {
-						  var z = item.url.split("/");
-						  z = z[3] + "/" + z[4];
-						  // add unique branch name
-						  if (!(z in branches))
-						    branches.push(z);
-					  }
-				  }
-				  // make dedicated list of branches
-                  payload.branches = branches;
-                  ////////////////  UPDATE THE LIST OF BRANCHES --------
+                    // Update title tags and description
+                    payload.title = $("#snippetor-save-title").val();
+                    payload.tags = $("#snippetor-save-tags").val();
+                    payload.tags = payload.tags.split(";");
+                    payload.description = $("#snippetor-save-description").val();
 
-                  var uid = $(this).attr("uid");
-                  if (!uid || uid == "") {
-                    storageApi.saveContent(payload, function(path) {
-						var uniquePath = path;
-						// TODO: just for the fast debug purpose
-						if (!LOCAL_ACCESS) {
-                          uniquePath = path.toString().split("/")[2];
-                          uniquePath = uniquePath.substr(1);
-					    }
-                        // handle snippet save
-                        extensionRemoteApi.onSavedSnippet({uid: uniquePath});
-                        
-                        setTimeout(function() {
-                          window.location.href = "/?open=" + uniquePath;
-                        }, 100);
-                    });
-                  } else {
-                    storageApi.updateContent(uid, payload, function(path) {
-                        var uniquePath = path.uid;
-                        if (!LOCAL_ACCESS) {
-						  uniquePath = path.toString().split("/")[2];
-                          uniquePath = uniquePath.substr(1);
-					    }
+                    ////////////////  UPDATE THE LIST OF BRANCHES --------
+                    var branches = [];
+                    for (var x in payload.items) {
+                        var item = payload.items[x];
+                        if (item.url.indexOf("https://github.com") >= 0) {
+                            var z = item.url.split("/");
+                            z = z[3] + "/" + z[4];
+                            // add unique branch name
+                            if (!(z in branches))
+                                branches.push(z);
+                        }
+                    }
+                    // make dedicated list of branches
+                    payload.branches = branches;
+                    ////////////////  UPDATE THE LIST OF BRANCHES --------
 
-                        // handle snippet saved
-                        extensionRemoteApi.onSavedSnippet({uid: uniquePath, version: path.version});
+                    var uid = $(this).attr("uid");
+                    if (!uid || uid == "") {
+                        storageApi.saveContent(payload, function(path) {
+                            var uniquePath = path;
+                            // TODO: just for the fast debug purpose
+                            if (!LOCAL_ACCESS) {
+                                uniquePath = path.toString().split("/")[2];
+                                uniquePath = uniquePath.substr(1);
+                            }
+                            // handle snippet save
+                            extensionRemoteApi.onSavedSnippet({
+                                uid: uniquePath
+                            });
 
-                        setTimeout(function() {
-                          window.location.href = "/?open=" + uniquePath + "/" +path.version + "/";
-                        }, 100);
-                     }); // update content API
-                }
-                return false;
-              }); // on sumbit method
+                            setTimeout(function() {
+                                window.location.href = "/?open=" + uniquePath;
+                            }, 100);
+                        });
+                    } else {
+                        storageApi.updateContent(uid, payload, function(path) {
+                            var uniquePath = path.uid;
+                            if (!LOCAL_ACCESS) {
+                                uniquePath = path.toString().split("/")[2];
+                                uniquePath = uniquePath.substr(1);
+                            }
+
+                            // handle snippet saved
+                            extensionRemoteApi.onSavedSnippet({
+                                uid: uniquePath,
+                                version: path.version
+                            });
+
+                            setTimeout(function() {
+                                window.location.href = "/?open=" + uniquePath + "/" + path.version + "/";
+                            }, 100);
+                        }); // update content API
+                    }
+                    return false;
+                }); // on sumbit method
             } // show Content method
 
-         uiHandler = {
-             snippets: [],
-             working: -1,
-             updateWorkingSnippets: function(snippets) {
-                 $("ul#snippetor-select-menu>li.snippet-draft").remove();
-                 for (var i in snippets) {
-                     var sn = snippets[i];
-                     if (sn)
-                       $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="'+i+'"><a href="#">'+sn.title+'</a></li>');
-                 }
-                 $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
-                     var idx = $(this).attr("idx");
-                     idx = parseInt(idx);
-                     uiHandler.handleWorkingSnippet(idx);
-                     extensionRemoteApi.selectSnippet(idx);
-                 });
-                 uiHandler.snippets = snippets;
-             },
-             handleWorkingSnippet: function(id) {
-                 if (uiHandler.snippets.length > id) {
-                     uiHandler.working = id;
-                     if (global_action == "SAVE")
-                       showContent(uiHandler.snippets[id], id);
-                 }
-             },
-             onSaveCurrentSnippet: function() {
-                 window.location.href = "/";
-             },
-             doSwapItems: function(action) {
-                 if (action.oldIndex == action.newIndex)
-                   return;
+            uiHandler = {
+                snippets: [],
+                working: -1,
+                updateWorkingSnippets: function(snippets) {
+                    $("ul#snippetor-select-menu>li.snippet-draft").remove();
+                    for (var i in snippets) {
+                        var sn = snippets[i];
+                        if (sn)
+                            $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="' + i + '"><a href="#">' + sn.title + '</a></li>');
+                    }
+                    $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
+                        var idx = $(this).attr("idx");
+                        idx = parseInt(idx);
+                        uiHandler.handleWorkingSnippet(idx);
+                        extensionRemoteApi.selectSnippet(idx);
+                    });
+                    uiHandler.snippets = snippets;
+                },
+                handleWorkingSnippet: function(id) {
+                    if (uiHandler.snippets.length > id) {
+                        uiHandler.working = id;
+                        if (global_action == "SAVE")
+                            showContent(uiHandler.snippets[id], id);
+                    }
+                },
+                onSaveCurrentSnippet: function() {
+                    window.location.href = "/";
+                },
+                doSwapItems: function(action) {
+                    if (action.oldIndex == action.newIndex)
+                        return;
 
-                 var lis = $('div.panel-default');
-                 console.dir(action);
-                 console.dir(lis);
-                 var ttt = lis.eq(action.oldIndex);
-                 var new_ttt = lis.eq(action.newIndex);
-                 console.dir(ttt);
-                 if (action.newIndex < action.oldIndex) {
-                   new_ttt.before(ttt);
-                 } else {
-                   new_ttt.after(ttt);
-                 }
-             }
-         };
+                    var lis = $('div.panel-default');
+                    console.dir(action);
+                    console.dir(lis);
+                    var ttt = lis.eq(action.oldIndex);
+                    var new_ttt = lis.eq(action.newIndex);
+                    console.dir(ttt);
+                    if (action.newIndex < action.oldIndex) {
+                        new_ttt.before(ttt);
+                    } else {
+                        new_ttt.after(ttt);
+                    }
+                }
+            };
 
 
         }); // document ready
