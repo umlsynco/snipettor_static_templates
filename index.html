@@ -1068,16 +1068,19 @@
                     $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
                         var idx = $(this).attr("idx");
                         idx = parseInt(idx);
-                        uiHandler.handleWorkingSnippet(idx);
                         extensionRemoteApi.selectSnippet(idx);
+                        uiHandler.handleWorkingSnippet(idx, true);
                     });
                     uiHandler.snippets = snippets;
                 },
-                handleWorkingSnippet: function(id) {
+                handleWorkingSnippet: function(id, force) {
                     if (uiHandler.snippets.length > id) {
                         uiHandler.working = id;
                         if (global_action == "SAVE")
                             showContent(uiHandler.snippets[id], id);
+                        else if (force) {
+                           window.location.href = "/?save=DRAFT";
+                        }
                     }
                 },
                 onSaveCurrentSnippet: function() {
