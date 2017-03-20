@@ -792,7 +792,7 @@
 
         var container = null;
         $(document).ready(function() {
-            var content = window.location.href.split("?");
+            var content = decodeURI(window.location.href).split("?");
             //
             // initialize firebase auth provider
             //
@@ -817,7 +817,7 @@
                         showContent(data);
                     });
                 } else if (content.indexOf("search") >= 0) {
-                    var searchString = content.split("&");
+                    var searchString = decodeURI(content).split("&");
                     var searcher = {};
                     for (var x = 0; x < searchString.length; ++x) {
                         var m = searchString[x].split("=");
@@ -829,9 +829,10 @@
                     }
                     if (searcher["search"] == "*")
                         searcher["search"] = null;
-
                     storageApi.searchContent(searcher, function(content) {
+                        uiHandler.updateSearchForm(searcher);
                         showSearchResult(searchString, content);
+
                     });
                 }
 
@@ -1097,6 +1098,11 @@
                     } else {
                         new_ttt.after(ttt);
                     }
+                },
+                updateSearchForm: function(query) {
+                  $("[name='search']").val(query.search || "");
+                  $("[name='branches']").val(query.branches || "");
+                  $("[name='tags']").val(query.tags || "");
                 }
             };
 
