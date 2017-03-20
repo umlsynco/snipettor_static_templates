@@ -23,6 +23,57 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
     <style>
+        body {
+            padding-top: 0px;
+        }
+
+        .dropdown.dropdown-lg .dropdown-menu {
+            margin-top: -1px;
+            padding: 6px 20px;
+        }
+
+        .input-group-btn .btn-group {
+            display: flex !important;
+        }
+
+        .btn-group .btn {
+            border-radius: 0;
+            margin-left: -1px;
+        }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .btn-group .form-horizontal .btn[type="submit"] {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .form-horizontal .form-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .form-group .form-control:last-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        @media screen and (min-width: 768px) {
+            #adv-search {
+                width: 500px;
+                margin: 0 auto;
+            }
+            .dropdown.dropdown-lg {
+                position: static !important;
+            }
+            .dropdown.dropdown-lg .dropdown-menu {
+                min-width: 500px;
+            }
+        }
+
         .btn-circle {
             width: 30px;
             height: 30px;
@@ -32,7 +83,7 @@
             line-height: 1.428571429;
             border-radius: 15px;
         }
-        
+
         .btn-circle.btn-lg {
             width: 50px;
             height: 50px;
@@ -41,7 +92,7 @@
             line-height: 1.33;
             border-radius: 25px;
         }
-        
+
         .btn-circle.btn-xl {
             width: 70px;
             height: 70px;
@@ -84,6 +135,66 @@
                 </li>
             </ul>
             <div class="col-sm-3 col-md-3">
+                <!-- div class="container">
+	<div class="row">
+		<div class="col-md-12" -->
+                <div class="input-group" id="adv-search">
+                    <input type="text" class="form-control" placeholder="Search for snippets" />
+                    <div class="input-group-btn">
+                        <div class="btn-group" role="group">
+                            <div class="dropdown dropdown-lg">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label for="filter">Filter by</label>
+                                            <select class="form-control">
+                                        <option value="0" selected>All Snippets</option>
+                                        <option value="1">Featured</option>
+                                        <option value="2">Most popular</option>
+                                        <option value="3">Top rated</option>
+                                        <option value="4">Most commented</option>
+                                    </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="contain">Contains the words</label>
+                                            <input class="form-control" type="text" name="search" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="contain">Author</label>
+                                            <input class="form-control" type="text" name="author" />
+                                        </div>
+                                        <div id="demo" class="collapse out">
+                                            <div class="form-group">
+                                                <label for="contain">Branch name</label>
+                                                <input class="form-control" type="text" name="branches" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contain">Hash tags</label>
+                                                <input class="form-control" type="text" name="tags" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contain">uml</label>
+                                                <input class="form-control" type="text" name="uml" />
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">More options:</button>
+
+                                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        </div>
+                    </div>
+                </div>
+                <!--
+          </div>
+        </div>
+	</div>
+
                 <form class="navbar-form" role="search">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search snippet" name="search">
@@ -91,7 +202,7 @@
                             <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
                     </div>
-                </form>
+                </form> -->
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#" style="color:red;">Local storage</a></li>
@@ -311,15 +422,12 @@
                     if (callback) {
                         var xxx = snapshot.val();
                         for (var x in xxx) {
-                            console.log(x);
-                            console.dir(xxx[x]);
                             callback(xxx[x]);
                         }
                     }
                 };
 
                 if (version) {
-                    console.log("LOADING: window/" + uid + "/" + version);
                     var ref = this.database.ref('messages/' + uid + "/" + version);
                     ref.limitToFirst(1).once("value").then(handler2);
                 } else {
@@ -443,10 +551,8 @@
 
                     var z = x.split("/");
                     if (z.length != 3) {
-                        console.log("MN: " + x);
                         continue;
                     }
-                    console.log("X: " + x);
 
                     var y = localStorage[x];
                     if ((!query.search) || (y.indexOf(query.search) >= 0)) {
@@ -471,8 +577,6 @@
                         if (should_increase_counter) counter++;
                     }
                 }
-                console.log("FFFFFFFFFFFFFFFF");
-                console.dir(result2);
                 setTimeout(function() {
                     callback(result2);
                 }, 400);
@@ -573,7 +677,7 @@
             },
             //
             // Update current snippet data:
-            // title, hash-tags or description 
+            // title, hash-tags or description
             //
             updateSnippet: function(payload) {
                 window.dispatchEvent(new CustomEvent("onSnipettorAction", {
@@ -602,9 +706,6 @@
         var handlers = {
             initialized: false,
             onInit: function(response) {
-                console.log(">onInit");
-                console.dir(response);
-
                 uiHandler.updateWorkingSnippets(response.snippets);
                 if (response.working != undefined) {
                     uiHandler.handleWorkingSnippet(response.working);
@@ -616,7 +717,6 @@
                 handlers.initialized = true;
             },
             onSaveSnippet: function(payload) {
-                console.log("7");
                 if (!handlers.initialized)
                     return;
 
@@ -634,7 +734,6 @@
 
             },
             onCreateSnippet: function(payload) {
-                console.log("6");
                 if (!handlers.initialized)
                     return;
 
@@ -642,7 +741,6 @@
                 uiHandler.updateWorkingSnippets(uiHandler.snippets);
             },
             onOpenSnippet: function(payload) {
-                console.log("5");
                 if (!handlers.initialized)
                     return;
 
@@ -650,7 +748,6 @@
                 uiHandler.updateWorkingSnippets(uiHandler.snippets);
             },
             onAddItem: function(payload) {
-                console.log("4");
                 if (!handlers.initialized)
                     return;
 
@@ -660,7 +757,6 @@
                 uiHandler.snippets[payload.working].items.splice(payload.index, 0, payload.item);
             },
             onRemoveItem: function(payload) {
-                console.log("3");
                 if (!handlers.initialized)
                     return;
 
@@ -670,7 +766,6 @@
                 uiHandler.snippets[payload.working].items.splice(payload.index, 1);
             },
             onUpdateItem: function(payload) {
-                console.log("2");
                 if (!handlers.initialized)
                     return;
 
@@ -684,7 +779,6 @@
                 uiHandler.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
             },
             onMoveItem: function(payload) {
-                console.log("on swap: " + payload.working + " == " + uiHandler.working);
                 if (!handlers.initialized)
                     return;
 
@@ -692,7 +786,6 @@
                     uiHandler.doSwapItems(payload.payload);
                 }
                 var item = uiHandler.snippets[payload.working].items[payload.payload.oldIndex];
-                console.dir(item);
                 uiHandler.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
                 uiHandler.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
             }
@@ -862,9 +955,9 @@
                 }
                 $(".snippetor-play-snippet").click(function() {
                     var uid = $(this).attr("uid");
-                    var xuid = parseInt( $(this).attr("xuid"));
+                    var xuid = parseInt($(this).attr("xuid"));
                     console.log("UUUUUUUUUU :   " + uid + "     XUID: " + xuid);
-                    
+
                     var payload = LOCAL_ACCESS ? searchData[uid][xuid] : searchData[uid];
                     console.dir(payload);
 
