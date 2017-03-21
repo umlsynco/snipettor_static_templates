@@ -852,13 +852,14 @@
                 $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '') +
                     '" class="navbar-form pull-left">\
                 <img alt="@baragoz" style="display: inline-block;overflow: hidden;line-height: 1;vertical-align: middle;border-radius: 3px;" height="20" src="https://avatars3.githubusercontent.com/u/6011629?v=3&amp;s=40" width="20">\
-    <button type="button" class="btn snippetor-details-play"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
-    ' +
-                    (payload.uid ? '' : '<button type="submit" class="btn"><i class="fa fa-delete">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp;') +
-                    '\
-    <button type="submit" class="btn"><i class="fa fa-save">&nbsp;Save</i></button>&nbsp;&nbsp;&nbsp;\
-    ' + (payload.uid ? '<button type="submit" class="btn"><i class="fa fa-fork">&nbsp;Fork</i></button>' : '') +
-                    ' <br><br>\
+    <button type="submit" name="play" class="btn snippetor-details-play"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
+    <button type="submit" name="delete" class="btn"><i class="fa fa-trash">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp; \
+    <button type="submit" name="save" class="btn" style="display:none;"><i class="fa fa-save">&nbsp;Save</i></button> \
+    <button type="submit" name="edit" class="btn" style="display:none;"><i class="fa fa-edit">&nbsp;Edit</i></button> \
+    <button type="submit" name="revert" class="btn" style="display:none;"><i class="fa fa-undo">&nbsp;Revert</i></button> \
+    &nbsp;&nbsp;&nbsp;\
+    <button type="submit" name="fork" class="btn" style="display:none;"><i class="fa fa-fork">&nbsp;Fork</i></button> \
+    <br><br>\
   <div class="raw">\
         <label for="title">Title*    </label><br>\
         <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" style="width: 550px;" value="' +
@@ -878,6 +879,23 @@
     <br>\
   </form>'
                 ).appendTo("#main-content");
+
+                // Configure the buttons visibility
+                if (payload.uid) {
+                  $("[name='delete']").hide();
+                  $("[name='fork']").show();
+                  if (payload.isModified) {
+                    $("[name='revert']").show();
+                  }
+                  else {
+                    $("[name='edit']").show();
+                  }
+                }
+                else {
+
+                  // There is no support of isModified state for a draft snippet
+                  $("[name='save']").show();
+                }
 
                 $("#snipettor-save-form .snippetor-details-play").click(function() {
                     extensionRemoteApi.openSnippet(payload, idx);
@@ -988,7 +1006,6 @@
                 // Save content to the firebase storage
                 //
                 $("#snipettor-save-form").submit(function(e) {
-
                     e.preventDefault();
                     e.stopPropagation();
 
