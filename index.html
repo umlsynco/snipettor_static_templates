@@ -608,6 +608,15 @@
                 }));
 
             },
+            onEditCurrentSnippet: function(payload) {
+                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+                    detail: {
+                        action: "edit-current-snippet",
+                        payload: payload
+                    }
+                }));
+
+            },
             onUnsubscribeSnippet: function(payload) {
                 window.dispatchEvent(new CustomEvent("onSnipettorAction", {
                     detail: {
@@ -859,6 +868,8 @@
     <button type="submit" name="revert" class="btn" style="display:none;"><i class="fa fa-undo">&nbsp;Revert</i></button> \
     &nbsp;&nbsp;&nbsp;\
     <button type="submit" name="fork" class="btn" style="display:none;"><i class="fa fa-fork">&nbsp;Fork</i></button> \
+    &nbsp;&nbsp;&nbsp;\
+    <button type="submit" name="close" class="btn"><i class="fa fa-close">&nbsp;Close</i></button> \
     <br><br>\
   <div class="raw">\
         <label for="title">Title*    </label><br>\
@@ -868,7 +879,7 @@
     </div><br>\
     <div class="raw">\
         <label for="tags">Tags*</label><br>\
-        <input id="snippetor-save-tags" type="text" value="' + (payload.tags.join(";") || "") +
+        <input id="snippetor-save-tags" type="text" value="' + (payload.tags ? payload.tags.join(";") : "") +
                     '" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">\
     </div>\
     <div class="raw">\
@@ -892,12 +903,13 @@
                   }
                 }
                 else {
-
                   // There is no support of isModified state for a draft snippet
                   $("[name='save']").show();
+                  $("[name='close']").hide();
                 }
 
                 $("#snipettor-save-form .snippetor-details-play").click(function() {
+                    payload.isOpened = true;
                     extensionRemoteApi.openSnippet(payload, idx);
                 });
             }
@@ -974,21 +986,19 @@
                 $(".snippetor-play-snippet").click(function() {
                     var uid = $(this).attr("uid");
                     var xuid = parseInt($(this).attr("xuid"));
-                    console.log("UUUUUUUUUU :   " + uid + "     XUID: " + xuid);
-
                     var payload = LOCAL_ACCESS ? searchData[uid][xuid] : searchData[uid];
-                    console.dir(payload);
 
                     if (!uid || xuid == undefined)
                         return;
+
                     // Drop the "-" prefix for the firebase ??? do we really need it ?
                     if (!LOCAL_ACCESS)
                         uid = uid.substr(1);
 
                     payload.uid = uid; // save current unique ID
                     payload.version = xuid;
-                    console.dir(payload);
-                    console.log("OOOOOOOOOOOPEN : " + uid);
+
+                    payload.isOpened = true;
                     extensionRemoteApi.openSnippet(payload);
                 });
             }
@@ -1005,19 +1015,21 @@
                 //
                 // Save content to the firebase storage
                 //
-                $("#snipettor-save-form").submit(function(e) {
+                $("#snipettor-save-form>button").click(function(e) {
                     e.preventDefault();
                     e.stopPropagation();
+                    var action = $(this).attr("name");
 
-                    // Update title tags and description
-                    payload.title = $("#snippetor-save-title").val();
-                    payload.tags = $("#snippetor-save-tags").val();
-                    payload.tags = payload.tags.split(";");
-                    payload.description = $("#snippetor-save-description").val();
+                    if (action == "save" || action == "fork") {
+                      // Update title tags and description
+                      payload.title = $("#snippetor-save-title").val();
+                      payload.tags = $("#snippetor-save-tags").val();
+                      payload.tags = payload.tags.split(";");
+                      payload.description = $("#snippetor-save-description").val();
 
-                    ////////////////  UPDATE THE LIST OF BRANCHES --------
-                    var branches = [];
-                    for (var x in payload.items) {
+                      ////////////////  UPDATE THE LIST OF BRANCHES --------
+                      var branches = [];
+                      for (var x in payload.items) {
                         var item = payload.items[x];
                         if (item.url.indexOf("https://github.com") >= 0) {
                             var z = item.url.split("/");
@@ -1026,13 +1038,19 @@
                             if (!(z in branches))
                                 branches.push(z);
                         }
-                    }
-                    // make dedicated list of branches
-                    payload.branches = branches;
-                    ////////////////  UPDATE THE LIST OF BRANCHES --------
+                      }
+                      // make dedicated list of branches
+                      payload.branches = branches;
+                      ////////////////  UPDATE THE LIST OF BRANCHES --------
 
-                    var uid = $(this).attr("uid");
-                    if (!uid || uid == "") {
+                      var uid = $(this).attr("uid");
+                      if (!uid || uid == "" || action == "fork") {
+                        // reset values for a fork
+                        payload.uid = undefined;
+                        payload.version = undefined;
+                        // reset is modified before save
+                        payload.isModified = undefined;
+                        // SAVE CONTENT
                         storageApi.saveContent(payload, function(path) {
                             var uniquePath = path;
                             // TODO: just for the fast debug purpose
@@ -1049,7 +1067,7 @@
                                 window.location.href = "/?open=" + uniquePath;
                             }, 100);
                         });
-                    } else {
+                      } else {
                         storageApi.updateContent(uid, payload, function(path) {
                             var uniquePath = path.uid;
                             if (!LOCAL_ACCESS) {
@@ -1067,6 +1085,26 @@
                                 window.location.href = "/?open=" + uniquePath + "/" + path.version + "/";
                             }, 100);
                         }); // update content API
+                      }
+                    }
+                    else if (action == "close" || action == "delete") {
+                      // Unsubscribed all opened items from snippet
+                      // and redirect on the main page
+                      // TODO: think about closing of not opened snippet (which was opened for view only and never played)
+                      extensionRemoteApi.onSavedSnippet({
+                        uid: ""
+                      });
+                      setTimeout(function() {
+                          window.location.href = "/";
+                      }, 100);
+                    }
+                    else if (action == "revert") {
+                      alert("DO SOME MAGIC WITH ITEM REVERT TO THE SAME VERSION:");
+                    }
+                    else if (action == "edit") {
+                       payload.isModified = true;
+                       if (payload.isOpened)
+                         extensionRemoteApi.onEditCurrentSnippet(payload);
                     }
                     return false;
                 }); // on sumbit method
