@@ -18,7 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css" rel="stylesheet" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet" crossorigin="anonymous">
 
-    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
@@ -101,6 +101,60 @@
             line-height: 1.33;
             border-radius: 35px;
         }
+        
+                .nav-tabs { border-bottom: 2px solid #DDD; }
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 0; }
+    .nav-tabs > li > a { border: none; color: #666; }
+        .nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none; color: #4285F4 !important; background: transparent; }
+        .nav-tabs > li > a::after { content: ""; background: #4285F4; height: 2px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
+    .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
+.tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
+.tab-pane { padding: 15px 0; }
+.tab-content{padding:20px}
+
+.card {background: #FFF none repeat scroll 0% 0%; margin-bottom: 30px; }
+
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+
+.clickable {
+    background: rgba(0, 0, 0, 0.15);
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.clickable:hover {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.dataprovider {
+    color: #777;
+    text-shadow: 0 1px 0 rgba(255,255,255,.25);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 20px;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    height:50px;
+}
+
     </style>
 
 </head>
@@ -116,7 +170,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Snipettor</a>
+            <a class="navbar-brand" href="/">Snipettor</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -189,18 +243,47 @@
                 </div>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" style="color:red;">Local storage</a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Local Storage</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
+                <li class="dropdown" id="signin-dropdown-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Google</a></li>
-                        <li><a href="#">GitHub</a></li>
+                        <li><a id="firebase-auth-google">Google</a></li>
+                        <li><a id="firebase-auth-github">GitHub</a></li>
                     </ul>
+                </li>
+                <li class="dropdown" id="signout-dropdown-menu" style="display:none;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b name="displayName"> NAAMMMEEE</b><b class="caret"></b></a>
+                    <ul class="dropdown-menu" class="col-xs-12 col-sm-12" style="width:350px;">
+                      <li>
+                        <div class="col-xs-6 col-sm-6">
+                            <img id="firebase-auth-user-photo" src="" width=150 alt="Evgeny Alexeyev" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                          <ul  class="nav nav-lis">
+                              <li><a href="#"> Available</a></li>
+                              <li><a> Invisible</a></li>
+                              <li><a href="/?dashboard"> Dashboard</a></li>
+                              <li><a> Edit Profile</a></li>
+                              <li><a id="signout-firebase">Sign-Out</a></li>
+                          </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                  </ul>
+                    <!-- div class="dropdown-menu">
+                    <img href="">
+                    <ul >
+                        <li><a> Available</a></li>
+                        <li><a> Invisible</a></li>
+                        <li><a> Dashboard</a></li>
+                        <li><a> Edit Profile</a></li>
+                        <li><a id="signout-firebase">Sign-Out</a></li>
+                    </ul>
+                  </div-->
                 </li>
             </ul>
         </div>
@@ -208,12 +291,72 @@
     </nav>
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-1 col-md-2 col-lg-3">
+        <div class="row" id="snipettor-search-tabs">
+            <div class="col-sm-1 col-md-1 col-lg-1"> 
             </div>
-            <div id="main-content" class="col-sm-10 col-md-8 col-lg-6">
+            <div class="col-sm-10 col-md-10 col-lg-10" id="main-content-all">
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10" >
+			
+                                    <!-- Nav tabs --><div class="card">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li role="presentation" class="active"><a href="#main-content" aria-controls="main-content" role="tab" data-toggle="tab">All snippets</a></li>
+                                        <!--li role="presentation" class="disabled" disabled><a href="#main-feed" disabled aria-controls="main-feed" role="tab" data-4-toggle="tab">News feed</a></li -->
+                                        <li role="presentation"><a href="#main-dashboard" aria-controls="main-dashboard" role="tab" data-toggle="tab">Dashboard</a></li>
+                                        <!-- li role="presentation" class="disabled" disabled><a href="#main-discussion" aria-controls="main-discussion" role="tab" data-4-toggle="tab">Discussions</a></li -->
+                                    </ul>
+
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active"  id="main-content">
+											This section contains all snipettors snippets
+                                          <div class="container">
+                                            <button class="btn btn-lg btn-warning">
+											   <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+											   </span>
+	 									   </button>
+                                          </div>
+										</div>
+                                        <div role="tabpanel" class="tab-pane" id="main-feed" >User's snippets and fllow repo and user snippets</div>
+                                        <div role="tabpanel" class="tab-pane" id="main-dashboard" ><h3>Loading user's snippets</h3>
+                                          <div class="container">
+                                            <button class="btn btn-lg btn-warning">
+											   <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+											   </span>
+	 									   </button>
+                                          </div>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="main-discussion" >Working snippets under discussion</div>
+                                    </div>
+</div>
+</div>
+</div>
             </div>
-            <div class="col-sm-1 col-md-2 col-lg-3">
+           </div>
+            <div class="col-sm-1 col-md-1 col-lg-1">
+            </div>
+        </div>
+        <div class="row" style="display:none;" id="snipettor-details-page">
+            <div class="col-sm-1 col-md-1 col-lg-1"> 
+            </div>
+            <div class="col-sm-10 col-md-10 col-lg-10" id="main-content-all">
+              <div class="container">
+	            <div class="row">
+                  <div class="col-sm-10 col-md-10" id="main-details">
+                                          <div class="container">
+                                            <button class="btn btn-lg btn-warning">
+											   <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+											   </span>
+	 									   </button>
+                                          </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+           </div>
+            <div class="col-sm-1 col-md-1 col-lg-1">
             </div>
         </div>
     </div>
@@ -233,6 +376,7 @@
 
     <script>
         var global_action = null;
+        var global_method = null;
         var uiHandler = {};
 
         function showContentItem(item, index, extApi) {
@@ -251,7 +395,7 @@
     <i class="fa fa-chevron-down fa-3x" style="float: left;position: relative;left: -50px;top: 70px;"></i>\
     <i class="fa fa-chevron-up fa-3x" style="float: left;left: -93px;position: relative;top: 20px;"></i>\
 <div class="panel-heading" style="background-image: none;">\
-<i class="fa fa-close" style="position:absolute; right: 80px;"></i>\
+<span class="pull-right clickable close-snippet-item-icon" data-effect="fadeOut"><i class="fa fa-times"></i></span>\
   <h3 class="panel-title">\
   <ul class="breadcrumb" style="margin-bottom: 0px;">\
       <li><a href="https://github.com"><p><i class="fa fa-github"></i></p></a></li>\
@@ -294,7 +438,7 @@
                     uiHandler.doSwapItems(payload);
                 }
             });
-            item.find(".fa-close").click(function() {
+            item.find(".close-snippet-item-icon").click(function() {
                 var idx = $(".panel-default").index($(this).parent().parent());
                 extApi.updateSnippetItem("delete", {
                     index: idx
@@ -333,7 +477,9 @@
         };
 
         var storageApiFirebase = {
-            init: function() {
+            observer: null,
+            init: function(observer) {
+                this.observer = observer;
                 // make firebase initialization here
                 this.auth = firebase.auth();
                 this.database = firebase.database();
@@ -350,6 +496,7 @@
                     // probably it could trigger firebase:auth event
                     this.authCallback(user);
                 }
+                this.observer.authCompleteCallback(user);
             },
             //
             // Helper method to hide storage selection
@@ -367,17 +514,24 @@
             // Save a new content
             //
             saveContent: function(payload, callback) {
+
                 var messagesRef = this._getMessageRef('content');
                 if (!messagesRef)
                     callback(null);
 
                 var currentUser = this.auth.currentUser;
+
                 messagesRef.push({
                     version: 0, // default is 0
-                    name: currentUser ? currentUser.displayName : "unknown",
+                    // no idea how to reformat it now, but may be later
+                    user_name: currentUser ? currentUser.displayName : "unknown",
+                    user_id: currentUser ? currentUser.uid : "unknown",
+                    // Snippet title an description
                     title: payload.title, // UML title
-                    tags: payload.tags || [], // uml/class etc or markdown
                     description: payload.description || "", // uml/class etc or markdown
+                    // arrays
+                    tags: payload.tags || [], // uml/class etc or markdown
+                    branches: payload.branches || [], // uml/class etc or markdown
                     items: payload.items, // JSON description
                 }).then(function(snapshot) {
                     if (callback) {
@@ -411,7 +565,7 @@
                     }
                 };
 
-                if (version) {
+                if (false && version) {
                     var ref = this.database.ref('messages/' + uid + "/" + version);
                     ref.limitToFirst(1).once("value").then(handler2);
                 } else {
@@ -422,6 +576,38 @@
             // Update the content and version
             //
             updateContent: function(uid, payload, callback) {
+              var messagesRef = this._getMessageRef('content');
+              if (!messagesRef)
+                  callback(null, "Error: invalid firebase path.");
+              var ref = msg.child("-" + uid);
+              if (!ref)
+                  callback(null, "Error: invalid content id: -" + uid+ " .");
+
+              var currentUser = this.auth.currentUser;
+
+              ref.set({
+                  version: 0, // default is 0
+                  // no idea how to reformat it now, but may be later
+                  user_name: currentUser ? currentUser.displayName : "unknown",
+                  user_id: currentUser ? currentUser.uid : "unknown",
+                  // Snippet title an description
+                  title: payload.title, // UML title
+                  description: payload.description || "", // uml/class etc or markdown
+                  // arrays
+                  tags: payload.tags || [], // uml/class etc or markdown
+                  branches: payload.branches || [], // uml/class etc or markdown
+                  items: payload.items, // JSON description
+              }).then(function(snapshot) {
+                  if (callback) {
+                      callback(snapshot.path);
+                  }
+              }.bind(this)).catch(function(error) {
+                  var text = 'Error writing new message to Firebase Database';
+                  console.error(text, error);
+                  callback(null, text);
+              });
+            },
+            updateContentWithVersion: function(uid, payload, callback) {
                 var msg = this._getMessageRef('content');
                 if (msg) {
                     var ref = msg.child("-" + uid);
@@ -454,8 +640,21 @@
             //
             // Show the latest content only
             //
-            searchContent: function(queryText, callback) {
-                if (queryText) {
+            searchContent: function(queryText, callback, user_id) {
+                // Search content for current user
+                if (user_id) {
+                  this.database.ref('messages')
+                      .limitToLast(20)
+                      .orderByChild('user_id')
+                      .equalTo(user_id)
+                      .once('value')
+                      .then(function(complete) {
+                          callback(complete.val());
+                      });
+
+                  return;
+                }
+                if (false && queryText) {
                     this.database.ref('messages')
                         .limitToLast(20)
                         .orderByChild('title')
@@ -492,6 +691,8 @@
                 localStorage[this.uid] = localStorage[this.uid] || [];
             },
             saveContent: function(payload, callback) {
+              console.log("WTF !!!!!");
+              return;
                 var uid = uidGenerator();
                 localStorage[this.uid + uid] = 0;
                 localStorage[this.uid + uid + "/0"] = JSON.stringify(payload);
@@ -583,11 +784,11 @@
             }
         };
         // TODO: runtime select between firebase and localstorage
-        var LOCAL_ACCESS = true;
+        var LOCAL_ACCESS = false;
         var storageApi = LOCAL_ACCESS ? storageApiLocalStorage : storageApiFirebase;
 
         var extensionRemoteApi = {
-            handlers: null,
+            observer: null,
             openSnippet: function(payload, idx) {
                 window.dispatchEvent(new CustomEvent("onSnipettorAction", {
                     detail: {
@@ -627,21 +828,23 @@
 
             },
             init: function(handlers) {
-                extensionRemoteApi.handlers = handlers;
+                extensionRemoteApi.observer = handlers;
 
                 window.addEventListener("onInit", function(evt) {
-                    if (extensionRemoteApi.handlers &&
-                        extensionRemoteApi.handlers.onInit)
-                        extensionRemoteApi.handlers.onInit(evt.detail);
+                    if (extensionRemoteApi.observer &&
+                        extensionRemoteApi.observer.initCallback)
+                        extensionRemoteApi.observer.initCallback(evt.detail);
                 });
                 window.addEventListener("onSnippetChange", function(evt) {
                     var payload = evt.detail;
                     if (payload.action == "save") {
-                        extensionRemoteApi.handlers.onSaveSnippet(payload);
+                        extensionRemoteApi.observer.onSaveSnippet(payload);
                     } else if (payload.action == "create") {
-                        extensionRemoteApi.handlers.onCreateSnippet(payload);
+                        extensionRemoteApi.observer.onCreateSnippet(payload);
                     } else if (payload.action == "open") {
-                        extensionRemoteApi.handlers.onOpenSnippet(payload);
+                        extensionRemoteApi.observer.onOpenSnippet(payload);
+                    } else if (payload.action == "edit-state") {
+                        console.log("TODO: ADD edit state handling");
                     } else {
                         alert("Unknow snippet action: " + payload.action);
                     }
@@ -650,13 +853,13 @@
                 window.addEventListener("onSnippetItemChange", function(evt) {
                     var payload = evt.detail;
                     if (payload.action == "add") {
-                        extensionRemoteApi.handlers.onAddItem(payload);
+                        extensionRemoteApi.observer.onAddItem(payload);
                     } else if (payload.action == "remove") {
-                        extensionRemoteApi.handlers.onRemoveItem(payload);
+                        extensionRemoteApi.observer.onRemoveItem(payload);
                     } else if (payload.action == "update") {
-                        extensionRemoteApi.handlers.onUpdateItem(payload);
+                        extensionRemoteApi.observer.onUpdateItem(payload);
                     } else if (payload.action == "move") {
-                        extensionRemoteApi.handlers.onMoveItem(payload);
+                        extensionRemoteApi.observer.onMoveItem(payload);
                     } else {
                         alert("Unknow snippet action: " + payload.action);
                     }
@@ -664,6 +867,7 @@
 
 
                 setTimeout(function() {
+                  console.log("GET INITIAL STATE!!!!");
                     window.dispatchEvent(new CustomEvent("onSnipettorAction", {
                         detail: {
                             action: "GetInitialState"
@@ -713,7 +917,8 @@
 
         var handlers = {
             initialized: false,
-            onInit: function(response) {
+            initCallback: function(response) {
+              console.log("GOT CALLBACK !!!");
                 uiHandler.updateWorkingSnippets(response.snippets);
                 if (response.working != undefined) {
                     uiHandler.handleWorkingSnippet(response.working);
@@ -723,6 +928,30 @@
                 }
 
                 handlers.initialized = true;
+              },
+              //
+              // Update an authentication options
+              //
+              authCompleteCallback: function(currentUser) {
+                if (currentUser) {
+                  console.dir(currentUser);
+                  //currentUser.photoURL  ddddd
+                  $("#signin-dropdown-menu").hide();
+                  $("#signout-dropdown-menu").show();
+                  $("#signout-dropdown-menu [name='displayName']").text(currentUser.displayName);
+                  // user photo if available
+                  $("#firebase-auth-user-photo").attr("src", currentUser.photoURL);
+                  //
+                  // Request user data
+                  //
+                  if (global_action == "dashboard" && global_method) {
+                    global_method(currentUser.uid);
+                  }
+                }
+                else {
+                  $("#signin-dropdown-menu").show();
+                  $("#signout-dropdown-menu").hide();
+                }
             },
             onSaveSnippet: function(payload) {
                 if (!handlers.initialized)
@@ -805,9 +1034,55 @@
             //
             // initialize firebase auth provider
             //
-            storageApi.init();
+            $("#firebase-auth-google").click(function() {
+              var provider = new firebase.auth.GoogleAuthProvider();
+firebase.auth().signInWithPopup(provider).then(function(result) {
+  // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+  var token = result.credential.accessToken;
+  // The signed-in user info.
+  var user = result.user;
+  console.log("GOT USER !!!!!!!!!11");
+  console.dir(user);
+  // ...
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+    console.log("GOT USER !!!!!!!!!112222222222222");
+    console.log("ERROR: " + errorMessage);
+  // ...
+});
+            });
+            $("#firebase-auth-github").click(function() {
+              var provider = new firebase.auth.GithubAuthProvider();
+              firebase.auth().signInWithPopup(provider).then(function(result) {
+                // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+                var token = result.credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
 
-            extensionRemoteApi.init(handlers);
+console.log("GOT USER !!!!!!!!!11");
+console.dir(user);
+
+                // ...
+              }).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+                  console.log("GOT USER !!!!!!!!!11333333333333");
+                  console.log("ERROR: " + errorMessage);
+              });
+            });
+            storageApi.init(handlers);
 
             if (content.length > 1) {
                 content = content[1];
@@ -816,14 +1091,17 @@
                     //showContent(container);
                 } // save
                 else if (content.indexOf("open") >= 0) {
+                    $("#snipettor-details-page").show();
+                    $("#snipettor-search-tabs").hide();
+  
                     var content = content.substr(5);
-                    var uid = content.substr(0, content.length - 1).split("/");
+                    var uid = content.substr(0, content.length).split("/");
                     var version = uid[1] || 0;
                     uid = uid[0];
                     storageApi.loadContent(uid, version, function(data) {
                         console.dir(data);
                         if (data) data.uid = uid;
-                        showContent(data);
+                        showContent(data, null, "#main-details");
                     });
                 } else if (content.indexOf("search") >= 0) {
                     var searchString = decodeURI(content).split("&");
@@ -843,8 +1121,36 @@
                         showSearchResult(searchString, content);
 
                     });
-                }
+                } else if (content.indexOf("dashboard") >=0) {
+                  // Show current user dashboard
+   				  $('[aria-controls="main-dashboard"]').trigger("click");
+                  global_action = "dashboard";
+                  global_method = function(user_id) {
+                    storageApi.searchContent({
+                        search: null
+                    }, function(content) {
+                        showSearchResult({
+                            search: null
+                        }, content, "#main-dashboard");
+                    },
+                    user_id);
+                  }; // global_method
 
+                }  else if (content.indexOf("user_id") >=0) {
+                  var sst = decodeURI(content).split("&");
+                  var first = sst[0].split("=");
+                  var user_id = first[1];
+                  // Show current user dashboard
+   				  $('[aria-controls="main-dashboard"]').trigger("click");
+                    storageApi.searchContent({
+                        search: null
+                    }, function(content) {
+                        showSearchResult({
+                            search: null
+                        }, content, "#main-dashboard");
+                    },
+                    user_id);
+                  }; // in that case we know user id and could start search imidiatly
             } else { // content is not a query
                 storageApi.searchContent({
                     search: null
@@ -854,11 +1160,27 @@
                     }, content);
                 });
             }
+            
+            $('[aria-controls="main-content"]').click(function() {
+				window.location.href = "/";
+			});
 
-            function addSaveForm(payload, idx) {
+            $('[aria-controls="main-dashboard"]').click(function() {
+				window.location.href = "/?dashboard";
+			});
+			
+			$("#signout-firebase").click(function() {
+				firebase.auth().signOut().then(function() {
+				window.location.href = "/";
+}, function(error) {
+				window.location.href = "/";
+});
+			});
+
+            function addSaveForm(payload, idx, pselector) {
                 // remove the previous form and create a new one
                 $("#snipettor-save-form").remove();
-                $('<form id="snipettor-save-form" action="#" uid="' + (payload.uid || '') +
+                $('<form id="snipettor-save-form" class="col-sm-10 col-md-10 col-lg-10" action="#" uid="' + (payload.uid || '') +
                     '" class="navbar-form pull-left">\
                 <img alt="@baragoz" style="display: inline-block;overflow: hidden;line-height: 1;vertical-align: middle;border-radius: 3px;" height="20" src="https://avatars3.githubusercontent.com/u/6011629?v=3&amp;s=40" width="20">\
     <button type="submit" name="play" class="btn snippetor-details-play"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
@@ -873,23 +1195,23 @@
     <br><br>\
   <div class="raw">\
         <label for="title">Title*    </label><br>\
-        <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" style="width: 550px;" value="' +
+        <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" value="' +
                     payload.title +
                     '"><br>\
     </div><br>\
     <div class="raw">\
         <label for="tags">Tags*</label><br>\
         <input id="snippetor-save-tags" type="text" value="' + (payload.tags ? payload.tags.join(";") : "") +
-                    '" class="form-control input-sm" data-role="tagsinput" class="span2" style="min-width: 550px;">\
+                    '" class="form-control input-sm" data-role="tagsinput" class="span2" >\
     </div>\
     <div class="raw">\
         <label for="description">Description*</label><br>\
-        <textarea id="snippetor-save-description" class="form-control input-sm" id="snippetor-save-description" rows="3" style="min-width: 550px;">' +
+        <textarea id="snippetor-save-description" class="form-control input-sm" id="snippetor-save-description" rows="3">' +
                     (payload.description || "") + '</textarea>\
     </div>\
     <br>\
   </form>'
-                ).appendTo("#main-content");
+                ).appendTo(pselector);
 
                 // Configure the buttons visibility
                 if (payload.uid) {
@@ -911,6 +1233,8 @@
                 $("#snipettor-save-form .snippetor-details-play").click(function() {
                     payload.isOpened = true;
                     extensionRemoteApi.openSnippet(payload, idx);
+                    $("snipettor-details-page").show();
+                    $("snipettor-search-tabs").hide();
                 });
             }
 
@@ -946,31 +1270,35 @@
 
             function showAvailableVersions(search, uid, versions) {
                 var result = "";
-                for (var y in versions)
+                return result;
+
+                for (var y in ["0","1", "3"])
                     result += '<a href="/?open=' + uid + '/' + y + '"><button type="button" class="btn btn-default btn-circle"><i class="glyphicon">' + y + '</i></button></a>';
                 return result;
             }
 
-            function showSearchResult(searchString, searchData) {
+            function showSearchResult(searchString, searchData, pSel) {
+				var pselector = pSel || "#main-content";
+				$(pselector).empty();
 
                 if (!searchData || Object.keys(searchData).length == 0) {
-                    $("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo("#main-content");
+                    $("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo(pselector);
                     return;
                 }
                 for (var x in searchData) {
                     var versions = searchData[x];
-                    var item = versions[versions.length - 1]; // it should be the latest version
+                    var item = versions; //[versions.length - 1]; // it should be the latest version
 
                     var description = LOCAL_ACCESS ? item : searchData[x];
                     var xxx = LOCAL_ACCESS ? x : x.substr(1);
-                    var xuid = versions.length - 1;
-                    $('<div class="container" style="width:800px;">\
+                    var xuid = 0; //versions.length - 1;
+                    $('<div class="container">\
 <h2 ><div class="input-group" style="display:flex;">\
-  [ Evgeny ]&nbsp;&nbsp;/&nbsp;&nbsp;\
+  <a href="/?user_id='+item.user_id +'"><h4>'+ item.user_name +'</h4></a>&nbsp;&nbsp;/&nbsp;&nbsp;\
   <a class="snippetor-play-snippet" uid="' + xxx + '" xuid="' + xuid +
-                        '"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
+                        '/"><p><i class="fa fa-play">Play</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
   <a class="snippetor-detail-snippet" href="/?open=' + xxx +
-                        '"><p><i class="fa fa-edit">&nbsp;Details</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
+                        '/"><p><i class="fa fa-edit">&nbsp;Details</i></p></a> &nbsp;&nbsp;/&nbsp;&nbsp;\
   ' + showAvailableVersions(searchString, xxx, searchData[x]) +
                         '\
 </div></h2>\
@@ -981,32 +1309,39 @@
 ' + getTagsBubbles(searchString, description.tags) + '\
 ' + getBranches(searchString, description.items) + '\
 </div>\
-</div>').prependTo("#main-content");
+</div>').prependTo(pselector);
                 }
+
+                
                 $(".snippetor-play-snippet").click(function() {
                     var uid = $(this).attr("uid");
                     var xuid = parseInt($(this).attr("xuid"));
-                    var payload = LOCAL_ACCESS ? searchData[uid][xuid] : searchData[uid];
+                    
+                    var payload = LOCAL_ACCESS ? searchData[uid][xuid] : searchData["-" + uid];
 
                     if (!uid || xuid == undefined)
                         return;
 
                     // Drop the "-" prefix for the firebase ??? do we really need it ?
-                    if (!LOCAL_ACCESS)
-                        uid = uid.substr(1);
+                    //if (!LOCAL_ACCESS)
+                     //   uid = uid.substr(1);
 
                     payload.uid = uid; // save current unique ID
+                    
                     payload.version = xuid;
 
                     payload.isOpened = true;
+                    
+                    console.dir(payload);
                     extensionRemoteApi.openSnippet(payload);
                 });
             }
 
 
-            function showContent(payload, idx) {
+            function showContent(payload, idx, pselector) {
+				$(pselector).empty();
 
-                addSaveForm(payload, idx);
+                addSaveForm(payload, idx, pselector);
                 for (var r = 0; r < payload.items.length; ++r) {
                     showContentItem(payload.items[r], null, extensionRemoteApi);
 
@@ -1051,6 +1386,8 @@
                         // reset is modified before save
                         payload.isModified = undefined;
                         // SAVE CONTENT
+                        console.log("SAVE CONTENTNNNNNNNNNNNNNN");
+
                         storageApi.saveContent(payload, function(path) {
                             var uniquePath = path;
                             // TODO: just for the fast debug purpose
@@ -1105,6 +1442,10 @@
                        payload.isModified = true;
                        if (payload.isOpened)
                          extensionRemoteApi.onEditCurrentSnippet(payload);
+
+                       // make it possible to save dialog
+                       $("[name='save']").show();
+                       $("[name='edit']").hide();
                     }
                     return false;
                 }); // on sumbit method
@@ -1132,7 +1473,7 @@
                     if (uiHandler.snippets.length > id) {
                         uiHandler.working = id;
                         if (global_action == "SAVE")
-                            showContent(uiHandler.snippets[id], id);
+                            showContent(uiHandler.snippets[id], id, "#main-details");
                         else if (force) {
                            window.location.href = "/?save=DRAFT";
                         }
@@ -1164,7 +1505,7 @@
                 }
             };
 
-
+            extensionRemoteApi.init(handlers);
         }); // document ready
     </script>
 
