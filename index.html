@@ -919,8 +919,10 @@
             initialized: false,
             initCallback: function(response) {
               console.log("GOT CALLBACK !!!");
+
                 uiHandler.updateWorkingSnippets(response.snippets);
                 if (response.working != undefined) {
+					
                     uiHandler.handleWorkingSnippet(response.working);
                 } else {
                     if (global_action == "SAVE")
@@ -1088,7 +1090,8 @@ console.dir(user);
                 content = content[1];
                 if (content.indexOf("save") >= 0) {
                     global_action = "SAVE";
-                    //showContent(container);
+                    $("#snipettor-details-page").show();
+                    $("#snipettor-search-tabs").hide();
                 } // save
                 else if (content.indexOf("open") >= 0) {
                     $("#snipettor-details-page").show();
