@@ -1268,19 +1268,35 @@ console.dir(user);
                 var uitems = [];
 
                 for (var x in items) {
-                    if (items[x].url.indexOf("https://github.com") >= 0) {
+                    if (items[x].url.indexOf("https://github.com") == 0) {
                         var rr = items[x].url.split("/");
-                        var branch = rr[3] + "/" + rr[4];
+                        var branch = "github:" + rr[3] + "/" + rr[4];
                         if (uitems.indexOf(branch) == -1)
                             uitems.push(branch);
                     }
+                    else if (items[x].url.indexOf("https://bitbucket.org") == 0) {
+                        var rr =  items[x].url.split("/");
+                        var branch = "bitbucket:" + rr[3] + "/" + rr[4];
+                        if (uitems.indexOf(branch) == -1)
+                            uitems.push(branch);
+                    }
+                    else if (items[x].url.indexOf("https://cs.chromium.org") == 0) {
+                        var branch = "google:cs.chromium.org";
+                        if (uitems.indexOf(branch) == -1)
+                            uitems.push(branch);
+                    }
+
                 }
 
                 var result = '<div class="panel-heading">';
-                for (var x in uitems)
-                    result += '<a href="/?'+ encodeURI('branches=' + uitems[x] + '&search=' + (search.search ? search.search : '*')) +
-                    '"><button type="button" class="btn btn-active btn-xs">' + uitems[x] +
+                for (var x in uitems) {
+					var branch = uitems[x].split(":");
+					var icon = '<i class="fa fa-'+branch[0]+'"></i>';
+					
+                    result += '<a href="/?'+ encodeURI('branches=' + branch[1] + '&search=' + (search.search ? search.search : '*')) +
+                    '"><button type="button" class="btn btn-active btn-xs">' + icon + '&nbsp;&nbsp;&nbsp;' +branch[1] + 
                     '</button></a>&nbsp;&nbsp;&nbsp;';
+				}
                 result += '</div>';
                 return result;
             }
@@ -1320,14 +1336,14 @@ console.dir(user);
 		<p class="lead text-left snippet_title" style="margin-bottom:0px;">' + description.title + '</p>\
 	</div>\
 	<div class="panel-body">\
-		<div class="col-md-3">\
+		<div class="col-md-4">\
 			<a href="/?user_id='+item.user_id +'"><h4>'+ item.user_name +'</h4></a>\
 			<p>\
 				<button uid="' + xxx + '" xuid="' + xuid + '" class="btn btn-default snippetor-play-snippet" type="button"><span class="hidden-sm hidden-xs">Play</span><i class="fa fa-play" style="  padding:6px;"></i></button>\
 				<button class="btn btn-default snippetor-detail-snippet" type="button" style="  margin:10px;"><a href="/?open=' + xxx +'"><span class="hidden-sm hidden-xs">Details</span><i class="fa fa-edit" style="  padding:6px;"></i></a></button>\
 			</p>\
 		</div>\
-		<div class="col-md-9">\
+		<div class="col-md-8">\
 			<p><h4>' + (description.description ? description.description : 'THERE IS NO DESCRIPTION FOR THIS ITEM') + '</h4></p>\
 			<p><h3 style="margin:0px;">'+ getTagsBubbles(searchString, description.tags) + '</h3></p>\
 		</div>\
