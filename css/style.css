@@ -1,0 +1,273 @@
+@charset "utf-8";
+/*
+	Author: Filip Todorov - www.filiptodorov.com
+	Project: Snipettor
+	All rights reserved
+*/
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
+
+body, html {
+    font-family: 'Lato', sans-serif;
+    background: #D8DBE2;
+    color: #1B1B1E;
+}
+@media (min-width:768px) {
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }
+    .border-left {
+        border-left: 1px solid #eee;
+    }
+}
+.panel.panel-default {
+    border: none;
+    margin-top: 30px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 3px solid #cccccc;
+    box-shadow: rgba(0,0,0,0.03) 0px 5px 10px;
+}
+.panel.panel-default .panel-heading {
+    background: #373F51;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border: none;
+}
+.panel.panel-default .panel-heading .title {
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    float: left;
+}
+.panel-heading .title a{
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    float: left;
+    margin-right: 3px;
+}
+.panel.panel-default .panel-heading .stats {
+    float: right;
+}
+.panel.panel-default .panel-heading .stats > div {
+    display: inline-block;
+    color: #fff;
+    padding-left: 15px;
+    margin-left: 15px;
+    position: relative;
+}
+.panel.panel-default .panel-heading .stats > div:first-child:before {
+    display: none;
+}
+.panel.panel-default .panel-heading .stats > div:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: #fff;
+    content: ' ';
+    opacity: 0.2;
+}
+.panel.panel-default .panel-heading .stats > div > img {
+    -webkit-filter:invert(100%);
+    filter:invert(100%);
+    width: 16px;
+    opacity: 0.5;
+    margin-right: 5px;
+}
+.panel.panel-default .panel-body {
+    border: none;
+}
+.panel.panel-default .panel-body .profile {
+    padding-bottom: 10px;
+}
+.panel.panel-default .panel-body .profile .avatar {
+    display: inline-block;
+    vertical-align: middle;
+    width:40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.panel.panel-default .panel-body .profile h2.name {
+    display: inline-block;
+    vertical-align: middle;
+    text-transform: uppercase;
+    margin: 0;
+    margin-left: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #58A4B0;
+    cursor: pointer;
+}
+.panel.panel-default .panel-body .no-description {
+    padding: 40px 0px;
+}
+.panel.panel-default .panel-body .no-description > img {
+    width: 64px;
+    opacity: 0.1;
+    display: inline-block;
+    vertical-align: middle;
+}
+.panel.panel-default .panel-body .no-description > .content {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 15px;
+}
+.panel.panel-default .panel-body .no-description > .content p {
+    margin: 0;
+}
+.panel.panel-default .panel-body .no-description > .content p.small {
+    opacity: 0.5;
+}
+.panel.panel-default .panel-body .description {
+    padding: 20px 0px;
+}
+.panel.panel-default .panel-body .description p {
+    margin: 0;
+}
+.panel.panel-default .panel-body .description > .hashtags {
+    margin: 10px 0px 0px 0px;
+    padding: 0;
+    list-style: none;
+}
+.panel.panel-default .panel-body .description > .hashtags > li {
+    display: inline-block;
+    padding: 3px 5px;
+    background: #f0f1f4;
+    font-size: 11px;
+    border-radius: 4px;
+    margin-right: 3px;
+}
+.panel.panel-default .panel-body .btn {
+    color: #fff;
+    border-radius: 25px;
+    border: none;
+    font-size: 12px;
+    text-transform: uppercase;
+    -webkit-transition:0.2s ease all;
+    -moz-transition:0.2s ease all;
+    -o-transition:0.2s ease all;
+    transition:0.2s ease all;
+}
+.panel.panel-default .panel-body .btn i {
+    margin-left: 5px;
+    opacity: 0.5;
+    -webkit-transition:0.2s ease all;
+    -moz-transition:0.2s ease all;
+    -o-transition:0.2s ease all;
+    transition:0.2s ease all;
+}
+.panel.panel-default .panel-body .btn:hover i {
+    opacity: 1;
+}
+.panel.panel-default .panel-body .btn-primary {
+    background: #58A4B0;
+}
+.panel.panel-default .panel-body .btn-primary:hover {
+    background: #85BCC5;
+}
+.panel.panel-default .panel-body .btn-default {
+    background: #A9BCD0;
+}
+.panel.panel-default .panel-body .btn-default:hover {
+    background: #C0CEDC;
+}
+.panel.panel-default .panel-footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.panel.panel-default .panel-footer ul li {
+    display: inline-block;
+    background: #A9BCD0;
+    font-size: 12px;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 4px;
+    cursor: default;
+    -webkit-transition:0.2s ease all;
+    -moz-transition:0.2s ease all;
+    -o-transition:0.2s ease all;
+    transition:0.2s ease all;
+    margin-right: 3px;
+}
+.panel.panel-default .panel-footer ul li:hover {
+    background: #6D7380;
+}
+.panel.panel-default .panel-footer ul li > img {
+    width: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-filter:invert(100%);
+    filter:invert(100%);
+}
+.panel.panel-default .panel-footer ul li > span {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    padding-left: 10px;
+    margin-left: 6px;
+}
+.panel.panel-default .panel-footer ul li > span:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background: #fff;
+    opacity: 0.4;
+    content: ' ';
+}
+@media (min-width:768px) and (max-width:992px) {
+    .panel.panel-default .panel-heading .title {
+        width: 60%;
+    }
+    .panel.panel-default .panel-body .no-description > img {
+        width: 32px;
+    }
+    .panel.panel-default .panel-body .no-description > .content {
+        width: calc(100% - 40px);
+    }
+    .panel.panel-default .panel-body .btn {
+        padding: 5px 9px;
+        font-size: 10px;
+        margin-bottom: 4px;
+    }
+}
+@media (max-width:768px) {
+    .panel.panel-default .panel-footer ul li {
+        margin: 2px 0px !important;
+        display: inline-block;
+    }
+    .panel.panel-default .panel-body .no-description > img {
+        width: 32px;
+    }
+    .panel.panel-default .panel-body .no-description > .content {
+        width: calc(100% - 40px);
+    }
+}
+
+.panel.panel-default .panel-body .no-description > .hashtags {
+    margin: 10px 0px 0px 0px;
+    padding: 0;
+    list-style: none;
+}
+.panel.panel-default .panel-body .no-description > .hashtags > li {
+    display: inline-block;
+    padding: 3px 5px;
+    background: #f0f1f4;
+    font-size: 11px;
+    border-radius: 4px;
+    margin-right: 3px;
+}
+#snipettor-save-form>button {
+    background: #373F51;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border: none;
+    color: #fff;
+}
