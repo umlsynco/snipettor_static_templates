@@ -1,502 +1,399 @@
+<!-- Author: Filip Todorov www.filiptodorov.com -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Snipettor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Optional font awersome -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <style>
-		.experiment:nth-child(even) {
-          
-          background-color:#fafaeb;
-        }
-
-		.experiment .panel-heading:nth-child(even) {
-          background-color:#fafaeb;
-        }
-
-		.experiment:hover {
-			background-color:#ebeced;
-		}
-				
-
-        body {
-            padding-top: 0px;
-        }
-
-        .dropdown.dropdown-lg .dropdown-menu {
-            margin-top: -1px;
-            padding: 6px 20px;
-        }
-
-        .input-group-btn .btn-group {
-            display: flex !important;
-        }
-
-        .btn-group .btn {
-            border-radius: 0;
-            margin-left: -1px;
-        }
-
-        .btn-group .btn:last-child {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
-
-        .btn-group .form-horizontal .btn[type="submit"] {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-
-        .form-horizontal .form-group {
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        .form-group .form-control:last-child {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-
-        @media screen and (min-width: 768px) {
-            #adv-search {
-                width: 500px;
-                margin: 0 auto;
-            }
-            .dropdown.dropdown-lg {
-                position: static !important;
-            }
-            .dropdown.dropdown-lg .dropdown-menu {
-                min-width: 500px;
-            }
-        }
-
-        .btn-circle {
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            padding: 6px 0;
-            font-size: 12px;
-            line-height: 1.428571429;
-            border-radius: 15px;
-        }
-
-        .btn-circle.btn-lg {
-            width: 50px;
-            height: 50px;
-            padding: 10px 16px;
-            font-size: 18px;
-            line-height: 1.33;
-            border-radius: 25px;
-        }
-
-        .btn-circle.btn-xl {
-            width: 70px;
-            height: 70px;
-            padding: 10px 16px;
-            font-size: 24px;
-            line-height: 1.33;
-            border-radius: 35px;
-        }
-        
-                .nav-tabs { border-bottom: 2px solid #DDD; }
-    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 0; }
-    .nav-tabs > li > a { border: none; color: #666; }
-        .nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none; color: #4285F4 !important; background: transparent; }
-        .nav-tabs > li > a::after { content: ""; background: #4285F4; height: 2px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
-    .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
-.tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
-.tab-pane { padding: 15px 0; }
-.tab-content{padding:20px;background:#D8DBE2;}
-
-.card {background: #FFF none repeat scroll 0% 0%; margin-bottom: 30px; }
-
-
-.glyphicon-refresh-animate {
-    -animation: spin .7s infinite linear;
-    -webkit-animation: spin2 .7s infinite linear;
-}
-
-@-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
-}
-
-@keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
-}
-
-
-.clickable {
-    background: rgba(0, 0, 0, 0.15);
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.clickable:hover {
-    background: rgba(0, 0, 0, 0.45);
-}
-
-.dataprovider {
-    color: #777;
-    text-shadow: 0 1px 0 rgba(255,255,255,.25);
-    padding-top: 10px;
-    padding-bottom: 10px;
-    line-height: 20px;
-    position: relative;
-    display: block;
-    padding: 10px 15px;
-    height:50px;
-}
-
-
-.snippet_title {
-    font-size: 14px;
-    padding-top: 4px;
-    width: auto;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-left: 10px;
-    margin-top:0px;
-    padding: 0px 0px;
-}
-
-.dropdown-submenu {
-    position: relative;
-}
-
-.dropdown-submenu .dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: -1px;
-}
-
-
-    </style>
-
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="Filip Todorov">
+  <title>Filip Todorov Template</title>
+  <link rel="shortcut icon" href="img/favicon.ico" />
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/bootstrap-tagsinput.css" rel="stylesheet">
+  <link href="css/scrollbar.css" rel="stylesheet">
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+              <![endif]-->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="js/jquery-1.12.3.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap-tagsinput.min.js"></script>
+  <script src="js/jquery.scrollbar.min.js"></script>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-default" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Snipettor</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Working snippets <b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="snippetor-select-menu">
-                        <li id="test-sub-menu" class="dropdown-submenu">
-                           <a class="test" href="#">Create new ...</a>
-                           <ul class="dropdown-menu">
-                             <li><a href="https://github.com"><i class="fa fa-github fa-2x"></i> Github snippet</a></li>
-                             <li><a href="https://bitbucket.org"><i class="fa fa-bitbucket fa-2x"></i> Bitbucket snippet</a></li>
-                             <li><a href="https://cs.chromium.org"><i class="fa fa-google fa-2x"></i> Chromium snippet</a></li>
-                           </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <div class="col-sm-3 col-md-3">
-                <div class="input-group" id="adv-search" style="padding-top:10px; padding-left:30%;">
-                    <input type="text" class="form-control" placeholder="Search for snippets" name="search"/>
-                    <div class="input-group-btn">
-                        <div class="btn-group" role="group">
-                            <div class="dropdown dropdown-lg">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-                                <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="form-group">
-                                            <label for="filter">Filter by</label>
-                                            <select class="form-control">
-                                        <option value="0" selected>All Snippets</option>
-                                        <option value="1">Featured</option>
-                                        <option value="2">Most popular</option>
-                                        <option value="3">Top rated</option>
-                                        <option value="4">Most commented</option>
-                                    </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="contain">Contains the words</label>
-                                            <input class="form-control" type="text" name="search" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="contain">Author</label>
-                                            <input class="form-control" type="text" name="author" />
-                                        </div>
-                                        <div id="demo" class="collapse out">
-                                            <div class="form-group">
-                                                <label for="contain">Branch name</label>
-                                                <input class="form-control" type="text" name="branches" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="contain">Hash tags</label>
-                                                <input class="form-control" type="text" name="tags" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="contain">uml</label>
-                                                <input class="form-control" type="text" name="uml" />
-                                            </div>
-                                        </div>
-
-                                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">More options:</button>
-
-                                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Local Storage</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown" id="signin-dropdown-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a id="firebase-auth-google">Google</a></li>
-                        <li><a id="firebase-auth-github">GitHub</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown" id="signout-dropdown-menu" style="display:none;">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b name="displayName"> NAAMMMEEE</b><b class="caret"></b></a>
-                    <ul class="dropdown-menu" class="col-xs-12 col-sm-12" style="width:350px;">
-                      <li>
-                        <div class="col-xs-6 col-sm-6">
-                            <img id="firebase-auth-user-photo" src="" width=150 alt="Evgeny Alexeyev" />
-                        </div>
-                        <div class="col-xs-6 col-sm-6">
-                          <ul  class="nav nav-lis">
-                              <li><a href="#"> Available</a></li>
-                              <li><a> Invisible</a></li>
-                              <li><a href="/?dashboard"> Dashboard</a></li>
-                              <li><a> Edit Profile</a></li>
-                              <li><a id="signout-firebase">Sign-Out</a></li>
-                          </ul>
-                        </div>
-                        <div class="clearfix"></div>
-                    </li>
-                  </ul>
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row" id="snipettor-search-tabs">
-            <div class="col-sm-0 col-md-1 col-lg-1"> 
-            </div>
-            <div class="col-sm-11 col-md-8 col-lg-8" id="main-content-all">
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12" >
-			
-                                    <!-- Nav tabs --><div class="card">
-                                    <ul class="nav nav-tabs" role="tablist">
-                                        <li role="presentation" class="active"><a href="#main-content" aria-controls="main-content" role="tab" data-toggle="tab">All snippets</a></li>
-                                        <!--li role="presentation" class="disabled" disabled><a href="#main-feed" disabled aria-controls="main-feed" role="tab" data-4-toggle="tab">News feed</a></li -->
-                                        <li role="presentation"><a href="#main-dashboard" aria-controls="main-dashboard" role="tab" data-toggle="tab">Dashboard</a></li>
-                                        <!-- li role="presentation" class="disabled" disabled><a href="#main-discussion" aria-controls="main-discussion" role="tab" data-4-toggle="tab">Discussions</a></li -->
-                                    </ul>
-
-                                    <!-- Tab panes -->
-                                    <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane active"  id="main-content">
-											This section contains all snipettors snippets
-                                          <div class="container">
-                                            <button class="btn btn-lg btn-warning">
-											   <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
-											   </span>
-	 									   </button>
-                                          </div>
-										</div>
-                                        <div role="tabpanel" class="tab-pane" id="main-feed" >User's snippets and fllow repo and user snippets</div>
-                                        <div role="tabpanel" class="tab-pane" id="main-dashboard" ><h3>Loading user's snippets</h3>
-                                          <div class="container">
-                                            <button class="btn btn-lg btn-warning">
-											   <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
-											   </span>
-	 									   </button>
-                                          </div>
-                                        </div>
-                                        <div role="tabpanel" class="tab-pane" id="main-discussion" >Working snippets under discussion</div>
-                                    </div>
-</div>
-</div>
-</div>
-            </div>
-           </div>
-            <div class="col-sm-12 col-md-3 col-lg-3">
-<div class="col-3 float-left pr-3" itemscope="" itemtype="http://schema.org/Person">
-
-    <div class="user-profile-sticky-bar js-user-profile-sticky-bar">
-      <div class="user-profile-mini-vcard d-table">
-        <span class="user-profile-mini-avatar d-table-cell v-align-middle lh-condensed-ultra pr-2">
-           <a href="https://github.com"><p><i class="fa fa-github"></i></p>GitHub User</a>
-        </span>
-        <span class="d-table-cell v-align-middle lh-condensed js-user-profile-following-mini-toggle">
-          <strong>baragoz</strong>
-        </span>
+  <nav class="navbar navbar-inverse">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+        <a class="navbar-brand" href="index.html"><img src="img/002-code.png"> Snippetor</a>
       </div>
-    </div>
-
-      <a href="/account" aria-label="Change your avatar" class="vcard-avatar d-block tooltipped tooltipped-s">
-		  <img alt="" class="avatar width-full rounded-2" height="230" src="https://avatars0.githubusercontent.com/u/6011629?v=3&amp;s=460" width="230">
-	  </a>
-  </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Working Snippets <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#"><i class="fa fa-fw fa-floppy-o"></i> Draft Snippets</a></li>
+              <li><a href="#"><i class="fa fa-fw fa-files-o"></i> Opened Snippets</a></li>
+              <li><a href="#"><i class="fa fa-fw fa-edit"></i> Modified Snippets</a></li>
+              <li class="dropdown-submenu">
+                <a href="#"><i class="fa fa-fw fa-plus-circle"></i> Create new Snippet</a>
+                <ul class="dropdown-menu">
+                  <li><a href="#"><i class="fa fa-fw fa-github"></i> Github Snippet</a></li>
+                  <li><a href="#"><i class="fa fa-fw fa-bitbucket"></i> Bitbucket Snippet</a></li>
+                  <li><a href="#"><i class="fa fa-fw fa-google"></i> Chromium Snippet</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="search">
+            <input type="text" class="form-control" placeholder="Search Snippetor..">
+            <div class="buttons">
+              <button type="submit"><i class="fa fa-fw fa-search"></i></button>
+              <button type="button" id="advancedSearchToggle"><i class="fa fa-fw fa-navicon"></i></button>
             </div>
-        </div>
-        <div class="row" style="display:none;" id="snipettor-details-page">
-            <div class="col-sm-1 col-md-1 col-lg-1"> 
-            </div>
-            <div class="col-sm-10 col-md-10 col-lg-10" id="main-content-all">
-              <div class="container">
-	            <div class="row">
-                  <div class="col-sm-10 col-md-10" id="main-details">
-                                          <div class="container">
-                                            <button class="btn btn-lg btn-warning">
-											   <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
-											   </span>
-	 									   </button>
-                                          </div>
-
-                  </div>
+            <div class="advanced">
+              <a href="#" id="hideAdvanced"><i class="fa fa-fw fa-times"></i></a>
+              <form action="search.php" method="post">
+                <div class="form-group">
+                  <label>Filter Output</label>
+                  <select class="form-control">
+                                            <option>All Snippets</option>
+                                            <option>Draft Snippets</option>
+                                            <option>Opened Snippets</option>
+                                            <option>Modified Snippets</option>
+                                        </select>
                 </div>
+                <div class="form-group">
+                  <label>Looking by word</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Author</label>
+                  <div class="clearfix"></div>
+                  <select class="form-control first-half">
+                                            <option>Github</option>
+                                            <option>Bitbucket</option>
+                                            <option>Chromium</option>
+                                        </select>
+                  <input type="text" class="form-control second-half" placeholder="Author Name">
+                  <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                  <label>Branch name</label>
+                  <input type="text" class="form-control" data-role="tagsinput">
+                </div>
+                <div class="form-group">
+                  <label>Hash Tags</label>
+                  <input type="text" class="form-control" data-role="tagsinput">
+                </div>
+                <div class="checkbox">
+                  <label>
+                                            <input type="checkbox" id="uml"> Has UML?
+                                        </label>
+                </div>
+                <div class="form-group" id="hasuml" style="display:none;">
+                  <select class="form-control inline">
+                                            <option>All</option>
+                                            <option>Modified</option>
+                                            <option>Created</option>
+                                        </select>
+                  <select class="form-control inline">
+                                            <option>1 day</option>
+                                            <option>2 days</option>
+                                            <option>3 days</option>
+                                            <option>4 days</option>
+                                            <option>5+ days</option>
+                                        </select>
+                  <span class="inline-span">ago and has </span>
+                  <select class="form-control inline">
+                                            <option>more</option>
+                                            <option>less</option>
+                                        </select>
+                  <span class="inline-span">than 3 comments</span>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Search">
+              </form>
+            </div>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#about">Settings</a></li>
+          <li class="dropdown" id="signin-dropdown-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sign In</a>
+            <ul class="dropdown-menu">
+              <li id="firebase-auth-google"><a href="#"><i class="fa fa-fw fa-google"></i> Google</a></li>
+              <li id="firebase-auth-github"><a href="#"><i class="fa fa-fw fa-github"></i> Github</a></li>
+              <!-- li><a href="#"><i class="fa fa-fw fa-bitbucket"></i> Bitbucket</a></li -->
+            </ul>
+          </li>
+          <li class="dropdown" id="signout-dropdown-menu">
+            <a id="signout-dropdown-menu-item" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<img src="img/avatar.jpg" class="mini-avatar">
+							</a>
+            <ul class="dropdown-menu">
+              <img id="signout-dropdown-menu-avatar" src="img/avatar.jpg" class="big-avatar">
+              <li><a href="/?dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a></li>
+              <li id="signout-firebase"><a href="#"><i class="fa fa-fw fa-sign-out"></i> Sign Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <div class="tabs-header">
+    <div class="container">
+      <ul>
+        <li id="tab-all-snippets"><a href="/"><img src="img/003-speedometer.png"> <span>All Snippets</span></a></li>
+        <li id="tab-dashboard"><a href="/?dashboard"><img src="img/002-internet.png"> <span>Dashboard</span></a></li>
+        <li id="tab-feed"><a href="/?feed"><img src="img/001-interface.png"> <span>User Feed</span></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row" style="position:relative;">
+      <div id="main-dashboard" class="col-sm-8">
+
+        <div class="animationload">
+          <div class="osahanloading"></div>
+        </div>
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+            <li>
+              <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+      <div class="col-sm-4">
+        <div class="sidebar-profile">
+          <div class="box-shadow-area">
+            <div class="avatar-area">
+              <div class="avatar-bg"></div>
+            </div>
+            <div class="profile-details">
+              <img src="img/avatar.jpg" class="avatar-image">
+              <h1><i class="fa fa-fw fa-github"></i> Baragoz</h1>
+            </div>
+            <div class="followers">
+              <div class="part">
+                <h2>551</h2>
+                <h3>followers</h3>
+              </div>
+              <!--
+                             -->
+              <div class="part">
+                <h2>25</h2>
+                <h3>following</h3>
+              </div>
+              <!--
+                             -->
+              <div class="part">
+                <a href="#" class="btn btn-primary"><i class="fa fa-fw fa-user-o"></i> Follow</a>
               </div>
             </div>
-           </div>
-            <div class="col-sm-1 col-md-1 col-lg-1">
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <a href="#" class="btn btn-primary btn-block btn-lg"><i class="fa fa-fw fa-plus-circle"></i> Create Snippet</a>
+              <ul class="labels-list">
+                <li>All Snippets <u>(504)</u></li>
+                <li>Draft Snippets <u>(504)</u></li>
+                <li class="list">
+                  Error Snippets <i class="fa fa-fw fa-caret-down"></i> <u>(504)</u>
+                  <div class="details">
+                    <b>Label Color</b>
+                    <div class="clearfix"></div>
+                    <span class="color red" data-color="red"></span>
+                    <span class="color green" data-color="green"></span>
+                    <span class="color blue" data-color="blue"></span>
+                    <span class="color yellow" data-color="yellow"></span>
+                    <div class="clearfix"></div>
+                    <a href="#">Edit Label</a>
+                    <a href="#">Remove Label</a>
+                    <a href="#">Add SubLabel</a>
+                  </div>
+                  <ul class="list-menu">
+                    <li>HTML Code Errors</li>
+                    <li class="list">
+                      Logical Errors <i class="fa fa-fw fa-caret-down"></i>
+                      <div class="details">
+                        <b>Label Color</b>
+                        <div class="clearfix"></div>
+                        <span class="color red" data-color="red"></span>
+                        <span class="color green" data-color="green"></span>
+                        <span class="color blue" data-color="blue"></span>
+                        <span class="color yellow" data-color="yellow"></span>
+                        <div class="clearfix"></div>
+                        <a href="#">Edit Label</a>
+                        <a href="#">Remove Label</a>
+                        <a href="#">Add SubLabel</a>
+                      </div>
+                      <ul class="list-menu">
+                        <li>Database Connection <u>(50)</u></li>
+                        <li>Endless Loop <u>(96)</u></li>
+                      </ul>
+                    </li>
+                    <li>Styling Errors <u>(341)</u></li>
+                  </ul>
+                </li>
+              </ul>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <script src="https://www.gstatic.com/firebasejs/3.6.7/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyCLHGFmt-KvEV7pHmaYC2xQHz2Ary-f8X0",
-            authDomain: "snipettor.firebaseapp.com",
-            databaseURL: "https://snipettor.firebaseio.com",
-            storageBucket: "snipettor.appspot.com",
-            messagingSenderId: "1024573617684"
-        };
-        firebase.initializeApp(config);
-    </script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.7/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCLHGFmt-KvEV7pHmaYC2xQHz2Ary-f8X0",
+      authDomain: "snipettor.firebaseapp.com",
+      databaseURL: "https://snipettor.firebaseio.com",
+      storageBucket: "snipettor.appspot.com",
+      messagingSenderId: "1024573617684"
+    };
+    firebase.initializeApp(config);
+  </script>
 
-    <script>
-        var global_action = null;
-        var global_method = null;
-        var uiHandler = {};
+  <script>
+    $("#advancedSearchToggle").click(function(e) {
+      e.preventDefault();
+      $(this).parent().siblings(".advanced").slideToggle(150);
+    });
+    $("#hideAdvanced").click(function(e) {
+      e.preventDefault();
+      $(this).parent().slideToggle(150);
+    });
+    $(".labels-list .list i").click(function(e) {
+      e.preventDefault();
+      $(this).siblings(".details").fadeToggle(150);
+    })
+    $(".color").click(function(e) {
+      e.preventDefault();
+      $(this).parent().siblings("ul").children("li").css("color", $(this).data("color"));
+    })
+    $(".panel-labels li").click(function(e) {
+      e.preventDefault();
+      $(this).children(".colors").fadeToggle().toggleClass("active");
+    })
+    $(".colors").click(function(e) {
+      e.preventDefault();
+      return false;
+    })
+    $(".colors span").click(function(e) {
+      e.preventDefault();
+      $(this).parent().parent().css("color", $(this).data("color"));
+    })
+    $(document).click(function(e) {
+      var target = $(e.target),
+        article;
+      if (!target.is(".colors") && !target.parent().is(".panel-labels")) {
+        if ($(".colors").hasClass("active")) {
+          $(".colors").removeClass("active").fadeOut();
+        }
+      }
+    });
+    /* ADD TO ALL NEW PAGES */
+    $('.sidebar-profile').scrollbar({
+      disableBodyScroll: true,
+      autoUpdate: true,
+      showArrows: true
+    });
+    $("#uml").change(function(e) {
+      if ($(this).is(":checked")) {
+        $("#hasuml").fadeIn();
+      } else {
+        $("#hasuml").fadeOut();
+      }
+    })
+  </script>
+  <script>
+    /* Nano Templates - https://github.com/trix/nano */
 
-        function showContentItem(item, index, extApi) {
-			
-            var gh_prefix = "https://github.com/";
-            var bb_prefix = "https://bitbucket.org/";
-            var cs_prefix = "https://cs.chromium.org/";
-            var uml_prefix = "https://umlsync-6e2da.firebaseapp.com/";
-            var prefix = "";
-            var img = "";
-            
-            if (item.url.indexOf(gh_prefix) == 0) {
-				prefix = gh_prefix;
-				img = "github";
-			}
-			else if (item.url.indexOf(cs_prefix) == 0) {
-				prefix = cs_prefix;
-				img = "google";
-			} else if (item.url.indexOf(bb_prefix) == 0) {
-				prefix = bb_prefix;
-				img = "bitbucket";
-			} else  if (item.url.indexOf(uml_prefix) == 0) {
-				prefix = uml_prefix;
-				img = "puzzle-piece";
-			} 
-            
-            var url_path = item.url.substr(prefix.length);
-
-var panelTemplate = "";
-if (img != "google" && img != "puzzle-piece") {
-            var user = url_path.substr(0, url_path.indexOf("/"));
-            url_path = url_path.substr(url_path.indexOf("/") + 1);
-
-            var repo = url_path.substr(0, url_path.indexOf("/"));
-            url_path = url_path.substr(url_path.indexOf("/") + 1);
-
-            panelTemplate =
-                '\
+    function nano(template, data) {
+      return template.replace(/\{([\w\.]*)\}/g, function(str, key) {
+        var keys = key.split("."),
+          v = data[keys.shift()];
+        for (var i = 0, l = keys.length; i < l; i++) v = v[keys[i]];
+        return (typeof v !== "undefined" && v !== null) ? v : "";
+      });
+    }
+  </script>
+  <script>
+    function getTemplateGlobal(name, data) {
+      var template = "";
+      if (name == "comment_old_1") {
+        template =
+          '\
 <div class="panel panel-default">\
     <i class="fa fa-chevron-down fa-3x" style="float: left;position: relative;left: -50px;top: 70px;"></i>\
     <i class="fa fa-chevron-up fa-3x" style="float: left;left: -93px;position: relative;top: 20px;"></i>\
 <div class="panel-heading">\
   <div class="title">\
-    <a href="'+prefix+'"><p><i class="fa fa-'+img+'"></i></p></a><!--\
-    --><a href="#">' + user + '</a> <span class="divider"></span><!--\
-    --><a href="#">' + repo + '</a> <span class="divider"></span><!--\
-    --><a href="#">' + url_path + '</a> <span class="divider"></span><!--\
-    --><a href="#">:' + item.line + '</a>\
+    <a href="{item.prefix}"><p><i class="fa fa-{item.img}"></i></p></a><!--\
+    --><a href="#">{item.user}</a> <span class="divider"></span><!--\
+    --><a href="#">{item.repo}</a> <span class="divider"></span><!--\
+    --><a href="#">{item.path}</a> <span class="divider"></span><!--\
+    --><a href="#">:{item.line}</a>\
   </div>\
-                            <div class="stats">\
-                                <!--\
-                             --><div><img class="close-snippet-item-icon" src="img/close.png"></div>\
-                            </div>\
+  <div class="stats">\
+    <!--\
+    --><div><img class="close-snippet-item-icon" src="img/close.png"></div>\
+  </div>\
   <div class="clearfix"></div>\
 </div>\
 <div class="panel-body">\
   <p style="position:relative; float:right;"><i class="fa fa-edit"></i></p>\
-  <span class="snippet-description">' + item.comment + '</span></div>\
+  <span class="snippet-description">{item.comment}</span></div>\
 </div>';
-}
-else {
-            panelTemplate = '\
+
+      } else if (name == "comment_old_2") {
+        template =
+          '\
 <div class="panel panel-default">\
     <i class="fa fa-chevron-down fa-3x" style="float: left;position: relative;left: -50px;top: 70px;"></i>\
     <i class="fa fa-chevron-up fa-3x" style="float: left;left: -93px;position: relative;top: 20px;"></i>\
     <div class="panel-heading">\
       <div class="title">\
-        <a href="'+prefix+'"><p><i class="fa fa-'+img+'"></i></p></a><!--\
-        --><a href="#">' + url_path + '</a><!--\
-        --><a href="#"> : ' + item.line + '</a>\
+        <a href="{item.prefix}"><p><i class="fa fa-{item.img}"></i></p></a><!--\
+        --><a href="#">{item.path}</a><!--\
+        --><a href="#"> : {item.line}</a>\
       </div>\
                             <div class="stats">\
                                 <!--\
@@ -508,821 +405,48 @@ else {
 		<p style="position:relative; float:right;">\
 			<i class="fa fa-edit"></i>\
 		</p>\
-		<span class="snippet-description">' + item.comment + '</span></div>\
+		<span class="snippet-description">{item.comment}</span></div>\
    </div>\
 </div>';
-}
-            //
-            var item = $(panelTemplate).appendTo("#snipettor-save-form");
-
-            // Sort the comment items
-            item.find(".fa-chevron-up").click(function() {
-                var oldIndex = $(".panel-default").index($(this).parent());
-                if (oldIndex > 0) {
-                    var payload = {
-                        oldIndex: oldIndex,
-                        newIndex: oldIndex - 1
-                    };
-                    extApi.updateSnippetItem("move", payload);
-                    uiHandler.doSwapItems(payload);
-                }
-            });
-            item.find(".fa-chevron-down").click(function() {
-                var oldIndex = $(".panel-default").index($(this).parent());
-                if (oldIndex < $(".panel-default").length - 1) {
-                    var payload = {
-                        oldIndex: oldIndex,
-                        newIndex: oldIndex + 1
-                    };
-                    extApi.updateSnippetItem("move", payload);
-                    uiHandler.doSwapItems(payload);
-                }
-            });
-            item.find(".close-snippet-item-icon").click(function() {
-				var parent = $(this).parent().parent().parent().parent();
-                var idx = $(".panel-default").index(parent);
-                
-                extApi.updateSnippetItem("delete", {
-                    index: idx
-                });
-                parent.remove();
-            });
-            // edit the text of comment
-            item.find(".fa-edit").click(function() {
-                var parent = $(this).parent().parent();
-                var elemIndex = $(".panel-default").index(parent.parent());
-
-                if (parent.find("textarea").length > 0) {
-                    parent.find("textarea").trigger("blur");
-                    return;
-                }
-
-                var text = parent.find(".snippet-description").html();
-                parent.find(".snippet-description").hide();
-                parent.append("<textarea style='width:100%;'>" + text + "</textarea>");
-                parent.find("textarea").blur(function() {
-                    var xxx = parent.find("textarea").val();
-                    parent.find("textarea").remove();
-                    if (xxx != text) {
-                        parent.find(".snippet-description").text(xxx);
-                        extApi.updateSnippetItem("update", {
-                            idx: elemIndex,
-                            item: {
-                                comment: xxx
-                            }
-                        });
-                    }
-                    parent.find(".snippet-description").show();
-                });
-            });
-        };
-
-        var storageApi = {
-            observer: null,
-            init: function(observer) {
-                this.observer = observer;
-                // make firebase initialization here
-                this.auth = firebase.auth();
-                this.database = firebase.database();
-                this.storage = firebase.storage();
-                // Initiates Firebase auth and listen to auth state changes.
-                this.auth.onAuthStateChanged(this._onAuthStateChanged.bind(this));
-            },
-            //
-            // Helper method to handle sign-in change behaviour
-            //
-            _onAuthStateChanged: function(user) {
-                this.user = user;
-                if (this.authCallback) {
-                    // probably it could trigger firebase:auth event
-                    this.authCallback(user);
-                }
-                this.observer.authCompleteCallback(user);
-            },
-            //
-            // Helper method to hide storage selection
-            // for the authenticated and anonimous users
-            //
-            _getMessageRef: function(type) {
-                if (type == 'content') {
-                    if (!this.umlsRef) {
-                        this.umlsRef = this.database.ref('messages');
-                    }
-                    return this.umlsRef;
-                }
-            },
-            //
-            // Save a new content
-            //
-            saveContent: function(payload, callback) {
-
-                var messagesRef = this._getMessageRef('content');
-                if (!messagesRef)
-                    callback(null);
-
-                var currentUser = this.auth.currentUser;
-
-                messagesRef.push({
-                    version: 0, // default is 0
-                    // no idea how to reformat it now, but may be later
-                    user_name: currentUser ? currentUser.displayName : "unknown",
-                    user_id: currentUser ? currentUser.uid : "unknown",
-                    // Snippet title an description
-                    title: payload.title, // UML title
-                    description: payload.description || "", // uml/class etc or markdown
-                    // arrays
-                    tags: payload.tags || [], // uml/class etc or markdown
-                    branches: payload.branches || [], // uml/class etc or markdown
-                    items: payload.items, // JSON description
-                }).then(function(snapshot) {
-                    if (callback) {
-                        callback(snapshot.path);
-                    }
-                }.bind(this)).catch(function(error) {
-                    var text = 'Error writing new message to Firebase Database';
-                    console.error(text, error);
-                    callback(null, text);
-                });
-
-            },
-            //
-            // Load content by key and version
-            //
-            loadContent: function(uid2, version, callback) {
-                var uid = "-" + uid2;
-                var that = this;
-                var handler = function(snapshot) {
-                    if (callback)
-                        callback(snapshot.val());
-                    var xxx = snapshot.val();
-                    console.dir(xxx);
-                };
-                var handler2 = function(snapshot) {
-                    if (callback) {
-                        var xxx = snapshot.val();
-                        for (var x in xxx) {
-                            callback(xxx[x]);
-                        }
-                    }
-                };
-
-                if (false && version) {
-                    var ref = this.database.ref('messages/' + uid + "/" + version);
-                    ref.limitToFirst(1).once("value").then(handler2);
-                } else {
-                    this.messagesRef = this.database.ref('messages/' + uid).once('value').then(handler);
-                }
-            },
-            //
-            // Update the content and version
-            //
-            updateContent: function(uid, payload, callback) {
-              var messagesRef = this._getMessageRef('content');
-              if (!messagesRef)
-                  callback(null, "Error: invalid firebase path.");
-              var ref = msg.child("-" + uid);
-              if (!ref)
-                  callback(null, "Error: invalid content id: -" + uid+ " .");
-
-              var currentUser = this.auth.currentUser;
-
-              ref.set({
-                  version: 0, // default is 0
-                  // no idea how to reformat it now, but may be later
-                  user_name: currentUser ? currentUser.displayName : "unknown",
-                  user_id: currentUser ? currentUser.uid : "unknown",
-                  // Snippet title an description
-                  title: payload.title, // UML title
-                  description: payload.description || "", // uml/class etc or markdown
-                  // arrays
-                  tags: payload.tags || [], // uml/class etc or markdown
-                  branches: payload.branches || [], // uml/class etc or markdown
-                  items: payload.items, // JSON description
-              }).then(function(snapshot) {
-                  if (callback) {
-                      callback(snapshot.path);
-                  }
-              }.bind(this)).catch(function(error) {
-                  var text = 'Error writing new message to Firebase Database';
-                  console.error(text, error);
-                  callback(null, text);
-              });
-            },
-            updateContentWithVersion: function(uid, payload, callback) {
-                var msg = this._getMessageRef('content');
-                if (msg) {
-                    var ref = msg.child("-" + uid);
-                    ref.child('version').once('value').then(function(x) {
-                        var position = x.val() + 1;
-                        ref
-                            .child(position)
-                            .push({
-                                data: payload.data,
-                                title: payload.title,
-                                type: payload.type
-                            })
-                            .then(function(snapshot) {
-                                if (callback) {
-                                    callback(snapshot.path);
-                                }
-                                ref.update({
-                                    version: position
-                                });
-                            }.bind(this))
-                            .catch(function(error) {
-                                var text = 'Error updating existing content to Firebase Database';
-                                console.error(text, error);
-                                callback(null, text);
-                            });
-                    }); // ref get value
-                }
-            },
-
-            //
-            // Show the latest content only
-            //
-            searchContent: function(queryText, callback, user_id) {
-                // Search content for current user
-                if (user_id) {
-                  this.database.ref('messages')
-                      .limitToLast(20)
-                      .orderByChild('user_id')
-                      .equalTo(user_id)
-                      .once('value')
-                      .then(function(complete) {
-                          callback(complete.val());
-                      });
-
-                  return;
-                }
-                if (false && queryText) {
-                    this.database.ref('messages')
-                        .limitToLast(20)
-                        .orderByChild('title')
-                        .startAt(queryText)
-                        .endAt(queryText + "\uf8ff")
-                        .once('value')
-                        .then(function(complete) {
-                            callback(complete.val());
-                        });
-                } else {
-                    this.database.ref('messages')
-                        .limitToLast(20)
-                        .once('value')
-                        .then(function(complete) {
-                            callback(complete.val());
-                        });
-                }
-            }
-        }; // StorageApi
-
-        //
-        // Communication with an extension web-site injection plugin
-        // 
-        var extensionRemoteApi = {
-            observer: null,
-            openSnippet: function(payload, idx) {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                    detail: {
-                        action: "open-snippet",
-                        data: {
-                            payload: payload,
-                            index: idx
-                        }
-                    }
-                }));
-            },
-            onSavedSnippet: function(payload) {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                    detail: {
-                        action: "saved-draft",
-                        payload: payload
-                    }
-                }));
-
-            },
-            onEditCurrentSnippet: function(payload) {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                    detail: {
-                        action: "edit-current-snippet",
-                        payload: payload
-                    }
-                }));
-
-            },
-            onUnsubscribeSnippet: function(payload) {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                    detail: {
-                        action: "unsubscribe",
-                        payload: payload
-                    }
-                }));
-
-            },
-            init: function(handlers) {
-                extensionRemoteApi.observer = handlers;
-
-                window.addEventListener("onInit", function(evt) {
-                    if (extensionRemoteApi.observer &&
-                        extensionRemoteApi.observer.initCallback)
-                        extensionRemoteApi.observer.initCallback(evt.detail);
-                });
-                window.addEventListener("onSnippetChange", function(evt) {
-                    var payload = evt.detail;
-                    if (payload.action == "save") {
-                        extensionRemoteApi.observer.onSaveSnippet(payload);
-                    } else if (payload.action == "create") {
-                        extensionRemoteApi.observer.onCreateSnippet(payload);
-                    } else if (payload.action == "open") {
-                        extensionRemoteApi.observer.onOpenSnippet(payload);
-                    } else if (payload.action == "edit-state") {
-                        console.log("TODO: ADD edit state handling");
-                    } else {
-                        alert("Unknow snippet action: " + payload.action);
-                    }
-                });
-
-                window.addEventListener("onSnippetItemChange", function(evt) {
-                    var payload = evt.detail;
-                    if (payload.action == "add") {
-                        extensionRemoteApi.observer.onAddItem(payload);
-                    } else if (payload.action == "remove") {
-                        extensionRemoteApi.observer.onRemoveItem(payload);
-                    } else if (payload.action == "update") {
-                        extensionRemoteApi.observer.onUpdateItem(payload);
-                    } else if (payload.action == "move") {
-                        extensionRemoteApi.observer.onMoveItem(payload);
-                    } else {
-                        alert("Unknow snippet action: " + payload.action);
-                    }
-                });
-
-
-                setTimeout(function() {
-                  console.log("GET INITIAL STATE!!!!");
-                    window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                        detail: {
-                            action: "GetInitialState"
-                        }
-                    }));
-                }, 100);
-            },
-            //
-            // Assign current tab to the concreate snippet or snippet draft
-            // @param payload - index of the selected item, (-1) is to unsubscribe
-            //
-            selectSnippet: function(index) {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                    detail: {
-                        action: "select-snippet",
-                        data: index
-                    }
-                }));
-            },
-            //
-            // Update current snippet data:
-            // title, hash-tags or description
-            //
-            updateSnippet: function(payload) {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                    detail: {
-                        action: "update-snippet",
-                        payload: payload
-                    }
-                }));
-            },
-            //
-            // Update the concreate snippet item's description
-            // 1. update - update description
-            // 2. delete - item removed
-            // 3. position - change item position
-            //
-            updateSnippetItem: function(action, payload) {
-                window.dispatchEvent(new CustomEvent("onSnipettorAction", {
-                    detail: {
-                        action: action + "-snippet-item",
-                        payload: payload
-                    }
-                }));
-            }
-        };
-
-        var handlers = {
-            //
-            // Firebase observer method
-            // Update an authentication options
-            //
-            authCompleteCallback: function(currentUser) {
-                if (currentUser) {
-                  console.dir(currentUser);
-                  //currentUser.photoURL  ddddd
-                  $("#signin-dropdown-menu").hide();
-                  $("#signout-dropdown-menu").show();
-                  $("#signout-dropdown-menu [name='displayName']").text(currentUser.displayName);
-                  // user photo if available
-                  $("#firebase-auth-user-photo").attr("src", currentUser.photoURL);
-                  //
-                  // Request user data
-                  //
-                  if (global_action == "dashboard" && global_method) {
-                    global_method(currentUser.uid);
-                  }
-                }
-                else {
-                  $("#signin-dropdown-menu").show();
-                  $("#signout-dropdown-menu").hide();
-                }
-            },
-            //
-            // Snippetor extension observer methods
-            //
-            initialized: false,
-            initCallback: function(response) {
-                uiHandler.updateWorkingSnippets(response.snippets);
-                if (response.working != undefined) {
-                    uiHandler.handleWorkingSnippet(response.working);
-                } else {
-                    if (global_action == "SAVE")
-                        alert("There is nothing to save! Please, select some snippet");
-                }
-
-                handlers.initialized = true;
-              },
-            onSaveSnippet: function(payload) {
-                if (!handlers.initialized)
-                    return;
-
-                if (payload.working == uiHandler.working) {
-                    uiHandler.onSaveCurrentSnippet(payload.working);
-                }
-                // send unsubscribe from the current snippet
-                extensionRemoteApi.onUnsubscribeSnippet(payload.working);
-                setTimeout(function() {
-                    window.location.href = "/";
-                }, 100);
-
-                uiHandler.snippets[payload.working] = null;
-                uiHandler.updateWorkingSnippets(uiHandler.snippets);
-
-            },
-            onCreateSnippet: function(payload) {
-                if (!handlers.initialized)
-                    return;
-
-                uiHandler.snippets[payload.working] = payload.snippet;
-                uiHandler.updateWorkingSnippets(uiHandler.snippets);
-            },
-            onOpenSnippet: function(payload) {
-                if (!handlers.initialized)
-                    return;
-
-                uiHandler.snippets[payload.working] = payload.snippet;
-                uiHandler.updateWorkingSnippets(uiHandler.snippets);
-            },
-            onAddItem: function(payload) {
-                if (!handlers.initialized)
-                    return;
-
-                if (payload.working == uiHandler.working) {
-                    showContentItem(payload.item, payload.index, extensionRemoteApi);
-                }
-                uiHandler.snippets[payload.working].items.splice(payload.index, 0, payload.item);
-            },
-            onRemoveItem: function(payload) {
-                if (!handlers.initialized)
-                    return;
-
-                if (payload.working == uiHandler.working) {
-                    removeContentItem(payload.index);
-                }
-                uiHandler.snippets[payload.working].items.splice(payload.index, 1);
-            },
-            onUpdateItem: function(payload) {
-                if (!handlers.initialized)
-                    return;
-
-                if (payload.working == uiHandler.working) {
-                    console.log("Update UI description only");
-                    console.dir(payload);
-                    var elem = $(".panel-default:eq(" + payload.payload.idx + ")");
-                    console.dir(elem);
-                    elem.find("span.snippet-description").text(payload.payload.item.comment);
-                }
-                uiHandler.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
-            },
-            onMoveItem: function(payload) {
-                if (!handlers.initialized)
-                    return;
-
-                if (payload.working == uiHandler.working) {
-                    uiHandler.doSwapItems(payload.payload);
-                }
-                var item = uiHandler.snippets[payload.working].items[payload.payload.oldIndex];
-                uiHandler.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
-                uiHandler.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
-            }
-        };
-
-        var container = null;
-        $(document).ready(function() {
-  // Sub drop down
-  $('.dropdown-submenu a.test').on("mouseenter", function(e){
-    $(this).next('ul').toggle();
-    e.stopPropagation();
-    e.preventDefault();
-  });
-  $("#test-sub-menu").on("mouseleave", function(e){
-    $(this).next('ul').toggle();
-    e.stopPropagation();
-    e.preventDefault();
-  });
-            //
-            // Authentication part
-            //
-            
-            // Sign in
-            $("#firebase-auth-google").click(function() {
-              var provider = new firebase.auth.GoogleAuthProvider();
-firebase.auth().signInWithPopup(provider).then(function(result) {
-  // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-  var token = result.credential.accessToken;
-  // The signed-in user info.
-  var user = result.user;
-}).catch(function(error) {
-  // Handle Errors here.
-  var errorCode = error.code;
-  var errorMessage = error.message;
-  // The email of the user's account used.
-  var email = error.email;
-  // The firebase.auth.AuthCredential type that was used.
-  var credential = error.credential;
-});
-            });
-            $("#firebase-auth-github").click(function() {
-              var provider = new firebase.auth.GithubAuthProvider();
-              firebase.auth().signInWithPopup(provider).then(function(result) {
-                // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-                var token = result.credential.accessToken;
-                // The signed-in user info.
-                var user = result.user;
-              }).catch(function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                // The email of the user's account used.
-                var email = error.email;
-                // The firebase.auth.AuthCredential type that was used.
-                var credential = error.credential;
-              });
-            });
-
-            // Sign out
-			$("#signout-firebase").click(function() {
-			  firebase.auth().signOut().then(function() {
-			    window.location.href = "/";
-              }, function(error) {
-				window.location.href = "/";
-              });
-			});
-
-            storageApi.init(handlers);
-
-            var content = decodeURI(window.location.href).split("?");
-            var isSearch = true;
-            if (content.length > 1) {
-                content = content[1];
-                if (content.indexOf("save") >= 0) {
-					isSearch = false;
-                    global_action = "SAVE";
-                    $("#snipettor-details-page").show();
-                    $("#snipettor-search-tabs").hide();
-                } // save
-                else if (content.indexOf("open") >= 0) {
-					isSearch = false;
-                    $("#snipettor-details-page").show();
-                    $("#snipettor-search-tabs").hide();
-  
-                    var content = content.substr(5);
-                    var uid = content.substr(0, content.length).split("/");
-                    var version = uid[1] || 0;
-                    uid = uid[0];
-                    storageApi.loadContent(uid, version, function(data) {
-                        console.dir(data);
-                        if (data) data.uid = uid;
-                        showContent(data, null, "#main-details");
-                    });
-                } else if (content.indexOf("search") >= 0) {
-                    var searchString = decodeURI(content).split("&");
-                    var searcher = {};
-                    for (var x = 0; x < searchString.length; ++x) {
-                        var m = searchString[x].split("=");
-                        if (searchString.length - 1 == x) {
-                            searcher[m[0]] = m[1].substr(0, m[1].length - 1);
-                        } else {
-                            searcher[m[0]] = m[1];
-                        }
-                    }
-                    if (searcher["search"] == "*")
-                        searcher["search"] = null;
-                    storageApi.searchContent(searcher, function(content) {
-                        uiHandler.updateSearchForm(searcher);
-                        showSearchResult(searchString, content);
-
-                    });
-                } else if (content.indexOf("dashboard") >=0) {
-                  // Show current user dashboard
-   				  $('[aria-controls="main-dashboard"]').trigger("click");
-                  global_action = "dashboard";
-                  global_method = function(user_id) {
-                    storageApi.searchContent({
-                        search: null
-                    }, function(content) {
-                        showSearchResult({
-                            search: null
-                        }, content, "#main-dashboard");
-                    },
-                    user_id);
-                  }; // global_method
-
-                }  else if (content.indexOf("user_id") >=0) {
-                  var sst = decodeURI(content).split("&");
-                  var first = sst[0].split("=");
-                  var user_id = first[1];
-                  // Show current user dashboard
-   				  $('[aria-controls="main-dashboard"]').trigger("click");
-                    storageApi.searchContent({
-                        search: null
-                    }, function(content) {
-                        showSearchResult({
-                            search: null
-                        }, content, "#main-dashboard");
-                    },
-                    user_id);
-                  }; // in that case we know user id and could start search imidiatly
-            } else { // content is not a query
-                storageApi.searchContent({
-                    search: null
-                }, function(content) {
-                    showSearchResult({
-                        search: null
-                    }, content);
-                });
-            }
-            //
-            // Search UI contains tabs
-            //
-            if (isSearch) {
-              $('[aria-controls="main-content"]').click(function() {
-				window.location.href = "/";
-	  		  });
-
-              $('[aria-controls="main-dashboard"]').click(function() {
-	 			window.location.href = "/?dashboard";
-	  		  });
-		    }
-			
-			//
-			// SEARCH snippet UI part
-			//
-            function getTagsBubbles(search, tags) {
-                var result = '';
-                for (var x in tags)
-                    result += '<li href="/?' + encodeURI('tags=' + tags[x] + '&search=' + (search.search ? search.search : '*')) +
-                    '">' + tags[x] + '</li>';
-                return result;
-            }
-
-            function getBranches(search, items) {
-                var uitems = [];
-
-                for (var x in items) {
-                    if (items[x].url.indexOf("https://github.com") == 0) {
-                        var rr = items[x].url.split("/");
-                        var branch = "github:" + rr[3] + "/" + rr[4];
-                        if (uitems.indexOf(branch) == -1)
-                            uitems.push(branch);
-                    }
-                    else if (items[x].url.indexOf("https://bitbucket.org") == 0) {
-                        var rr =  items[x].url.split("/");
-                        var branch = "bitbucket:" + rr[3] + "/" + rr[4];
-                        if (uitems.indexOf(branch) == -1)
-                            uitems.push(branch);
-                    }
-                    else if (items[x].url.indexOf("https://cs.chromium.org") == 0) {
-                        var branch = "googlecode:cs.chromium.org";
-                        if (uitems.indexOf(branch) == -1)
-                            uitems.push(branch);
-                    }
-
-                }
-
-//              <li><img src="img/googlecode.png"> <span>cs.chromium.org</span></li>
-//              <li><img src="img/github.png"> <span>philip.github.org</span></li>
-//              <li><img src="img/bitbucket.png"> <span>bitbucket.com/philip</span></li>
-
-                var result = '';
-                for (var x in uitems) {
-					var branch = uitems[x].split(":");
-					var icon = branch[0];
-					result += '<li><img src="img/' + icon + '.png"> <span href="/?'
-					  + encodeURI('branches=' + branch[1] + '&search=' + (search.search ? search.search : '*')) +
-                    '">'+branch[1]+'</span></li>';
-				}
-                return result;
-            }
-            
-            function getDescription(description) {
-				if (!description || description == "") {
-					return '<img src="img/sad-face.png">\
-                                        <div class="content">\
-                                            <p>There is no description for this item!</p>\
-                                            <p class="small">Please check again later, we will probably update it.</p>\
-                                        </div>';
-				}
-				return '<p>' + description + '</p>';
-			}
-
-            function showAvailableVersions(search, uid, versions) {
-                var result = "";
-                return result;
-
-                for (var y in ["0","1", "3"])
-                    result += '<a href="/?open=' + uid + '/' + y + '"><button type="button" class="btn btn-default btn-circle"><i class="glyphicon">' + y + '</i></button></a>';
-                return result;
-            }
-
-            function showSearchResult(searchString, searchData, pSel) {
-				var pselector = pSel || "#main-content";
-				$(pselector).empty();
-
-                if (!searchData || Object.keys(searchData).length == 0) {
-                    $("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo(pselector);
-                    return;
-                }
-                for (var x in searchData) {
-                    var versions = searchData[x];
-                    var item = versions; //[versions.length - 1]; // it should be the latest version
-
-                    var description = searchData[x];
-                    var xxx = x.substr(1);
-                    var xuid = 0; //versions.length - 1;
-                    
-                    var panelTemplate =
-'<div class="panel panel-default experiment" style="margin-bottom:0px;">\
-	<div class="panel-heading">\
-		<p class="text-right" style="display:inline; float:right;">\
-			<a href="#" style="margin:10px;"><span>10</span><i class="glyphicon glyphicon-eye-open"></i></a>\
-		    <a href="#" style="margin:10px;"><i class="glyphicon glyphicon-star"></i><span>100</span></a>\
-		</p>\
-		<p class="lead text-left snippet_title" style="margin-bottom:0px;">' + description.title + '</p>\
-	</div>\
-	<div class="panel-body" style="padding:0px;">\
-		<div class="col-md-3"><div class="raw">\
-			<a href="/?user_id='+item.user_id +'"><h4>'+ item.user_name +'</h4></a>\
-			<p>\
-				<button uid="' + xxx + '" xuid="' + xuid + '" class="btn btn-default snippetor-play-snippet" type="button"><span class="hidden-sm hidden-xs">Play</span><i class="fa fa-play" style="  padding:6px;"></i></button>\
-				<button class="btn btn-default snippetor-detail-snippet" type="button" style="  margin:10px;"><a href="/?open=' + xxx +'"><span class="hidden-sm hidden-xs">Details</span><i class="fa fa-edit" style="  padding:6px;"></i></a></button>\
-			</p></div>\
-		</div>\
-		<div class="col-md-2">\
-		  <span>' + getBranches(searchString, description.items) + '</span>\
-		</div>\
-		<div class="col-md-5">\
-			<p><h4>' + (description.description ? description.description : 'THERE IS NO DESCRIPTION FOR THIS ITEM') + '</h4></p>\
-		</div>\
-		<div class="col-md-2">\
-			<p><h3 style="margin:0px;">'+ getTagsBubbles(searchString, description.tags) + '</h3></p>\
-		</div>\
-	</div>\
-</div>';
-
-var panelTemplate2 =
-'                    <div class="panel panel-default">\
+      } else if (name == "snippet") {
+        template =
+          '\
+                    <div class="panel panel-default">\
                         <div class="panel-heading">\
-                            <div class="title">'+ description.title +'</div>\
+                            <div class="title">{snippet.title}</div>\
                             <div class="stats">\
-                                <div><img src="img/comment.png">' + (description.items.length) +'</div><!--\
-                             --><div><img src="img/previews.png"> 10</div><!--\
-                             --><div><img src="img/likes.png"> 253</div>\
+                                <div><img src="img/comment.png">{snippet.n_comments}</div><!--\
+                             --><div><img src="img/previews.png">{snippet.n_watches}</div><!--\
+                             --><div><img src="img/likes.png">{snippet.n_likes}</div>\
                             </div>\
                             <div class="clearfix"></div>\
                         </div>\
+                        {n_labels}\
+                        <ul class="panel-labels">\
+                            <li>Label 1</li><!--\
+                         --><li>\
+                             SubLabel 1\
+                            </li><!--\
+                         --><li>\
+                             SubLabel 2\
+                            </li>\
+                        </ul>\
                         <div class="panel-body">\
                             <div class="row">\
                                 <div class="col-sm-4 vcenter">\
                                     <div class="profile">\
                                         <img src="https://avatars0.githubusercontent.com/u/6011629?v=3&s=460" class="avatar">\
-                                        <h2 class="name"><a href="/?user_id='+item.user_id +'">'+ item.user_name +'</a></h2>\
+                                        <h2 class="name"><a href="/?user_id={snippet.user_id}">{snippet.username}</a></h2>\
                                     </div>\
-                                    <a uid="' + xxx + '" xuid="' + xuid + '" class="btn btn-primary snippetor-play-snippet-new">Play <i class="fa fa-fw fa-play"></i></a>\
-                                    <a href="/?open=' + xxx +'" class="btn btn-default">Details <i class="fa fa-fw fa-edit"></i></a>\
+                                    <a uid="{snippet.uid}" xuid="{snippet.xuid}" class="btn btn-primary snippetor-play-snippet-new">Play <i class="fa fa-fw fa-play"></i></a>\
+                                    <a href="/?open={snippet.uid}" class="btn btn-default">Details <i class="fa fa-fw fa-edit"></i></a>\
                                 </div><!--\
                              --><div class="col-sm-8 border-left vcenter">\
-                                    <div class="'+ (description.description ? '' : 'no-') +'description">\
-                                        '+ getDescription(description.description) +'\
+                                    <div class="{snippet.has_description}description">\
+                                        {snippet.description}\
                                         <!-- Hash Tags -->\
                                         <ul class="hashtags">\
-                                        '+ getTagsBubbles(searchString, description.tags) +'\
+                                        {snippet.tags}\
                                         </ul>\
                                     </div>\
                                 </div>\
@@ -1330,272 +454,1170 @@ var panelTemplate2 =
                         </div>\
                         <div class="panel-footer">\
                             <ul class="repositories">\
-                            '+ getBranches(searchString, description.items) +'\
+                            {snippet.branches}\
                             </ul>\
                         </div>\
-                    </div>\
-';
+                    </div>';
+      } else if (name == "save-view") {
+        template =
+          '<div class="panel panel-default">\
+               <div class="panel-heading">\
+                   <div class="title"><i class="fa fa-fw fa-eye" style="opacity:0.25;margin-right:5px;"></i> Snippet {snippet.uid}</div>\
+                   <div class="clearfix"></div>\
+               </div>\
+               <div class="panel-body">\
+                   <div class="row">\
+                       <div class="col-sm-8">\
+                           <a name="play" class="btn btn-primary btn-margin-right-5">Play <i class="fa fa-fw fa-play"></i></a>\
+                           <a name="save" class="btn btn-default btn-margin-right-5" style="display:none;">Save <i class="fa fa-fw fa-save"></i></a>\
+                           <a name="edit" class="btn btn-default btn-margin-right-5" style="display:none;">Edit <i class="fa fa-fw fa-edit"></i></a>\
+                           <a name="fork" class="btn btn-default btn-margin-right-5" style="display:none;">Fork <i class="fa fa-fw fa-code-fork"></i></a>\
+                           <a name="revert" class="btn btn-default btn-margin-right-5" style="display:none;">Rever <i class="fa fa-fw fa-undo"></i></a>\
+                           <a name="delete" class="btn btn-default btn-margin-right-5">Delete <i class="fa fa-fw fa-trash"></i></a>\
+                           <a name="close" class="btn btn-default btn-margin-right-5">Close <i class="fa fa-fw fa-trash"></i></a>\
+                       </div>\
+                       <div class="col-sm-12">\
+                           <div class="alert alert-danger snippetor-alert"><i class="fa fa-fw fa-warning"></i> Users who are not logged in, cannot save their snappet.</div>\
+                           <form action="" method="post" class="edit-form">\
+                               <div class="form-group">\
+                                   <label>Titls</label>\
+                                   <input type="text" class="form-control" value="{snippet.title}">\
+                               </div>\
+                               <div class="form-group">\
+                                   <label>Tags</label>\
+                                   <input type="text" class="form-control" data-role="tagsinput" value="{snippet.tags}">\
+                               </div>\
+                               <div class="form-group">\
+                                   <label>Description</label>\
+                                   <textarea class="form-control" rows="5">{snippet.desc}</textarea>\
+                               </div>\
+                           </form>\
+                           <hr>\
+                           <div class="panel panel-default sort-header">\
+                               <div class="panel-heading">\
+                                   <div class="title"><i class="fa fa-fw fa-comments" style="opacity:0.25;margin-right:5px;"></i> Filip Todorov</div>\
+                                   <div class="stats">\
+                                       <div><img src="img/garbage.png"></div>\
+                                   </div>\
+                                   <div class="clearfix"></div>\
+                               </div>\
+                               <div class="panel-body bordered">\
+                                   <div class="pull-right">\
+                                       <a href="#" class="editComment"><i class="fa fa-fw fa-edit"></i> Edit Comment</a>\
+                                   </div>\
+                                   <div class="clearfix"></div>\
+                                   <textarea class="form-control" rows="4" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at nunc eu nisi fermentum condimentum vel quis lorem. Proin tempor magna velit, sit amet facilisis magna tristique sed. Ut eu lobortis sapien, sit amet mattis nulla. Donec sed dui ullamcorper elit vestibulum rutrum. Nam sed libero mi. Mauris porttitor egestas felis, vel tristique urna commodo ac. Quisque vel mollis metus. Proin eu venenatis augue, eu pellentesque turpis. Curabitur vel velit facilisis, accumsan neque ut, malesuada lectus. Aliquam tempor tellus in massa mattis scelerisque. Praesent convallis diam quis felis luctus, eleifend hendrerit magna consequat. Donec accumsan tellus sit amet dui sollicitudin, quis aliquet urna malesuada.</textarea>\
+                               </div>\
+                           </div>\
+                           <div class="panel panel-default sort-header">\
+                               <div class="panel-heading">\
+                                   <div class="title"><i class="fa fa-fw fa-comments" style="opacity:0.25;margin-right:5px;"></i> Filip Todorov</div>\
+                                   <div class="stats">\
+                                       <div><img src="img/garbage.png"></div>\
+                                   </div>\
+                                   <div class="clearfix"></div>\
+                               </div>\
+                               <div class="panel-body bordered">\
+                                   <div class="pull-right">\
+                                       <a href="#" class="editComment"><i class="fa fa-fw fa-edit"></i> Edit Comment</a>\
+                                   </div>\
+                                   <div class="clearfix"></div>\
+                                   <textarea class="form-control" rows="4" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at nunc eu nisi fermentum condimentum vel quis lorem. Proin tempor magna velit, sit amet facilisis magna tristique sed. Ut eu lobortis sapien, sit amet mattis nulla. Donec sed dui ullamcorper elit vestibulum rutrum. Nam sed libero mi. Mauris porttitor egestas felis, vel tristique urna commodo ac. Quisque vel mollis metus. Proin eu venenatis augue, eu pellentesque turpis. Curabitur vel velit facilisis, accumsan neque ut, malesuada lectus. Aliquam tempor tellus in massa mattis scelerisque. Praesent convallis diam quis felis luctus, eleifend hendrerit magna consequat. Donec accumsan tellus sit amet dui sollicitudin, quis aliquet urna malesuada.</textarea>\
+                               </div>\
+                           </div>\
+                       </div>\
+                   </div>\
+               </div>\
+           </div>';
+      }
+      return nano(template, data);
+    }
+  </script>
+  <script>
+    var global_action = null;
+    var global_method = null;
+    var uiHandler = {};
 
-$(panelTemplate2).prependTo(pselector);
-                }
+    function showContentItem(item, index, extApi) {
 
-                
-                $(".snippetor-play-snippet-new").click(function() {
-                    var uid = $(this).attr("uid");
-                    var xuid = parseInt($(this).attr("xuid"));
-                    
-                    var payload = searchData["-" + uid];
+      var gh_prefix = "https://github.com/";
+      var bb_prefix = "https://bitbucket.org/";
+      var cs_prefix = "https://cs.chromium.org/";
+      var uml_prefix = "https://umlsync-6e2da.firebaseapp.com/";
+      var prefix = "";
+      var img = "";
 
-                    if (!uid || xuid == undefined)
-                        return;
+      if (item.url.indexOf(gh_prefix) == 0) {
+        prefix = gh_prefix;
+        img = "github";
+      } else if (item.url.indexOf(cs_prefix) == 0) {
+        prefix = cs_prefix;
+        img = "google";
+      } else if (item.url.indexOf(bb_prefix) == 0) {
+        prefix = bb_prefix;
+        img = "bitbucket";
+      } else if (item.url.indexOf(uml_prefix) == 0) {
+        prefix = uml_prefix;
+        img = "puzzle-piece";
+      }
 
-                    payload.uid = uid; // save current unique ID
-                    
-                    payload.version = xuid;
+      var url_path = item.url.substr(prefix.length);
 
-                    payload.isOpened = true;
-                    
-                    console.dir(payload);
-                    extensionRemoteApi.openSnippet(payload);
-                });
+      var panelTemplate = "";
+      if (img != "google" && img != "puzzle-piece") {
+        var user = url_path.substr(0, url_path.indexOf("/"));
+        url_path = url_path.substr(url_path.indexOf("/") + 1);
+
+        var repo = url_path.substr(0, url_path.indexOf("/"));
+        url_path = url_path.substr(url_path.indexOf("/") + 1);
+
+        panelTemplate = getTemplateGlobal("comment_old_1", {
+          item: {
+            prefix: prefix,
+            img: img,
+            user: user,
+            repo: repo,
+            path: url_path,
+            line: item.line,
+            comment: item.comment
+          }
+        });
+      } else {
+        panelTemplate = getTemplateGlobal("comment_old_2", {
+          item: {
+            prefix: prefix,
+            img: img,
+            line: item.line,
+            comment: item.comment
+          }
+        });
+
+
+      }
+      //
+      var item = $(panelTemplate).appendTo("#snipettor-save-form");
+
+      item.find(".close-snippet-item-icon").click(function() {
+        var parent = $(this).parent().parent().parent().parent();
+        var idx = $(".panel-default").index(parent);
+
+        extApi.updateSnippetItem("delete", {
+          index: idx
+        });
+        parent.remove();
+      });
+      // edit the text of comment
+      item.find(".fa-edit").click(function() {
+        var parent = $(this).parent().parent();
+        var elemIndex = $(".panel-default").index(parent.parent());
+
+        if (parent.find("textarea").length > 0) {
+          parent.find("textarea").trigger("blur");
+          return;
+        }
+
+        var text = parent.find(".snippet-description").html();
+        parent.find(".snippet-description").hide();
+        parent.append("<textarea style='width:100%;'>" + text + "</textarea>");
+        parent.find("textarea").blur(function() {
+          var xxx = parent.find("textarea").val();
+          parent.find("textarea").remove();
+          if (xxx != text) {
+            parent.find(".snippet-description").text(xxx);
+            extApi.updateSnippetItem("update", {
+              idx: elemIndex,
+              item: {
+                comment: xxx
+              }
+            });
+          }
+          parent.find(".snippet-description").show();
+        });
+      });
+    };
+
+    var storageApi = {
+      observer: null,
+      init: function(observer) {
+        this.observer = observer;
+        // make firebase initialization here
+        this.auth = firebase.auth();
+        this.database = firebase.database();
+        this.storage = firebase.storage();
+        // Initiates Firebase auth and listen to auth state changes.
+        this.auth.onAuthStateChanged(this._onAuthStateChanged.bind(this));
+      },
+      //
+      // Helper method to handle sign-in change behaviour
+      //
+      _onAuthStateChanged: function(user) {
+        this.user = user;
+        if (this.authCallback) {
+          // probably it could trigger firebase:auth event
+          this.authCallback(user);
+        }
+        this.observer.authCompleteCallback(user);
+      },
+      //
+      // Helper method to hide storage selection
+      // for the authenticated and anonimous users
+      //
+      _getMessageRef: function(type) {
+        if (type == 'content') {
+          if (!this.umlsRef) {
+            this.umlsRef = this.database.ref('messages');
+          }
+          return this.umlsRef;
+        }
+      },
+      //
+      // Save a new content
+      //
+      saveContent: function(payload, callback) {
+
+        var messagesRef = this._getMessageRef('content');
+        if (!messagesRef)
+          callback(null);
+
+        var currentUser = this.auth.currentUser;
+
+        messagesRef.push({
+          version: 0, // default is 0
+          // no idea how to reformat it now, but may be later
+          user_name: currentUser ? currentUser.displayName : "unknown",
+          user_id: currentUser ? currentUser.uid : "unknown",
+          // Snippet title an description
+          title: payload.title, // UML title
+          description: payload.description || "", // uml/class etc or markdown
+          // arrays
+          tags: payload.tags || [], // uml/class etc or markdown
+          branches: payload.branches || [], // uml/class etc or markdown
+          items: payload.items, // JSON description
+        }).then(function(snapshot) {
+          if (callback) {
+            callback(snapshot.path);
+          }
+        }.bind(this)).catch(function(error) {
+          var text = 'Error writing new message to Firebase Database';
+          console.error(text, error);
+          callback(null, text);
+        });
+
+      },
+      //
+      // Load content by key and version
+      //
+      loadContent: function(uid2, version, callback) {
+        var uid = "-" + uid2;
+        var that = this;
+        var handler = function(snapshot) {
+          if (callback)
+            callback(snapshot.val());
+          var xxx = snapshot.val();
+          console.dir(xxx);
+        };
+        var handler2 = function(snapshot) {
+          if (callback) {
+            var xxx = snapshot.val();
+            for (var x in xxx) {
+              callback(xxx[x]);
             }
+          }
+        };
 
+        if (false && version) {
+          var ref = this.database.ref('messages/' + uid + "/" + version);
+          ref.limitToFirst(1).once("value").then(handler2);
+        } else {
+          this.messagesRef = this.database.ref('messages/' + uid).once('value').then(handler);
+        }
+      },
+      //
+      // Update the content and version
+      //
+      updateContent: function(uid, payload, callback) {
+        var messagesRef = this._getMessageRef('content');
+        if (!messagesRef)
+          callback(null, "Error: invalid firebase path.");
+        var ref = msg.child("-" + uid);
+        if (!ref)
+          callback(null, "Error: invalid content id: -" + uid + " .");
 
-            //
-            // Save snippet UI part
-            //
-            function addSaveForm(payload, idx, pselector) {
-                // remove the previous form and create a new one
-                $("#snipettor-save-form").remove();
-                
-                
-                $('<form id="snipettor-save-form" class="col-sm-10 col-md-10 col-lg-10" action="#" uid="' + (payload.uid || '') +
-                    '" class="navbar-form pull-left">\
-                <img alt="@baragoz" style="display: inline-block;overflow: hidden;line-height: 1;vertical-align: middle;border-radius: 3px;" height="20" src="https://avatars3.githubusercontent.com/u/6011629?v=3&amp;s=40" width="20">\
-    <button type="submit" name="play" class="btn snippetor-details-play"><i class="fa fa-play">&nbsp;Play</i></button>&nbsp;&nbsp;&nbsp;\
-    <button type="submit" name="delete" class="btn"><i class="fa fa-trash">&nbsp;Delete</i></button>&nbsp;&nbsp;&nbsp; \
-    <button type="submit" name="save" class="btn" style="display:none;"><i class="fa fa-save">&nbsp;Save</i></button> \
-    <button type="submit" name="edit" class="btn" style="display:none;"><i class="fa fa-edit">&nbsp;Edit</i></button> \
-    <button type="submit" name="revert" class="btn" style="display:none;"><i class="fa fa-undo">&nbsp;Revert</i></button> \
-    &nbsp;&nbsp;&nbsp;\
-    <button type="submit" name="fork" class="btn" style="display:none;"><i class="fa fa-fork">&nbsp;Fork</i></button> \
-    &nbsp;&nbsp;&nbsp;\
-    <button type="submit" name="close" class="btn"><i class="fa fa-close">&nbsp;Close</i></button> \
-    <br><br>\
-  <div class="raw">\
-        <label for="title">Title*    </label><br>\
-        <input id="snippetor-save-title" class="form-control input-sm" type="text" class="span2" value="' +
-                    payload.title +
-                    '"><br>\
-    </div><br>\
-    <div class="raw">\
-        <label for="tags">Tags*</label><br>\
-        <input id="snippetor-save-tags" type="text" value="' + (payload.tags ? payload.tags.join(";") : "") +
-                    '" class="form-control input-sm" data-role="tagsinput" class="span2" >\
-    </div>\
-    <div class="raw">\
-        <label for="description">Description*</label><br>\
-        <textarea id="snippetor-save-description" class="form-control input-sm" id="snippetor-save-description" rows="3">' +
-                    (payload.description || "") + '</textarea>\
-    </div>\
-    <br>\
-  </form>'
-                ).appendTo(pselector);
+        var currentUser = this.auth.currentUser;
 
-                // Configure the buttons visibility
-                if (payload.uid) {
-                  $("[name='delete']").hide();
-                  $("[name='fork']").show();
-                  if (payload.isModified) {
-                    $("[name='revert']").show();
-                  }
-                  else {
-                    $("[name='edit']").show();
-                  }
+        ref.set({
+          version: 0, // default is 0
+          // no idea how to reformat it now, but may be later
+          user_name: currentUser ? currentUser.displayName : "unknown",
+          user_id: currentUser ? currentUser.uid : "unknown",
+          // Snippet title an description
+          title: payload.title, // UML title
+          description: payload.description || "", // uml/class etc or markdown
+          // arrays
+          tags: payload.tags || [], // uml/class etc or markdown
+          branches: payload.branches || [], // uml/class etc or markdown
+          items: payload.items, // JSON description
+        }).then(function(snapshot) {
+          if (callback) {
+            callback(snapshot.path);
+          }
+        }.bind(this)).catch(function(error) {
+          var text = 'Error writing new message to Firebase Database';
+          console.error(text, error);
+          callback(null, text);
+        });
+      },
+      updateContentWithVersion: function(uid, payload, callback) {
+        var msg = this._getMessageRef('content');
+        if (msg) {
+          var ref = msg.child("-" + uid);
+          ref.child('version').once('value').then(function(x) {
+            var position = x.val() + 1;
+            ref
+              .child(position)
+              .push({
+                data: payload.data,
+                title: payload.title,
+                type: payload.type
+              })
+              .then(function(snapshot) {
+                if (callback) {
+                  callback(snapshot.path);
                 }
-                else {
-                  // There is no support of isModified state for a draft snippet
-                  $("[name='save']").show();
-                  $("[name='close']").hide();
-                }
-
-                $("#snipettor-save-form .snippetor-details-play").click(function() {
-                    payload.isOpened = true;
-                    extensionRemoteApi.openSnippet(payload, idx);
-                    $("snipettor-details-page").show();
-                    $("snipettor-search-tabs").hide();
+                ref.update({
+                  version: position
                 });
+              }.bind(this))
+              .catch(function(error) {
+                var text = 'Error updating existing content to Firebase Database';
+                console.error(text, error);
+                callback(null, text);
+              });
+          }); // ref get value
+        }
+      },
+
+      //
+      // Show the latest content only
+      //
+      searchContent: function(queryText, callback, user_id) {
+        // Search content for current user
+        if (user_id) {
+          this.database.ref('messages')
+            .limitToLast(20)
+            .orderByChild('user_id')
+            .equalTo(user_id)
+            .once('value')
+            .then(function(complete) {
+              callback(complete.val());
+            });
+
+          return;
+        }
+        if (false && queryText) {
+          this.database.ref('messages')
+            .limitToLast(20)
+            .orderByChild('title')
+            .startAt(queryText)
+            .endAt(queryText + "\uf8ff")
+            .once('value')
+            .then(function(complete) {
+              callback(complete.val());
+            });
+        } else {
+          this.database.ref('messages')
+            .limitToLast(20)
+            .once('value')
+            .then(function(complete) {
+              callback(complete.val());
+            });
+        }
+      }
+    }; // StorageApi
+
+    //
+    // Communication with an extension web-site injection plugin
+    //
+    var extensionRemoteApi = {
+      observer: null,
+      openSnippet: function(payload, idx) {
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: "open-snippet",
+            data: {
+              payload: payload,
+              index: idx
             }
+          }
+        }));
+      },
+      onSavedSnippet: function(payload) {
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: "saved-draft",
+            payload: payload
+          }
+        }));
 
-            function showContent(payload, idx, pselector) {
-				$(pselector).empty();
+      },
+      onEditCurrentSnippet: function(payload) {
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: "edit-current-snippet",
+            payload: payload
+          }
+        }));
 
-                addSaveForm(payload, idx, pselector);
-                for (var r = 0; r < payload.items.length; ++r) {
-                    showContentItem(payload.items[r], null, extensionRemoteApi);
+      },
+      onUnsubscribeSnippet: function(payload) {
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: "unsubscribe",
+            payload: payload
+          }
+        }));
 
-                } // for
+      },
+      init: function(handlers) {
+        extensionRemoteApi.observer = handlers;
 
-                //
-                // Save content to the firebase storage
-                //
-                $("#snipettor-save-form>button").click(function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    var action = $(this).attr("name");
+        window.addEventListener("onInit", function(evt) {
+          if (extensionRemoteApi.observer &&
+            extensionRemoteApi.observer.initCallback)
+            extensionRemoteApi.observer.initCallback(evt.detail);
+        });
+        window.addEventListener("onSnippetChange", function(evt) {
+          var payload = evt.detail;
+          if (payload.action == "save") {
+            extensionRemoteApi.observer.onSaveSnippet(payload);
+          } else if (payload.action == "create") {
+            extensionRemoteApi.observer.onCreateSnippet(payload);
+          } else if (payload.action == "open") {
+            extensionRemoteApi.observer.onOpenSnippet(payload);
+          } else if (payload.action == "edit-state") {
+            console.log("TODO: ADD edit state handling");
+          } else {
+            alert("Unknow snippet action: " + payload.action);
+          }
+        });
 
-                    if (action == "save" || action == "fork") {
-                      // Update title tags and description
-                      payload.title = $("#snippetor-save-title").val();
-                      payload.tags = $("#snippetor-save-tags").val();
-                      payload.tags = payload.tags.split(";");
-                      payload.description = $("#snippetor-save-description").val();
+        window.addEventListener("onSnippetItemChange", function(evt) {
+          var payload = evt.detail;
+          if (payload.action == "add") {
+            extensionRemoteApi.observer.onAddItem(payload);
+          } else if (payload.action == "remove") {
+            extensionRemoteApi.observer.onRemoveItem(payload);
+          } else if (payload.action == "update") {
+            extensionRemoteApi.observer.onUpdateItem(payload);
+          } else if (payload.action == "move") {
+            extensionRemoteApi.observer.onMoveItem(payload);
+          } else {
+            alert("Unknow snippet action: " + payload.action);
+          }
+        });
 
-                      ////////////////  UPDATE THE LIST OF BRANCHES --------
-                      var branches = [];
-                      for (var x in payload.items) {
-                        var item = payload.items[x];
-                        if (item.url.indexOf("https://github.com") >= 0) {
-                            var z = item.url.split("/");
-                            z = z[3] + "/" + z[4];
-                            // add unique branch name
-                            if (!(z in branches))
-                                branches.push(z);
-                        }
-                      }
-                      // make dedicated list of branches
-                      payload.branches = branches;
-                      ////////////////  UPDATE THE LIST OF BRANCHES --------
 
-                      var uid = $(this).attr("uid");
-                      if (!uid || uid == "" || action == "fork") {
-                        // reset values for a fork
-                        payload.uid = undefined;
-                        payload.version = undefined;
-                        // reset is modified before save
-                        payload.isModified = undefined;
-                        // SAVE CONTENT
-                        console.log("SAVE CONTENTNNNNNNNNNNNNNN");
+        setTimeout(function() {
+          console.log("GET INITIAL STATE!!!!");
+          window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+            detail: {
+              action: "GetInitialState"
+            }
+          }));
+        }, 100);
+      },
+      //
+      // Assign current tab to the concreate snippet or snippet draft
+      // @param payload - index of the selected item, (-1) is to unsubscribe
+      //
+      selectSnippet: function(index) {
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: "select-snippet",
+            data: index
+          }
+        }));
+      },
+      //
+      // Update current snippet data:
+      // title, hash-tags or description
+      //
+      updateSnippet: function(payload) {
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: "update-snippet",
+            payload: payload
+          }
+        }));
+      },
+      //
+      // Update the concreate snippet item's description
+      // 1. update - update description
+      // 2. delete - item removed
+      // 3. position - change item position
+      //
+      updateSnippetItem: function(action, payload) {
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: action + "-snippet-item",
+            payload: payload
+          }
+        }));
+      }
+    };
 
-                        storageApi.saveContent(payload, function(path) {
-                            var uniquePath = path;
-                            uniquePath = path.toString().split("/")[2];
-                            uniquePath = uniquePath.substr(1);
+    var handlers = {
+      //
+      // Firebase observer method
+      // Update an authentication options
+      //
+      authCompleteCallback: function(currentUser) {
+        if (currentUser) {
+          console.dir(currentUser);
+          //currentUser.photoURL  ddddd
+          $("#signin-dropdown-menu").hide();
+          $("#signout-dropdown-menu").show();
 
-                            // handle snippet save
-                            extensionRemoteApi.onSavedSnippet({
-                                uid: uniquePath
-                            });
+          //
+          //
+          var photo = (currentUser.photoURL ? currentUser.photoURL : "img/avatar.jpg");
+          $("a#signout-dropdown-menu-item").html(currentUser.displayName + '<img src="' + photo + '" class="mini-avatar">');
+          // Change the dropdown menu avatar
+          $("#signout-dropdown-menu-avatar").attr("src", photo);
+          // user photo if available
+          //
+          // Request user data
+          //
+          if (global_action == "dashboard" && global_method) {
+            global_method(currentUser.uid);
+          }
+        } else {
+          $("#signin-dropdown-menu").show();
+          $("#signout-dropdown-menu").hide();
+        }
+      },
+      //
+      // Snippetor extension observer methods
+      //
+      initialized: false,
+      initCallback: function(response) {
+        uiHandler.updateWorkingSnippets(response.snippets);
+        if (response.working != undefined) {
+          uiHandler.handleWorkingSnippet(response.working);
+        } else {
+          if (global_action == "SAVE")
+            alert("There is nothing to save! Please, select some snippet");
+        }
 
-                            setTimeout(function() {
-                                window.location.href = "/?open=" + uniquePath;
-                            }, 100);
-                        });
-                      } else {
-                        storageApi.updateContent(uid, payload, function(path) {
-                            var uniquePath = path.uid;
-                            uniquePath = path.toString().split("/")[2];
-                            uniquePath = uniquePath.substr(1);
+        handlers.initialized = true;
+      },
+      onSaveSnippet: function(payload) {
+        if (!handlers.initialized)
+          return;
 
-                            // handle snippet saved
-                            extensionRemoteApi.onSavedSnippet({
-                                uid: uniquePath,
-                                version: path.version
-                            });
+        if (payload.working == uiHandler.working) {
+          uiHandler.onSaveCurrentSnippet(payload.working);
+        }
+        // send unsubscribe from the current snippet
+        extensionRemoteApi.onUnsubscribeSnippet(payload.working);
+        setTimeout(function() {
+          window.location.href = "/";
+        }, 100);
 
-                            setTimeout(function() {
-                                window.location.href = "/?open=" + uniquePath + "/" + path.version + "/";
-                            }, 100);
-                        }); // update content API
-                      }
-                    }
-                    else if (action == "close" || action == "delete") {
-                      // Unsubscribed all opened items from snippet
-                      // and redirect on the main page
-                      // TODO: think about closing of not opened snippet (which was opened for view only and never played)
-                      extensionRemoteApi.onSavedSnippet({
-                        uid: ""
-                      });
-                      setTimeout(function() {
-                          window.location.href = "/";
-                      }, 100);
-                    }
-                    else if (action == "revert") {
-                      alert("DO SOME MAGIC WITH ITEM REVERT TO THE SAME VERSION:");
-                    }
-                    else if (action == "edit") {
-                       payload.isModified = true;
-                       if (payload.isOpened)
-                         extensionRemoteApi.onEditCurrentSnippet(payload);
+        uiHandler.snippets[payload.working] = null;
+        uiHandler.updateWorkingSnippets(uiHandler.snippets);
 
-                       // make it possible to save dialog
-                       $("[name='save']").show();
-                       $("[name='edit']").hide();
-                    }
-                    return false;
-                }); // on sumbit method
-            } // show Content method
+      },
+      onCreateSnippet: function(payload) {
+        if (!handlers.initialized)
+          return;
 
-            //
-            // Update snippet navigation tool-bar
-            //
-            uiHandler = {
-                snippets: [],
-                working: -1,
-                updateWorkingSnippets: function(snippets) {
-                    $("ul#snippetor-select-menu>li.snippet-draft").remove();
-                    for (var i in snippets) {
-                        var sn = snippets[i];
-                        if (sn)
-                            $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="' + i + '"><a href="#">' + sn.title + '</a></li>');
-                    }
-                    $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
-                        var idx = $(this).attr("idx");
-                        idx = parseInt(idx);
-                        extensionRemoteApi.selectSnippet(idx);
-                        uiHandler.handleWorkingSnippet(idx, true);
-                    });
-                    uiHandler.snippets = snippets;
+        uiHandler.snippets[payload.working] = payload.snippet;
+        uiHandler.updateWorkingSnippets(uiHandler.snippets);
+      },
+      onOpenSnippet: function(payload) {
+        if (!handlers.initialized)
+          return;
+
+        uiHandler.snippets[payload.working] = payload.snippet;
+        uiHandler.updateWorkingSnippets(uiHandler.snippets);
+      },
+      onAddItem: function(payload) {
+        if (!handlers.initialized)
+          return;
+
+        if (payload.working == uiHandler.working) {
+          showContentItem(payload.item, payload.index, extensionRemoteApi);
+        }
+        uiHandler.snippets[payload.working].items.splice(payload.index, 0, payload.item);
+      },
+      onRemoveItem: function(payload) {
+        if (!handlers.initialized)
+          return;
+
+        if (payload.working == uiHandler.working) {
+          removeContentItem(payload.index);
+        }
+        uiHandler.snippets[payload.working].items.splice(payload.index, 1);
+      },
+      onUpdateItem: function(payload) {
+        if (!handlers.initialized)
+          return;
+
+        if (payload.working == uiHandler.working) {
+          console.log("Update UI description only");
+          console.dir(payload);
+          var elem = $(".panel-default:eq(" + payload.payload.idx + ")");
+          console.dir(elem);
+          elem.find("span.snippet-description").text(payload.payload.item.comment);
+        }
+        uiHandler.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
+      },
+      onMoveItem: function(payload) {
+        if (!handlers.initialized)
+          return;
+
+        if (payload.working == uiHandler.working) {
+          uiHandler.doSwapItems(payload.payload);
+        }
+        var item = uiHandler.snippets[payload.working].items[payload.payload.oldIndex];
+        uiHandler.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
+        uiHandler.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
+      }
+    };
+
+    var container = null;
+    $(document).ready(function() {
+      //
+      // Authentication part
+      //
+
+      // Sign in with GOOGLE
+      $("#firebase-auth-google").click(function() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+        }).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+        });
+      });
+      // Sign in with GITHUB
+      $("#firebase-auth-github").click(function() {
+        var provider = new firebase.auth.GithubAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+        }).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+        });
+      });
+
+      // Sign out
+      $("#signout-firebase").click(function() {
+        firebase.auth().signOut().then(function() {
+          window.location.href = "/";
+        }, function(error) {
+          window.location.href = "/";
+        });
+      });
+
+      //
+      // Connect to the firebase storage
+      //
+      storageApi.init(handlers);
+
+      //
+      // parse URL first
+      //
+      function handleRouting(xurl) {
+        var content = xurl.split("?");
+        var isSearch =  true;
+
+        //
+        // Root URL
+        //
+        if (content.length == 1) {
+          $("#tab-all-snippets").addClass("active");
+          storageApi.searchContent({
+            search: null
+          }, function(content) {
+            showSearchResult({
+              search: null
+            }, content, "#main-dashboard");
+          });
+        }
+        //
+        // Query URL
+        //
+        else {
+          content = content[1];
+          if (content.indexOf("save") >= 0) {
+            isSearch = false;
+            global_action = "SAVE";
+          } // save
+          else if (content.indexOf("open") >= 0) {
+            isSearch = false;
+            $("#snipettor-details-page").show();
+            $("#snipettor-search-tabs").hide();
+
+            var content = content.substr(5);
+            var uid = content.substr(0, content.length).split("/");
+            var version = uid[1] || 0;
+            uid = uid[0];
+            storageApi.loadContent(uid, version, function(data) {
+              console.dir(data);
+              if (data) data.uid = uid;
+              showContent(data, null, "#main-dashboard");
+            });
+          } else if (content.indexOf("search") >= 0) {
+            $("#tab-all-snippets").addClass("active");
+            var searchString = decodeURI(content).split("&");
+            var searcher = {};
+            for (var x = 0; x < searchString.length; ++x) {
+              var m = searchString[x].split("=");
+              if (searchString.length - 1 == x) {
+                searcher[m[0]] = m[1].substr(0, m[1].length - 1);
+              } else {
+                searcher[m[0]] = m[1];
+              }
+            }
+            if (searcher["search"] == "*")
+              searcher["search"] = null;
+            storageApi.searchContent(searcher, function(content) {
+              uiHandler.updateSearchForm(searcher);
+              showSearchResult(searchString, content);
+            });
+          } else if (content.indexOf("dashboard") >= 0) {
+            $("#tab-dashboard").addClass("active");
+            // Show current user dashboard
+            $('[aria-controls="main-dashboard"]').trigger("click");
+            global_action = "dashboard";
+            global_method = function(user_id) {
+              storageApi.searchContent({
+                  search: null
+                }, function(content) {
+                  showSearchResult({
+                    search: null
+                  }, content, "#main-dashboard");
                 },
-                handleWorkingSnippet: function(id, force) {
-                    if (uiHandler.snippets.length > id) {
-                        uiHandler.working = id;
-                        if (global_action == "SAVE")
-                            showContent(uiHandler.snippets[id], id, "#main-details");
-                        else if (force) {
-                           window.location.href = "/?save=DRAFT";
-                        }
-                    }
-                },
-                onSaveCurrentSnippet: function() {
-                    window.location.href = "/";
-                },
-                doSwapItems: function(action) {
-                    if (action.oldIndex == action.newIndex)
-                        return;
+                user_id);
+            }; // global_method
 
-                    var lis = $('div.panel-default');
-                    console.dir(action);
-                    console.dir(lis);
-                    var ttt = lis.eq(action.oldIndex);
-                    var new_ttt = lis.eq(action.newIndex);
-                    console.dir(ttt);
-                    if (action.newIndex < action.oldIndex) {
-                        new_ttt.before(ttt);
-                    } else {
-                        new_ttt.after(ttt);
-                    }
+          } else if (content.indexOf("feed") >= 0) {
+            $("#tab-feed").addClass("active");
+            // Show current user dashboard
+            $('[aria-controls="main-dashboard"]').trigger("click");
+            global_action = "dashboard";
+            global_method = function(user_id) {
+              storageApi.searchContent({
+                  search: null
+                }, function(content) {
+                  showSearchResult({
+                    search: null
+                  }, content, "#main-dashboard");
                 },
-                updateSearchForm: function(query) {
-                  $("[name='search']").val(query.search || "");
-                  $("[name='branches']").val(query.branches || "");
-                  $("[name='tags']").val(query.tags || "");
-                }
-            };
+                user_id);
+            }; // global_method
 
-            extensionRemoteApi.init(handlers);
-        }); // document ready
-    </script>
+          } else if (content.indexOf("user_id") >= 0) {
+            $("#tab-dashboard").addClass("active");
+            var sst = decodeURI(content).split("&");
+            var first = sst[0].split("=");
+            var user_id = first[1];
+            // Show current user dashboard
+            $('[aria-controls="main-dashboard"]').trigger("click");
+            storageApi.searchContent({
+                search: null
+              }, function(content) {
+                showSearchResult({
+                  search: null
+                }, content, "#main-dashboard");
+              },
+              user_id);
+          }; // in that case we know user id and could start search imidiatly
+        }
+        //
+        // Search UI contains tabs
+        //
+        if (isSearch) {
+          $('[aria-controls="main-content"]').click(function() {
+            window.location.href = "/";
+          });
+
+          $('[aria-controls="main-dashboard"]').click(function() {
+            window.location.href = "/?dashboard";
+          });
+        }
+      }
+
+
+      //
+      // Urgly stupid routing
+      //
+      handleRouting(decodeURI(window.location.href));
+
+      //
+      // SEARCH snippet UI part
+      //
+      function getTagsBubbles(search, tags) {
+        var result = '';
+        for (var x in tags)
+          result += '<li href="/?' + encodeURI('tags=' + tags[x] + '&search=' + (search.search ? search.search : '*')) +
+          '">' + tags[x] + '</li>';
+        return result;
+      }
+
+      function getBranches(search, items) {
+        var uitems = [];
+
+        for (var x in items) {
+          if (items[x].url.indexOf("https://github.com") == 0) {
+            var rr = items[x].url.split("/");
+            var branch = "github:" + rr[3] + "/" + rr[4];
+            if (uitems.indexOf(branch) == -1)
+              uitems.push(branch);
+          } else if (items[x].url.indexOf("https://bitbucket.org") == 0) {
+            var rr = items[x].url.split("/");
+            var branch = "bitbucket:" + rr[3] + "/" + rr[4];
+            if (uitems.indexOf(branch) == -1)
+              uitems.push(branch);
+          } else if (items[x].url.indexOf("https://cs.chromium.org") == 0) {
+            var branch = "googlecode:cs.chromium.org";
+            if (uitems.indexOf(branch) == -1)
+              uitems.push(branch);
+          }
+
+        }
+
+        //              <li><img src="img/googlecode.png"> <span>cs.chromium.org</span></li>
+        //              <li><img src="img/github.png"> <span>philip.github.org</span></li>
+        //              <li><img src="img/bitbucket.png"> <span>bitbucket.com/philip</span></li>
+
+        var result = '';
+        for (var x in uitems) {
+          var branch = uitems[x].split(":");
+          var icon = branch[0];
+          result += '<li><img src="img/' + icon + '.png"> <span href="/?' +
+            encodeURI('branches=' + branch[1] + '&search=' + (search.search ? search.search : '*')) +
+            '">' + branch[1] + '</span></li>';
+        }
+        return result;
+      }
+
+      function getDescription(description) {
+        if (!description || description == "") {
+          return '<img src="img/sad-face.png">\
+                                        <div class="content">\
+                                            <p>There is no description for this item!</p>\
+                                            <p class="small">Please check again later, we will probably update it.</p>\
+                                        </div>';
+        }
+        return '<p>' + description + '</p>';
+      }
+
+      function showAvailableVersions(search, uid, versions) {
+        var result = "";
+        return result;
+
+        for (var y in ["0", "1", "3"])
+          result += '<a href="/?open=' + uid + '/' + y + '"><button type="button" class="btn btn-default btn-circle"><i class="glyphicon">' + y + '</i></button></a>';
+        return result;
+      }
+
+      function showSearchResult(searchString, searchData, pSel) {
+        var pselector = pSel || "#main-content";
+        $(pselector).empty();
+
+        if (!searchData || Object.keys(searchData).length == 0) {
+          $("<h1>THERE IS NOTHING TO RESULT OF YOUR SEARCH</h1>").prependTo(pselector);
+          return;
+        }
+        for (var x in searchData) {
+          var versions = searchData[x];
+          var item = versions; //[versions.length - 1]; // it should be the latest version
+
+          var description = searchData[x];
+          var xxx = x.substr(1);
+          var xuid = 0; //versions.length - 1;
+
+
+          var panelTemplate2 = getTemplateGlobal("snippet", {
+            snippet: {
+              title: description.title,
+              n_comments: description.items.length,
+              n_watches: description.watches || 0,
+              n_likes: description.stars || 0,
+              labels: "", // getGlobalTemplates("snippet:labels", description.labels),
+              username: item.user_name,
+              uid: xxx,
+              xuid: xuid,
+              user_id: item.user_id,
+              has_description: (description.description ? '' : 'no-'),
+              description: getDescription(description.description),
+              tags: getTagsBubbles(searchString, description.tags),
+              branches: getBranches(searchString, description.items)
+            }
+          });
+
+          $(panelTemplate2).prependTo(pselector);
+        }
+
+
+        $(".snippetor-play-snippet-new").click(function() {
+          var uid = $(this).attr("uid");
+          var xuid = parseInt($(this).attr("xuid"));
+
+          var payload = searchData["-" + uid];
+
+          if (!uid || xuid == undefined)
+            return;
+
+          payload.uid = uid; // save current unique ID
+
+          payload.version = xuid;
+
+          payload.isOpened = true;
+
+          console.dir(payload);
+          extensionRemoteApi.openSnippet(payload);
+        });
+      }
+
+
+      //
+      // Save snippet UI part
+      //
+      function addSaveForm(payload, idx, pselector) {
+        // remove the previous form and create a new one
+        $("#snipettor-save-form").remove();
+        var saveTemplate = getTemplateGlobal("save-view", {
+          snippet: {
+            uid: (payload.uid || ''),
+            title: payload.title,
+            tags: (payload.tags ? payload.tags.join(";") : ""),
+            desc: (payload.description || "")
+          }
+        });
+
+        $(saveTemplate).appendTo(pselector);
+
+        // Configure the buttons visibility
+        if (payload.uid) {
+          $("[name='delete']").hide();
+          $("[name='fork']").show();
+          if (payload.isModified) {
+            $("[name='revert']").show();
+          } else {
+            $("[name='edit']").show();
+          }
+
+          if (payload.isOpend) {
+            if (payload.isModified || payload.isEditMode) {
+              // Switch to the editable mode
+              // Make input editable and list of comments sortable
+            }
+          } else {
+            if (payload.isModified)
+              alert("SOMETHING GO WRONG: NOT OPENED CONTENT COULD NOT BE MODIFIED.");
+          }
+        } else {
+          // There is no support of isModified state for a draft snippet
+          $("[name='save']").show();
+          $("[name='close']").hide();
+        }
+
+        $("#snipettor-save-form .snippetor-details-play").click(function() {
+          payload.isOpened = true;
+          extensionRemoteApi.openSnippet(payload, idx);
+          $("snipettor-details-page").show();
+          $("snipettor-search-tabs").hide();
+        });
+      }
+
+      function showContent(payload, idx, pselector) {
+        $(pselector).empty();
+
+        addSaveForm(payload, idx, pselector);
+        for (var r = 0; r < payload.items.length; ++r) {
+          showContentItem(payload.items[r], null, extensionRemoteApi);
+
+        } // for
+
+        //
+        // Save content to the firebase storage
+        //
+        $("#snipettor-save-form>button").click(function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var action = $(this).attr("name");
+
+          if (action == "save" || action == "fork") {
+            // Update title tags and description
+            payload.title = $("#snippetor-save-title").val();
+            payload.tags = $("#snippetor-save-tags").val();
+            payload.tags = payload.tags.split(";");
+            payload.description = $("#snippetor-save-description").val();
+
+            ////////////////  UPDATE THE LIST OF BRANCHES --------
+            var branches = [];
+            for (var x in payload.items) {
+              var item = payload.items[x];
+              if (item.url.indexOf("https://github.com") >= 0) {
+                var z = item.url.split("/");
+                z = z[3] + "/" + z[4];
+                // add unique branch name
+                if (!(z in branches))
+                  branches.push(z);
+              }
+            }
+            // make dedicated list of branches
+            payload.branches = branches;
+            ////////////////  UPDATE THE LIST OF BRANCHES --------
+
+            var uid = $(this).attr("uid");
+            if (!uid || uid == "" || action == "fork") {
+              // reset values for a fork
+              payload.uid = undefined;
+              payload.version = undefined;
+              // reset is modified before save
+              payload.isModified = undefined;
+              // SAVE CONTENT
+              console.log("SAVE CONTENTNNNNNNNNNNNNNN");
+
+              storageApi.saveContent(payload, function(path) {
+                var uniquePath = path;
+                uniquePath = path.toString().split("/")[2];
+                uniquePath = uniquePath.substr(1);
+
+                // handle snippet save
+                extensionRemoteApi.onSavedSnippet({
+                  uid: uniquePath
+                });
+
+                setTimeout(function() {
+                  window.location.href = "/?open=" + uniquePath;
+                }, 100);
+              });
+            } else {
+              storageApi.updateContent(uid, payload, function(path) {
+                var uniquePath = path.uid;
+                uniquePath = path.toString().split("/")[2];
+                uniquePath = uniquePath.substr(1);
+
+                // handle snippet saved
+                extensionRemoteApi.onSavedSnippet({
+                  uid: uniquePath,
+                  version: path.version
+                });
+
+                setTimeout(function() {
+                  window.location.href = "/?open=" + uniquePath + "/" + path.version + "/";
+                }, 100);
+              }); // update content API
+            }
+          } else if (action == "close" || action == "delete") {
+            // Unsubscribed all opened items from snippet
+            // and redirect on the main page
+            // TODO: think about closing of not opened snippet (which was opened for view only and never played)
+            extensionRemoteApi.onSavedSnippet({
+              uid: ""
+            });
+            setTimeout(function() {
+              window.location.href = "/";
+            }, 100);
+          } else if (action == "revert") {
+            alert("DO SOME MAGIC WITH ITEM REVERT TO THE SAME VERSION:");
+          } else if (action == "edit") {
+            payload.isModified = true;
+            if (payload.isOpened)
+              extensionRemoteApi.onEditCurrentSnippet(payload);
+
+            // make it possible to save dialog
+            $("[name='save']").show();
+            $("[name='edit']").hide();
+          }
+          return false;
+        }); // on sumbit method
+      } // show Content method
+
+      //
+      // Update snippet navigation tool-bar
+      //
+      uiHandler = {
+        snippets: [],
+        working: -1,
+        updateWorkingSnippets: function(snippets) {
+          $("ul#snippetor-select-menu>li.snippet-draft").remove();
+          for (var i in snippets) {
+            var sn = snippets[i];
+            if (sn)
+              $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="' + i + '"><a href="#">' + sn.title + '</a></li>');
+          }
+          $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
+            var idx = $(this).attr("idx");
+            idx = parseInt(idx);
+            extensionRemoteApi.selectSnippet(idx);
+            uiHandler.handleWorkingSnippet(idx, true);
+          });
+          uiHandler.snippets = snippets;
+        },
+        handleWorkingSnippet: function(id, force) {
+          if (uiHandler.snippets.length > id) {
+            uiHandler.working = id;
+            if (global_action == "SAVE")
+              showContent(uiHandler.snippets[id], id, "#main-dashboard");
+            else if (force) {
+              window.location.href = "/?save=DRAFT";
+            }
+          }
+        },
+        onSaveCurrentSnippet: function() {
+          window.location.href = "/";
+        },
+        doSwapItems: function(action) {
+          if (action.oldIndex == action.newIndex)
+            return;
+
+          var lis = $('div.panel-default');
+          console.dir(action);
+          console.dir(lis);
+          var ttt = lis.eq(action.oldIndex);
+          var new_ttt = lis.eq(action.newIndex);
+          console.dir(ttt);
+          if (action.newIndex < action.oldIndex) {
+            new_ttt.before(ttt);
+          } else {
+            new_ttt.after(ttt);
+          }
+        },
+        updateSearchForm: function(query) {
+          $("[name='search']").val(query.search || "");
+          $("[name='branches']").val(query.branches || "");
+          $("[name='tags']").val(query.tags || "");
+        }
+      };
+
+      extensionRemoteApi.init(handlers);
+    }); // document ready
+  </script>
+
 
 </body>
 
