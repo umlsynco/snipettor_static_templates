@@ -1,4 +1,4 @@
-<!-- Author: Filip Todorov www.filiptodorov.com -->
+<!-- Bootstrap Template Author: Filip Todorov www.filiptodorov.com -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,8 +9,7 @@
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <meta name="keywords" content="">
   <meta name="description" content="">
-  <meta name="author" content="Filip Todorov">
-  <title>Filip Todorov Template</title>
+  <title>SW Architecture Snippets</title>
   <link rel="shortcut icon" href="img/favicon.ico" />
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -538,6 +537,9 @@
     var global_method = null;
     var uiHandler = {};
 
+    //
+    // Show the UI snippet list item
+    //
     function showContentItem(item, index, extApi) {
 
       var gh_prefix = "https://github.com/";
@@ -582,7 +584,8 @@
             comment: item.comment
           }
         });
-      } else {
+      }
+      else {
         panelTemplate = getTemplateGlobal("comment_old_2", {
           item: {
             prefix: prefix,
@@ -591,9 +594,7 @@
             comment: item.comment
           }
         });
-
-
-      }
+      } // elese if bitbucket or github
       //
       var item = $(panelTemplate).appendTo("#snipettor-save-form");
 
@@ -637,9 +638,11 @@
     };
 
     var storageApi = {
-      observer: null,
-      init: function(observer) {
-        this.observer = observer;
+      observers: [],
+      addAuthObserver: function(observer) {
+        this.observers.push(observer);
+      },
+      init: function() {
         // make firebase initialization here
         this.auth = firebase.auth();
         this.database = firebase.database();
@@ -656,7 +659,13 @@
           // probably it could trigger firebase:auth event
           this.authCallback(user);
         }
-        this.observer.authCompleteCallback(user);
+        //
+        // Notify all registered observers
+        //
+        for (var x=0; x < this.observers.length; ++x) {
+          if (this.observers[x] && this.observers[x].authCompleteCallback)
+            this.observers[x].authCompleteCallback(user);
+        }
       },
       //
       // Helper method to hide storage selection
@@ -839,7 +848,10 @@
     // Communication with an extension web-site injection plugin
     //
     var extensionRemoteApi = {
-      observer: null,
+      observers: [],
+      addObserver: function(observer) {
+        this.observers.push(observer);
+      },
       openSnippet: function(payload, idx) {
         window.dispatchEvent(new CustomEvent("onSnipettorAction", {
           detail: {
@@ -878,22 +890,28 @@
         }));
 
       },
-      init: function(handlers) {
-        extensionRemoteApi.observer = handlers;
-
+      //
+      // Notify all observers whic has "method"
+      //
+      notifyObservers: function(method, payload) {
+        for (var x =0; x< this.observers.length; ++x) {
+          if (this.observers[x] && this.observers[x][method]) {
+            this.observers[x] && this.observers[x][method](payload);
+          }
+        }
+      },
+      init: function() {
         window.addEventListener("onInit", function(evt) {
-          if (extensionRemoteApi.observer &&
-            extensionRemoteApi.observer.initCallback)
-            extensionRemoteApi.observer.initCallback(evt.detail);
+          extensionRemoteApi.notifyObservers("initCallback", evt.detail);
         });
         window.addEventListener("onSnippetChange", function(evt) {
           var payload = evt.detail;
           if (payload.action == "save") {
-            extensionRemoteApi.observer.onSaveSnippet(payload);
+            extensionRemoteApi.notifyObservers("onSaveSnippet", payload);
           } else if (payload.action == "create") {
-            extensionRemoteApi.observer.onCreateSnippet(payload);
+            extensionRemoteApi.notifyObservers("onCreateSnippet", payload);
           } else if (payload.action == "open") {
-            extensionRemoteApi.observer.onOpenSnippet(payload);
+            extensionRemoteApi.notifyObservers("onOpenSnippet", payload);
           } else if (payload.action == "edit-state") {
             console.log("TODO: ADD edit state handling");
           } else {
@@ -904,13 +922,13 @@
         window.addEventListener("onSnippetItemChange", function(evt) {
           var payload = evt.detail;
           if (payload.action == "add") {
-            extensionRemoteApi.observer.onAddItem(payload);
+            extensionRemoteApi.notifyObservers("onAddItem", payload);
           } else if (payload.action == "remove") {
-            extensionRemoteApi.observer.onRemoveItem(payload);
+            extensionRemoteApi.notifyObservers("onRemoveItem", payload);
           } else if (payload.action == "update") {
-            extensionRemoteApi.observer.onUpdateItem(payload);
+            extensionRemoteApi.notifyObservers("onUpdateItem", payload);
           } else if (payload.action == "move") {
-            extensionRemoteApi.observer.onMoveItem(payload);
+            extensionRemoteApi.notifyObservers("onMoveItem", payload);
           } else {
             alert("Unknow snippet action: " + payload.action);
           }
@@ -966,12 +984,77 @@
       }
     };
 
-    var handlers = {
+
+    //
+    // Right top navigation menu items
+    // @implements:  StorageApiObserver.onAuthStateChanged
+    // @dependson:   firebase API
+    //
+    var singInMenuComponent = {
+      init: function(firebase, storageApi) {
+        //
+        //
+        //
+        storageApi.addAuthObserver(singInMenuComponent);
+        //
+        // Sign in with GOOGLE
+        //
+        $("#firebase-auth-google").click(function() {
+          var provider = new firebase.auth.GoogleAuthProvider();
+          firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+          });
+        });
+        //
+        // Sign in with GITHUB
+        //
+        $("#firebase-auth-github").click(function() {
+          var provider = new firebase.auth.GithubAuthProvider();
+          firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+          });
+        });
+        //
+        // Sign out
+        //
+        $("#signout-firebase").click(function() {
+          firebase.auth().signOut().then(function() {
+            window.location.href = "/";
+          }, function(error) {
+            window.location.href = "/";
+          });
+        });
+      }, // END init
       //
       // Firebase observer method
       // Update an authentication options
       //
       authCompleteCallback: function(currentUser) {
+        //
+        // Hide login menu and insert user avatar
+        //
         if (currentUser) {
           console.dir(currentUser);
           //currentUser.photoURL  ddddd
@@ -984,16 +1067,27 @@
           $("a#signout-dropdown-menu-item").html(currentUser.displayName + '<img src="' + photo + '" class="mini-avatar">');
           // Change the dropdown menu avatar
           $("#signout-dropdown-menu-avatar").attr("src", photo);
-          // user photo if available
-          //
-          // Request user data
-          //
+        }
+        //
+        // Handle sign out or not loginned user use-case
+        //
+        else {
+          $("#signin-dropdown-menu").show();
+          $("#signout-dropdown-menu").hide();
+        }
+      }
+    };
+
+    var handlers = {
+      //
+      // Firebase observer method
+      // Update an authentication options
+      //
+      authCompleteCallback: function(currentUser) {
+        if (currentUser) {
           if (global_action == "dashboard" && global_method) {
             global_method(currentUser.uid);
           }
-        } else {
-          $("#signin-dropdown-menu").show();
-          $("#signout-dropdown-menu").hide();
         }
       },
       //
@@ -1091,57 +1185,13 @@
       //
       // Authentication part
       //
-
-      // Sign in with GOOGLE
-      $("#firebase-auth-google").click(function() {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-          // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-          var token = result.credential.accessToken;
-          // The signed-in user info.
-          var user = result.user;
-        }).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // The email of the user's account used.
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-        });
-      });
-      // Sign in with GITHUB
-      $("#firebase-auth-github").click(function() {
-        var provider = new firebase.auth.GithubAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-          // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-          var token = result.credential.accessToken;
-          // The signed-in user info.
-          var user = result.user;
-        }).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // The email of the user's account used.
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-        });
-      });
-
-      // Sign out
-      $("#signout-firebase").click(function() {
-        firebase.auth().signOut().then(function() {
-          window.location.href = "/";
-        }, function(error) {
-          window.location.href = "/";
-        });
-      });
+      singInMenuComponent.init(firebase, storageApi);
 
       //
       // Connect to the firebase storage
       //
-      storageApi.init(handlers);
+      storageApi.addAuthObserver(handlers);
+      storageApi.init();
 
       //
       // parse URL first
@@ -1613,8 +1663,8 @@
           $("[name='tags']").val(query.tags || "");
         }
       };
-
-      extensionRemoteApi.init(handlers);
+      extensionRemoteApi.addObserver(handlers);
+      extensionRemoteApi.init();
     }); // document ready
   </script>
 
