@@ -48,10 +48,7 @@
         <ul class="nav navbar-nav">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Working Snippets <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#"><i class="fa fa-fw fa-floppy-o"></i> Draft Snippets</a></li>
-              <li><a href="#"><i class="fa fa-fw fa-files-o"></i> Opened Snippets</a></li>
-              <li><a href="#"><i class="fa fa-fw fa-edit"></i> Modified Snippets</a></li>
+            <ul id="working_snippets_list" class="dropdown-menu">
               <li class="dropdown-submenu">
                 <a href="#"><i class="fa fa-fw fa-plus-circle"></i> Create new Snippet</a>
                 <ul class="dropdown-menu">
@@ -1215,6 +1212,35 @@
         $("#main-tabs-controll").parent().parent().hide();
       }
     };
+
+    var workingSnippetsComponent = {
+      init: function(extensionService) {
+        extensionService.addObserver(this);
+        this.extensionService = extensionService;
+      },
+      initCallback: function(response) {
+        this._updateComponent();
+      },
+      _updateComponent: function() {
+        $("#working_snippets_list>li.working_snippet_item").remove();
+        if (!this.extensionService.isInitialized())
+          return;
+
+        for (var x in this.extensionService.snippets) {
+          var item = this.extensionService.snippets[x];
+//          <li><a href="#"><i class="fa fa-fw fa-floppy-o"></i> Draft Snippets</a></li>
+//          <li><a href="#"><i class="fa fa-fw fa-files-o"></i> Opened Snippets</a></li>
+if (item)
+          $('<li class="working_snippet_item"><a href="#"><i class="fa fa-fw fa-edit"></i> ' + item.title.substr(0, 20)+ '</a></li>').prependTo("#working_snippets_list");
+
+        }
+        // handle select
+        $("li.working_snippet_item").click(function(e) {
+          alert("HANDLE SELECT SNIPPET PLEASE");
+        });
+      }
+    };
+
     //
     // Right top navigation menu items
     // @implements:  StorageApiObserver.onAuthStateChanged
@@ -2167,7 +2193,7 @@
       singInMenuComponent.init(firebase, storageApi);
       tabsController.init(storageApi, routingServiceApi);
       userDetailsComponent.init(storageApi, storageApi, routingServiceApi);
-
+      workingSnippetsComponent.init(snippetorExtensionService);
       // initialize components
       searchListComponent.init(routingServiceApi, storageApi, storageApi, snippetorExtensionService);
       snippetDetailsComponent.init(routingServiceApi, storageApi, storageApi, snippetorExtensionService);
