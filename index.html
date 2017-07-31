@@ -161,7 +161,7 @@
 
   <div class="tabs-header">
     <div class="container">
-      <ul>
+      <ul id="main-tabs-controll">
         <li id="tab-all-snippets"><a href="/"><img src="img/003-speedometer.png"> <span>All Snippets</span></a></li>
         <li id="tab-dashboard"><a href="/?dashboard"><img src="img/002-internet.png"> <span>Dashboard</span></a></li>
         <li id="tab-feed"><a href="/?feed"><img src="img/001-interface.png"> <span>User Feed</span></a></li>
@@ -198,80 +198,7 @@
 
       </div>
       <div class="col-sm-4">
-        <div class="sidebar-profile">
-          <div class="box-shadow-area">
-            <div class="avatar-area">
-              <div class="avatar-bg"></div>
-            </div>
-            <div class="profile-details">
-              <img src="img/avatar.jpg" class="avatar-image">
-              <h1><i class="fa fa-fw fa-github"></i> Baragoz</h1>
-            </div>
-            <div class="followers">
-              <div class="part">
-                <h2>551</h2>
-                <h3>followers</h3>
-              </div>
-              <!--
-                             -->
-              <div class="part">
-                <h2>25</h2>
-                <h3>following</h3>
-              </div>
-              <!--
-                             -->
-              <div class="part">
-                <a href="#" class="btn btn-primary"><i class="fa fa-fw fa-user-o"></i> Follow</a>
-              </div>
-            </div>
-          </div>
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <a href="#" class="btn btn-primary btn-block btn-lg"><i class="fa fa-fw fa-plus-circle"></i> Create Snippet</a>
-              <ul class="labels-list">
-                <li>All Snippets <u>(504)</u></li>
-                <li>Draft Snippets <u>(504)</u></li>
-                <li class="list">
-                  Error Snippets <i class="fa fa-fw fa-caret-down"></i> <u>(504)</u>
-                  <div class="details">
-                    <b>Label Color</b>
-                    <div class="clearfix"></div>
-                    <span class="color red" data-color="red"></span>
-                    <span class="color green" data-color="green"></span>
-                    <span class="color blue" data-color="blue"></span>
-                    <span class="color yellow" data-color="yellow"></span>
-                    <div class="clearfix"></div>
-                    <a href="#">Edit Label</a>
-                    <a href="#">Remove Label</a>
-                    <a href="#">Add SubLabel</a>
-                  </div>
-                  <ul class="list-menu">
-                    <li>HTML Code Errors</li>
-                    <li class="list">
-                      Logical Errors <i class="fa fa-fw fa-caret-down"></i>
-                      <div class="details">
-                        <b>Label Color</b>
-                        <div class="clearfix"></div>
-                        <span class="color red" data-color="red"></span>
-                        <span class="color green" data-color="green"></span>
-                        <span class="color blue" data-color="blue"></span>
-                        <span class="color yellow" data-color="yellow"></span>
-                        <div class="clearfix"></div>
-                        <a href="#">Edit Label</a>
-                        <a href="#">Remove Label</a>
-                        <a href="#">Add SubLabel</a>
-                      </div>
-                      <ul class="list-menu">
-                        <li>Database Connection <u>(50)</u></li>
-                        <li>Endless Loop <u>(96)</u></li>
-                      </ul>
-                    </li>
-                    <li>Styling Errors <u>(341)</u></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-          </div>
+        <div class="sidebar-profile" id="snippetor-sidebar-profile">
         </div>
       </div>
     </div>
@@ -462,184 +389,143 @@
           '<div class="panel panel-default">\
                <div class="panel-heading">\
                    <div class="title"><i class="fa fa-fw fa-eye" style="opacity:0.25;margin-right:5px;"></i> Snippet {snippet.uid}</div>\
+                   <div class="stats" style="display:block;"><div id="delete-snippet"><img src="img/garbage.png"></div></div>\
                    <div class="clearfix"></div>\
                </div>\
                <div class="panel-body">\
                    <div class="row">\
-                       <div class="col-sm-8">\
+                       <div class="col-sm-7">\
                            <a name="play" class="btn btn-primary btn-margin-right-5">Play <i class="fa fa-fw fa-play"></i></a>\
                            <a name="save" class="btn btn-default btn-margin-right-5" style="display:none;">Save <i class="fa fa-fw fa-save"></i></a>\
                            <a name="edit" class="btn btn-default btn-margin-right-5" style="display:none;">Edit <i class="fa fa-fw fa-edit"></i></a>\
                            <a name="fork" class="btn btn-default btn-margin-right-5" style="display:none;">Fork <i class="fa fa-fw fa-code-fork"></i></a>\
                            <a name="revert" class="btn btn-default btn-margin-right-5" style="display:none;">Rever <i class="fa fa-fw fa-undo"></i></a>\
                            <a name="delete" class="btn btn-default btn-margin-right-5">Delete <i class="fa fa-fw fa-trash"></i></a>\
-                           <a name="close" class="btn btn-default btn-margin-right-5">Close <i class="fa fa-fw fa-trash"></i></a>\
+                           <a name="cancel" class="btn btn-default btn-margin-right-5">Cancel <i class="fa fa-fw fa-close"></i></a>\
+                           <a name="close" class="btn btn-default btn-margin-right-5">Close <i class="fa fa-fw fa-close"></i></a>\
                        </div>\
-                       <div class="col-sm-12">\
+                       <div class="col-sm-5 text-right">\
+                           <a name="like" href="#" class="btn btn-warning btn-margin-right-5 active">Like Snippet <i class="fa fa-fw fa-heart"></i></a>\
+                           <a name="watch" class="btn btn-warning btn-margin-right-5">Watch <i class="fa fa-fw fa-eye"></i></a>\
+                       </div>\
+                       <div class="col-sm-12" id="snipettor-save-form">\
                            <div class="alert alert-danger snippetor-alert"><i class="fa fa-fw fa-warning"></i> Users who are not logged in, cannot save their snappet.</div>\
                            <form action="" method="post" class="edit-form">\
                                <div class="form-group">\
-                                   <label>Titls</label>\
-                                   <input type="text" class="form-control" value="{snippet.title}">\
+                                   <label>Title</label>\
+                                   <input id="snippetor-save-title" type="text" class="form-control {snippet.editable}" value="{snippet.title}" {snippet.disabled}>\
                                </div>\
                                <div class="form-group">\
                                    <label>Tags</label>\
-                                   <input type="text" class="form-control" data-role="tagsinput" value="{snippet.tags}">\
+                                   <input id="snippetor-save-tags" type="text" class="form-control  {snippet.editable}" data-role="tagsinput" value="{snippet.tags}" {snippet.disabled}>\
                                </div>\
                                <div class="form-group">\
                                    <label>Description</label>\
-                                   <textarea class="form-control" rows="5">{snippet.desc}</textarea>\
+                                   <textarea id="snippetor-save-description" class="form-control {snippet.editable}" rows="5" {snippet.disabled}>{snippet.desc}</textarea>\
                                </div>\
                            </form>\
                            <hr>\
-                           <div class="panel panel-default sort-header">\
-                               <div class="panel-heading">\
-                                   <div class="title"><i class="fa fa-fw fa-comments" style="opacity:0.25;margin-right:5px;"></i> Filip Todorov</div>\
-                                   <div class="stats">\
-                                       <div><img src="img/garbage.png"></div>\
-                                   </div>\
-                                   <div class="clearfix"></div>\
-                               </div>\
-                               <div class="panel-body bordered">\
-                                   <div class="pull-right">\
-                                       <a href="#" class="editComment"><i class="fa fa-fw fa-edit"></i> Edit Comment</a>\
-                                   </div>\
-                                   <div class="clearfix"></div>\
-                                   <textarea class="form-control" rows="4" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at nunc eu nisi fermentum condimentum vel quis lorem. Proin tempor magna velit, sit amet facilisis magna tristique sed. Ut eu lobortis sapien, sit amet mattis nulla. Donec sed dui ullamcorper elit vestibulum rutrum. Nam sed libero mi. Mauris porttitor egestas felis, vel tristique urna commodo ac. Quisque vel mollis metus. Proin eu venenatis augue, eu pellentesque turpis. Curabitur vel velit facilisis, accumsan neque ut, malesuada lectus. Aliquam tempor tellus in massa mattis scelerisque. Praesent convallis diam quis felis luctus, eleifend hendrerit magna consequat. Donec accumsan tellus sit amet dui sollicitudin, quis aliquet urna malesuada.</textarea>\
-                               </div>\
-                           </div>\
-                           <div class="panel panel-default sort-header">\
-                               <div class="panel-heading">\
-                                   <div class="title"><i class="fa fa-fw fa-comments" style="opacity:0.25;margin-right:5px;"></i> Filip Todorov</div>\
-                                   <div class="stats">\
-                                       <div><img src="img/garbage.png"></div>\
-                                   </div>\
-                                   <div class="clearfix"></div>\
-                               </div>\
-                               <div class="panel-body bordered">\
-                                   <div class="pull-right">\
-                                       <a href="#" class="editComment"><i class="fa fa-fw fa-edit"></i> Edit Comment</a>\
-                                   </div>\
-                                   <div class="clearfix"></div>\
-                                   <textarea class="form-control" rows="4" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at nunc eu nisi fermentum condimentum vel quis lorem. Proin tempor magna velit, sit amet facilisis magna tristique sed. Ut eu lobortis sapien, sit amet mattis nulla. Donec sed dui ullamcorper elit vestibulum rutrum. Nam sed libero mi. Mauris porttitor egestas felis, vel tristique urna commodo ac. Quisque vel mollis metus. Proin eu venenatis augue, eu pellentesque turpis. Curabitur vel velit facilisis, accumsan neque ut, malesuada lectus. Aliquam tempor tellus in massa mattis scelerisque. Praesent convallis diam quis felis luctus, eleifend hendrerit magna consequat. Donec accumsan tellus sit amet dui sollicitudin, quis aliquet urna malesuada.</textarea>\
-                               </div>\
-                           </div>\
                        </div>\
                    </div>\
                </div>\
            </div>';
+      } else if (name == "save-view-item") {
+        template =
+          '<div class="panel panel-default">\
+            <div class="panel-heading">\
+                <div class="title">\
+                    <i class="fa fa-fw fa-{item.source}" style="opacity:0.25;margin-right:5px;"  onClick="window.open(\'{item.prefix}\');"></i>\
+                    <span data-toggle="tooltip" data-placement="top" title="Username" onClick="window.open(\'{item.prefix}/{item.username}\');">{item.username}</span><!--\
+                 --><span data-toggle="tooltip" data-placement="top" title="Repository" onClick="window.open(\'{item.prefix}/{item.username}/{item.repo}\');">{item.repo}</span><!--\
+                 --><span data-toggle="tooltip" data-placement="top" title="Path" onClick="window.open(\'{item.prefix}/{item.username}/{item.repo}/{item.path}\');">{item.path}</span><!--\
+                 --><span data-toggle="tooltip" data-placement="top" title="Line Number" onClick="window.open(\'{item.prefix}/{item.username}/{item.repo}/{item.path}{item.lineprefix}{item.line}\');">{item.line}</span>\
+                </div>\
+                <div class="stats" style="display:{item.save_vis};"><div><img src="img/garbage.png"></div></div>\
+                <div class="clearfix"></div>\
+            </div>\
+            <div class="panel-body bordered">\
+                <div class="pull-right" style="display:{item.save_vis};"><a href="#" class="editComment"><i class="fa fa-fw fa-edit"></i> Edit Comment</a></div>\
+                <div class="clearfix"></div>\
+                <p style="display:{item.view_vis};">{item.comment}</p>\
+                <textarea class="form-control" rows="4" disabled="" style="display:{item.save_vis};">{item.comment}</textarea>\            </div>\
+        </div>';
+      } else if (name == "save-view-item-google") {
+        template =
+          '<div class="panel panel-default">\
+           <div class="panel-heading">\
+               <div class="title">\
+                   <i class="fa fa-fw fa-{item.source}" style="opacity:0.25;margin-right:5px;" onClick="window.open(\'{item.prefix}\');"></i>\
+                <span data-toggle="tooltip" data-placement="top" title="Path" onClick="window.open(\'{item.prefix}/{item.path}\');">{item.path}</span><!--\
+                --><span data-toggle="tooltip" data-placement="top" title="Line Number" onClick="window.open(\'{item.prefix}/{item.path}{item.lineprefix}{item.line}\');">{item.line}</span>\
+               </div>\
+               <div class="stats" style="display:{item.save_vis};"><div><img src="img/garbage.png"></div></div>\
+               <div class="clearfix"></div>\
+           </div>\
+           <div class="panel-body bordered">\
+               <div class="pull-right" style="display:{item.save_vis};"><a href="#" class="editComment"><i class="fa fa-fw fa-edit"></i> Edit Comment</a></div>\
+               <div class="clearfix"></div>\
+               <p style="display:{item.view_vis};">{item.comment}</p>\
+               <textarea class="form-control" rows="4" disabled="" style="display:{item.save_vis};">{item.comment}</textarea>\           </div>\
+       </div>';
+      } else if (name == "save-view-item-uml") {
+        template =
+          '<div class="panel panel-default">\
+            <div class="panel-heading">\
+                <div class="title">\
+                    <i class="fa fa-fw fa-{item.source}" style="opacity:0.25;margin-right:5px;" onClick="window.open(\'{item.prefix}\');"></i>\
+                 <span data-toggle="tooltip" data-placement="top" title="Path" onClick="window.open(\'{item.prefix}/{item.path}\');">{item.path}</span><!--\
+                 --><span data-toggle="tooltip" data-placement="top" title="UML element">{item.element}</span>\
+                </div>\
+                <div class="stats" style="display:{item.save_vis};"><div><img src="img/garbage.png"></div></div>\
+                <div class="clearfix"></div>\
+            </div>\
+            <div class="panel-body bordered">\
+            <div class="pull-right" style="display:{item.save_vis};"><a href="#" class="editComment"><i class="fa fa-fw fa-edit"></i> Edit Comment</a></div>\
+                <div class="clearfix"></div>\
+                <p style="display:{item.view_vis};">{item.comment}</p>\
+                <textarea class="form-control" rows="4" disabled="" style="display:{item.save_vis};">{item.comment}</textarea>\
+            </div>\
+        </div>';
+      } else if (name == "user-profile-details") {
+        template =
+        '<div class="box-shadow-area">\
+          <div class="avatar-area" style="background: url(\'{profile.avatar}\') center no-repeat">\
+            <div class="avatar-bg"></div>\
+          </div>\
+          <div class="profile-details">\
+            <img src="{profile.avatar}" class="avatar-image">\
+            <h1><i class="fa fa-fw fa-github"></i>{profile.username}</h1>\
+          </div>\
+          <div class="followers">\
+            <div class="part">\
+              <h2>{profile.followers}</h2>\
+              <h3>followers</h3>\
+            </div>\
+            <!--\
+                           -->\
+            <div class="part">\
+              <h2>{profile.following}</h2>\
+              <h3>following</h3>\
+            </div>\
+            <!--\
+                           -->\
+            <div class="part">\
+              <a href="#" class="btn btn-primary"><i class="fa fa-fw fa-user-o"></i> Follow</a>\
+            </div>\
+          </div>\
+        </div>';
       }
+
       return nano(template, data);
     }
   </script>
   <script>
-    var global_action = null;
-    var global_method = null;
-    var uiHandler = {};
-
     //
-    // Show the UI snippet list item
+    // storage abstract API (Firebase implementation)
     //
-    function showContentItem(item, index, extApi) {
-
-      var gh_prefix = "https://github.com/";
-      var bb_prefix = "https://bitbucket.org/";
-      var cs_prefix = "https://cs.chromium.org/";
-      var uml_prefix = "https://umlsync-6e2da.firebaseapp.com/";
-      var prefix = "";
-      var img = "";
-
-      if (item.url.indexOf(gh_prefix) == 0) {
-        prefix = gh_prefix;
-        img = "github";
-      } else if (item.url.indexOf(cs_prefix) == 0) {
-        prefix = cs_prefix;
-        img = "google";
-      } else if (item.url.indexOf(bb_prefix) == 0) {
-        prefix = bb_prefix;
-        img = "bitbucket";
-      } else if (item.url.indexOf(uml_prefix) == 0) {
-        prefix = uml_prefix;
-        img = "puzzle-piece";
-      }
-
-      var url_path = item.url.substr(prefix.length);
-
-      var panelTemplate = "";
-      if (img != "google" && img != "puzzle-piece") {
-        var user = url_path.substr(0, url_path.indexOf("/"));
-        url_path = url_path.substr(url_path.indexOf("/") + 1);
-
-        var repo = url_path.substr(0, url_path.indexOf("/"));
-        url_path = url_path.substr(url_path.indexOf("/") + 1);
-
-        panelTemplate = getTemplateGlobal("comment_old_1", {
-          item: {
-            prefix: prefix,
-            img: img,
-            user: user,
-            repo: repo,
-            path: url_path,
-            line: item.line,
-            comment: item.comment
-          }
-        });
-      }
-      else {
-        panelTemplate = getTemplateGlobal("comment_old_2", {
-          item: {
-            prefix: prefix,
-            img: img,
-            line: item.line,
-            comment: item.comment
-          }
-        });
-      } // elese if bitbucket or github
-      //
-      var item = $(panelTemplate).appendTo("#snipettor-save-form");
-
-      item.find(".close-snippet-item-icon").click(function() {
-        var parent = $(this).parent().parent().parent().parent();
-        var idx = $(".panel-default").index(parent);
-
-        extApi.updateSnippetItem("delete", {
-          index: idx
-        });
-        parent.remove();
-      });
-      // edit the text of comment
-      item.find(".fa-edit").click(function() {
-        var parent = $(this).parent().parent();
-        var elemIndex = $(".panel-default").index(parent.parent());
-
-        if (parent.find("textarea").length > 0) {
-          parent.find("textarea").trigger("blur");
-          return;
-        }
-
-        var text = parent.find(".snippet-description").html();
-        parent.find(".snippet-description").hide();
-        parent.append("<textarea style='width:100%;'>" + text + "</textarea>");
-        parent.find("textarea").blur(function() {
-          var xxx = parent.find("textarea").val();
-          parent.find("textarea").remove();
-          if (xxx != text) {
-            parent.find(".snippet-description").text(xxx);
-            extApi.updateSnippetItem("update", {
-              idx: elemIndex,
-              item: {
-                comment: xxx
-              }
-            });
-          }
-          parent.find(".snippet-description").show();
-        });
-      });
-    };
-
     var storageApi = {
       observers: [],
-      addAuthObserver: function(observer) {
+      addObserver: function(observer) {
         this.observers.push(observer);
       },
       init: function() {
@@ -649,6 +535,26 @@
         this.storage = firebase.storage();
         // Initiates Firebase auth and listen to auth state changes.
         this.auth.onAuthStateChanged(this._onAuthStateChanged.bind(this));
+      },
+      authCallback: function(user) {
+        if (!user) return;
+        var ref = this.database.ref('user_details');
+        var userData = {
+          photo: user.photoURL,
+          name: user.displayName,
+          following: 0,
+          followers: 0,
+          seflFF: false // indicates is user follow itself (reduce the number of requests to firebase)
+        };
+        ref.child(user.uid).transaction(function(currentUserData) {
+          console.dir("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+          console.dir(currentUserData);
+          if (currentUserData === null)
+            return userData;
+        }, function(error, committed) {
+          console.dir(committed);
+          // TBD handle if necessary;
+        });
       },
       //
       // Helper method to handle sign-in change behaviour
@@ -662,9 +568,9 @@
         //
         // Notify all registered observers
         //
-        for (var x=0; x < this.observers.length; ++x) {
-          if (this.observers[x] && this.observers[x].authCompleteCallback)
-            this.observers[x].authCompleteCallback(user);
+        for (var x = 0; x < this.observers.length; ++x) {
+          if (this.observers[x] && this.observers[x].onAuthChanged)
+            this.observers[x].onAuthChanged(user);
         }
       },
       //
@@ -748,7 +654,7 @@
         var messagesRef = this._getMessageRef('content');
         if (!messagesRef)
           callback(null, "Error: invalid firebase path.");
-        var ref = msg.child("-" + uid);
+        var ref = messagesRef.child("-" + uid);
         if (!ref)
           callback(null, "Error: invalid content id: -" + uid + " .");
 
@@ -803,7 +709,34 @@
                 callback(null, text);
               });
           }); // ref get value
-        }
+         }
+        },
+        //
+        // request users's like and watch snippet
+        // details
+        // params:
+        // @request = userUID + snippetUID
+        //
+        requestLikeAndWatch: function(uid, callback) {
+          this.database.ref('likes/'+uid)
+            .once('value')
+            .then(function(complete) {
+              callback(complete.val());
+            });
+      },
+      //
+      // Update current status of like and watch for the
+      // concreate user
+      //
+      setLikeAndWatch: function(uid, data) {
+        var ref = this.database.ref('likes')
+        ref.child(uid).transaction(function(currentData) {
+          console.dir("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+          console.dir(currentData);
+          return data;
+        }, function(error, committed) {
+          console.dir(committed);
+        });
       },
 
       //
@@ -841,13 +774,19 @@
               callback(complete.val());
             });
         }
+      },
+      getUserInfo: function(uid, callback) {
+        var ref = this.database.ref('user_details/' + uid);
+        ref.once("value").then(function(x1, x2, x3){
+          callback(x1.val());
+        });
       }
     }; // StorageApi
 
     //
     // Communication with an extension web-site injection plugin
     //
-    var extensionRemoteApi = {
+    var snippetorExtensionService = {
       observers: [],
       addObserver: function(observer) {
         this.observers.push(observer);
@@ -879,7 +818,16 @@
             payload: payload
           }
         }));
-
+      },
+      subscribers: [],
+      subscribeSnippet: function(uid, observer) {
+        this.subscribers[uid] = observer;
+        window.dispatchEvent(new CustomEvent("onSnipettorAction", {
+          detail: {
+            action: "subscribe",
+            payload: {payload: {uid:uid}}
+          }
+        }));
       },
       onUnsubscribeSnippet: function(payload) {
         window.dispatchEvent(new CustomEvent("onSnipettorAction", {
@@ -888,30 +836,107 @@
             payload: payload
           }
         }));
-
+      },
+      //
+      // HAndle snippet items
+      //
+      onAddItem: function(payload) {
+        if (!this.initialized)
+          return;
+        //
+        // Notify only if we are subscribed on it
+        if (payload.working == this.working) {
+        // Handle UI part
+          this.notifyObservers("onAddItem", payload.item, payload.index);
+        }
+        // Update current cache (TBD: fo future when it will be not necessary to reload all page)
+        this.snippets[payload.working].items.splice(payload.index, 0, payload.item);
+      },
+      onRemoveItem: function(payload) {
+        if (!this.initialized)
+          return;
+        // Handle UI part
+        if (payload.working == this.working) {
+          this.notifyObservers("onRemoveItem",  payload.index);
+        }
+        this.snippets[payload.working].items.splice(payload.index, 1);
+      },
+      onUpdateItem: function(payload) {
+        if (!this.initialized)
+          return;
+        // Handle UI part
+        if (payload.working == this.working) {
+          this.notifyObservers("onUpdateItem",  payload.payload.idx, payload.payload.item);
+        }
+        this.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
+      },
+      onMoveItem: function(payload) {
+        if (!this.initialized)
+          return;
+        // Handle UI part
+        if (payload.working == this.working) {
+          this.notifyObservers("onMoveItem",  payload.payload.oldIndex, payload.payload.newIndex);
+        }
+        var item = this.snippets[payload.working].items[payload.payload.oldIndex];
+        this.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
+        this.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
       },
       //
       // Notify all observers whic has "method"
       //
       notifyObservers: function(method, payload) {
-        for (var x =0; x< this.observers.length; ++x) {
+        for (var x = 0; x < this.observers.length; ++x) {
           if (this.observers[x] && this.observers[x][method]) {
             this.observers[x] && this.observers[x][method](payload);
           }
         }
       },
+      snippets: [],
+      working_snippet: -1,
+      initialized : false,
+      isInitialized: function() {
+        return this.initialized;
+      },
+      //
+      // Get current working snippet
+      //
+      getWorkingSnippet: function() {
+        if (this.initialized && this.working_snippet >=0 && this.snippets.length >0) {
+          return this.snippets[this.working_snippet];
+        }
+        return null;
+      },
+      //
+      // Get opened snippet by UID
+      //
+      getSnippetByUid: function(uid) {
+        if (!this.initialized)
+          return;
+        for (var r in this.snippets) {
+          if (this.snippets[r].uid == uid)
+            return this.snippets[r];
+        }
+        return null;
+      },
+      //
+      // subscribed for callbacks
+      //
       init: function() {
+        var that = this;
         window.addEventListener("onInit", function(evt) {
-          extensionRemoteApi.notifyObservers("initCallback", evt.detail);
+          that.initialized = true;
+          that.snippets = evt.detail.snippets;
+          that.working_snippet = evt.detail.working_snippet;
+          snippetorExtensionService.notifyObservers("initCallback", evt.detail);
         });
         window.addEventListener("onSnippetChange", function(evt) {
           var payload = evt.detail;
           if (payload.action == "save") {
-            extensionRemoteApi.notifyObservers("onSaveSnippet", payload);
+            snippetorExtensionService.notifyObservers("onSaveSnippet", payload);
           } else if (payload.action == "create") {
-            extensionRemoteApi.notifyObservers("onCreateSnippet", payload);
+            snippetorExtensionService.notifyObservers("onCreateSnippet", payload);
           } else if (payload.action == "open") {
-            extensionRemoteApi.notifyObservers("onOpenSnippet", payload);
+            snippetorExtensionService.notifyObservers("onOpenSnippet", payload);
           } else if (payload.action == "edit-state") {
             console.log("TODO: ADD edit state handling");
           } else {
@@ -922,13 +947,13 @@
         window.addEventListener("onSnippetItemChange", function(evt) {
           var payload = evt.detail;
           if (payload.action == "add") {
-            extensionRemoteApi.notifyObservers("onAddItem", payload);
+            snippetorExtensionService.notifyObservers("onAddItem", payload);
           } else if (payload.action == "remove") {
-            extensionRemoteApi.notifyObservers("onRemoveItem", payload);
+            snippetorExtensionService.notifyObservers("onRemoveItem", payload);
           } else if (payload.action == "update") {
-            extensionRemoteApi.notifyObservers("onUpdateItem", payload);
+            snippetorExtensionService.notifyObservers("onUpdateItem", payload);
           } else if (payload.action == "move") {
-            extensionRemoteApi.notifyObservers("onMoveItem", payload);
+            snippetorExtensionService.notifyObservers("onMoveItem", payload);
           } else {
             alert("Unknow snippet action: " + payload.action);
           }
@@ -984,7 +1009,212 @@
       }
     };
 
+    //
+    // Routing service handler
+    //
+    var routingServiceApi = {
+      observers: [],
+      addObserver: function(observer) {
+        this.observers.push(observer);
+        if (this.initialized) {
+          observer(this.state, null, this.payload);
+        }
+      },
+      notifyObservers: function(method, d1, d2, d3) {
+        for (var x = 0; x < this.observers.length; ++x) {
+          if (this.observers[x] && this.observers[x][method]) {
+            this.observers[x] && this.observers[x][method](d1, d2, d3);
+          }
+        }
+      },
+      changeUrl: function(uri, silence) {
+        if (!silence) {
+          window.location.href = uri;
+          return;
+        }
+        window.history.pushState(null, "Snippetor", uri);
+        this.init(uri);
+      },
+      // cache current routing state
+      //
+      state: null,
+      // initalize routing data
+      //
+      init: function(xurl) {
+        var content = xurl.split("?");
+        var isSearch = true;
 
+        var newState = null;
+        var payload = null;
+        //
+        // Root URL
+        //
+        if (content.length == 1) {
+          newState = "all-snippets";
+        }
+        //
+        // Query URL
+        //
+        else {
+          content = content[1];
+          if (content.indexOf("save") >= 0) {
+            // save snippet DRAFT
+            newState = "save-snippet";
+            var content = content.substr(5);
+            if (content.toUpperCase() != "DRAFT") {
+              var uid = content.substr(0, content.length).split("/");
+              var version = uid[1] || 0;
+              uid = uid[0];
+              payload = {
+                uid: uid,
+                version: version
+              };
+            }
+          } // save
+          else if (content.indexOf("open") >= 0) {
+            var content = content.substr(5);
+            var uid = content.substr(0, content.length).split("/");
+            var version = uid[1] || 0;
+            uid = uid[0];
+            payload = {
+              uid: uid,
+              version: version
+            };
+            // view stored snippet
+            newState = "view-snippet";
+          } else if (content.indexOf("search") >= 0) {
+            //              $("#tab-all-snippets").addClass("active");
+            var searchString = decodeURI(content).split("&");
+            var searcher = {};
+            for (var x = 0; x < searchString.length; ++x) {
+              var m = searchString[x].split("=");
+              if (searchString.length - 1 == x) {
+                searcher[m[0]] = m[1].substr(0, m[1].length - 1);
+              } else {
+                searcher[m[0]] = m[1];
+              }
+            }
+            if (searcher["search"] == "*")
+              searcher["search"] = null;
+            newState = "search-snippet";
+            payload = searcher;
+          } else if (content.indexOf("dashboard") >= 0) {
+            /*              $("#tab-dashboard").addClass("active");
+                          // Show current user dashboard
+                          $('[aria-controls="main-dashboard"]').trigger("click");
+                          global_action = "dashboard";
+                          global_method = function(user_id) {
+                            storageApi.searchContent({
+                                search: null
+                              }, function(content) {
+                                showSearchResult({
+                                  search: null
+                                }, content, "#main-dashboard");
+                              },
+                              user_id);
+                          }; // global_method
+            */
+            newState = "dashboard";
+          } else if (content.indexOf("feed") >= 0) {
+            /*
+                          $("#tab-feed").addClass("active");
+                          // Show current user dashboard
+                          $('[aria-controls="main-dashboard"]').trigger("click");
+                          global_action = "dashboard";
+                          global_method = function(user_id) {
+                            storageApi.searchContent({
+                                search: null
+                              }, function(content) {
+                                showSearchResult({
+                                  search: null
+                                }, content, "#main-dashboard");
+                              },
+                              user_id);
+                          }; // global_method
+            */
+            newState = "feed";
+
+          } else if (content.indexOf("user_id") >= 0) {
+            newState = "dashboard";
+
+            //              $("#tab-dashboard").addClass("active");
+            var sst = decodeURI(content).split("&");
+            var first = sst[0].split("=");
+            var user_id = first[1];
+
+            // user id to show for
+            payload = {
+              uid: user_id
+            };
+            // Show current user dashboard
+            /*              $('[aria-controls="main-dashboard"]').trigger("click");
+                          storageApi.searchContent({
+                              search: null
+                            }, function(content) {
+                              showSearchResult({
+                                search: null
+                              }, content, "#main-dashboard");
+                            },
+                            user_id);*/
+          }; // in that case we know user id and could start search imidiatly
+        }
+
+        //
+        // notify all observers about state change
+        this.notifyObservers("onRoutingChanged", this.state, newState, payload);
+        this.state = newState;
+        this.payload = payload;
+        this.initialized = true;
+
+        //
+        // Search UI contains tabs
+        //
+        /*          if (isSearch) {
+                    $('[aria-controls="main-content"]').click(function() {
+                      window.location.href = "/";
+                    });
+
+                    $('[aria-controls="main-dashboard"]').click(function() {
+                      window.location.href = "/?dashboard";
+                    });
+                  }*/
+        //}
+      }
+    };
+
+
+    var tabsController = {
+      init: function(loginService, routingService) {
+        routingService.addObserver(this);
+        loginService.addObserver(this);
+      },
+      onRoutingChanged: function(oldR, newR, payload) {
+        this.routingState = newR;
+        this._updateComponent();
+      },
+      authInitialized: false,
+      onAuthChanged: function(newUser) {
+        this.authInitialized = true;
+        this.uid = newUser ? newUser.uid : null;
+        this._updateComponent();
+      },
+      _updateComponent: function() {
+        $("#main-tabs-controll>li").removeClass("active");
+        if (this.routingState == "all-snippets" || this.routingState == "search") {
+          $("#main-tabs-controll>li#tab-all-snippets").addClass("active");
+          return;
+        }
+        if (this.routingState == "dashboard") {
+          $("#main-tabs-controll>li#tab-dashboard").addClass("active");
+          return;
+        }
+        if (this.routingState == "feed") {
+          $("#main-tabs-controll>li#tab-feed").addClass("active");
+          return;
+        }
+        $("#main-tabs-controll").parent().parent().hide();
+      }
+    };
     //
     // Right top navigation menu items
     // @implements:  StorageApiObserver.onAuthStateChanged
@@ -995,7 +1225,7 @@
         //
         //
         //
-        storageApi.addAuthObserver(singInMenuComponent);
+        storageApi.addObserver(singInMenuComponent);
         //
         // Sign in with GOOGLE
         //
@@ -1051,7 +1281,7 @@
       // Firebase observer method
       // Update an authentication options
       //
-      authCompleteCallback: function(currentUser) {
+      onAuthChanged: function(currentUser) {
         //
         // Hide login menu and insert user avatar
         //
@@ -1078,263 +1308,94 @@
       }
     };
 
-    var handlers = {
-      //
-      // Firebase observer method
-      // Update an authentication options
-      //
-      authCompleteCallback: function(currentUser) {
-        if (currentUser) {
-          if (global_action == "dashboard" && global_method) {
-            global_method(currentUser.uid);
-          }
-        }
-      },
-      //
-      // Snippetor extension observer methods
-      //
-      initialized: false,
-      initCallback: function(response) {
-        uiHandler.updateWorkingSnippets(response.snippets);
-        if (response.working != undefined) {
-          uiHandler.handleWorkingSnippet(response.working);
-        } else {
-          if (global_action == "SAVE")
-            alert("There is nothing to save! Please, select some snippet");
-        }
 
-        handlers.initialized = true;
+    // component which is responsible for the list of snippets
+    // showing and update.
+    // @depends - depends on login and routing services
+    // @required - uses firebase storage service
+    //
+    var searchListComponent = {
+      init: function(routingService, loginService, storageService) {
+        // cache the storage service
+        this.storageService = storageService;
+        // subscribe on login change and routing change
+        routingService.addObserver(this);
+        loginService.addObserver(this);
       },
-      onSaveSnippet: function(payload) {
-        if (!handlers.initialized)
+      storageService: null,
+      routingAction: null,
+      userId: null,
+      //
+      // Routing service callback method
+      //
+      onRoutingChanged: function(oldRouting, routingAction, payload) {
+        console.log("ROUTING CHANGED");
+        this.routingAction = routingAction;
+        this.payload = payload;
+        this._updateComponent();
+      },
+      //
+      // Authenticatoin service callback method
+      //
+      onAuthChanged: function(currentUser) {
+        console.log("AUTH CHANGED !!!");
+        console.dir(currentUser);
+        this.userId = currentUser ? currentUser.uid : null;
+        this._updateComponent();
+      },
+      //
+      // Request snippets list again
+      //
+      _updateComponent: function() {
+        console.log("SEARCH COMPONENT !!!" + this.routingAction);
+        if (this.routingAction != "all-snippets" &&
+          this.routingAction != "dashboard" &&
+          this.routingAction != "feed" &&
+          this.routingAction != "search")
           return;
-
-        if (payload.working == uiHandler.working) {
-          uiHandler.onSaveCurrentSnippet(payload.working);
+        var search = null;
+        // TODO: identify if user callback not got or wrong url
+        if (!this.userId &&
+          (this.routingAction == "dashboard" || this.routingAction == "feed")) {
+          alert("Wrong sequence or not loginned user");
+          return;
         }
-        // send unsubscribe from the current snippet
-        extensionRemoteApi.onUnsubscribeSnippet(payload.working);
-        setTimeout(function() {
-          window.location.href = "/";
-        }, 100);
 
-        uiHandler.snippets[payload.working] = null;
-        uiHandler.updateWorkingSnippets(uiHandler.snippets);
-
-      },
-      onCreateSnippet: function(payload) {
-        if (!handlers.initialized)
-          return;
-
-        uiHandler.snippets[payload.working] = payload.snippet;
-        uiHandler.updateWorkingSnippets(uiHandler.snippets);
-      },
-      onOpenSnippet: function(payload) {
-        if (!handlers.initialized)
-          return;
-
-        uiHandler.snippets[payload.working] = payload.snippet;
-        uiHandler.updateWorkingSnippets(uiHandler.snippets);
-      },
-      onAddItem: function(payload) {
-        if (!handlers.initialized)
-          return;
-
-        if (payload.working == uiHandler.working) {
-          showContentItem(payload.item, payload.index, extensionRemoteApi);
+        if (this.routingAction == "all-snippets") {
+          searcher = null;
+        } else if (this.routingAction == "dashboard") {
+          var uid = this.payload && this.payload.uid ? this.payload.uid : this.userId;
+          searcher = {
+            user_id: uid
+          };
+        } else if (this.routingAction == "search-snippets") {
+          searcher = this.payload;
         }
-        uiHandler.snippets[payload.working].items.splice(payload.index, 0, payload.item);
-      },
-      onRemoveItem: function(payload) {
-        if (!handlers.initialized)
-          return;
 
-        if (payload.working == uiHandler.working) {
-          removeContentItem(payload.index);
-        }
-        uiHandler.snippets[payload.working].items.splice(payload.index, 1);
-      },
-      onUpdateItem: function(payload) {
-        if (!handlers.initialized)
-          return;
-
-        if (payload.working == uiHandler.working) {
-          console.log("Update UI description only");
-          console.dir(payload);
-          var elem = $(".panel-default:eq(" + payload.payload.idx + ")");
-          console.dir(elem);
-          elem.find("span.snippet-description").text(payload.payload.item.comment);
-        }
-        uiHandler.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
-      },
-      onMoveItem: function(payload) {
-        if (!handlers.initialized)
-          return;
-
-        if (payload.working == uiHandler.working) {
-          uiHandler.doSwapItems(payload.payload);
-        }
-        var item = uiHandler.snippets[payload.working].items[payload.payload.oldIndex];
-        uiHandler.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
-        uiHandler.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
-      }
-    };
-
-    var container = null;
-    $(document).ready(function() {
-      //
-      // Authentication part
-      //
-      singInMenuComponent.init(firebase, storageApi);
-
-      //
-      // Connect to the firebase storage
-      //
-      storageApi.addAuthObserver(handlers);
-      storageApi.init();
-
-      //
-      // parse URL first
-      //
-      function handleRouting(xurl) {
-        var content = xurl.split("?");
-        var isSearch =  true;
-
-        //
-        // Root URL
-        //
-        if (content.length == 1) {
-          $("#tab-all-snippets").addClass("active");
-          storageApi.searchContent({
+        if (this.routingAction != "feed") {
+          console.log("SEARCH COMPONENT !!!222222");
+          var that = this;
+          this.storageService.searchContent({
             search: null
           }, function(content) {
-            showSearchResult({
+            console.log("RREEEEEE");
+            console.dir(content);
+            that.showSearchResult({
               search: null
             }, content, "#main-dashboard");
-          });
+          }, uid);
+        } else {
+          alert("USER FEED NOT IMPLEMENTED YET");
         }
-        //
-        // Query URL
-        //
-        else {
-          content = content[1];
-          if (content.indexOf("save") >= 0) {
-            isSearch = false;
-            global_action = "SAVE";
-          } // save
-          else if (content.indexOf("open") >= 0) {
-            isSearch = false;
-            $("#snipettor-details-page").show();
-            $("#snipettor-search-tabs").hide();
-
-            var content = content.substr(5);
-            var uid = content.substr(0, content.length).split("/");
-            var version = uid[1] || 0;
-            uid = uid[0];
-            storageApi.loadContent(uid, version, function(data) {
-              console.dir(data);
-              if (data) data.uid = uid;
-              showContent(data, null, "#main-dashboard");
-            });
-          } else if (content.indexOf("search") >= 0) {
-            $("#tab-all-snippets").addClass("active");
-            var searchString = decodeURI(content).split("&");
-            var searcher = {};
-            for (var x = 0; x < searchString.length; ++x) {
-              var m = searchString[x].split("=");
-              if (searchString.length - 1 == x) {
-                searcher[m[0]] = m[1].substr(0, m[1].length - 1);
-              } else {
-                searcher[m[0]] = m[1];
-              }
-            }
-            if (searcher["search"] == "*")
-              searcher["search"] = null;
-            storageApi.searchContent(searcher, function(content) {
-              uiHandler.updateSearchForm(searcher);
-              showSearchResult(searchString, content);
-            });
-          } else if (content.indexOf("dashboard") >= 0) {
-            $("#tab-dashboard").addClass("active");
-            // Show current user dashboard
-            $('[aria-controls="main-dashboard"]').trigger("click");
-            global_action = "dashboard";
-            global_method = function(user_id) {
-              storageApi.searchContent({
-                  search: null
-                }, function(content) {
-                  showSearchResult({
-                    search: null
-                  }, content, "#main-dashboard");
-                },
-                user_id);
-            }; // global_method
-
-          } else if (content.indexOf("feed") >= 0) {
-            $("#tab-feed").addClass("active");
-            // Show current user dashboard
-            $('[aria-controls="main-dashboard"]').trigger("click");
-            global_action = "dashboard";
-            global_method = function(user_id) {
-              storageApi.searchContent({
-                  search: null
-                }, function(content) {
-                  showSearchResult({
-                    search: null
-                  }, content, "#main-dashboard");
-                },
-                user_id);
-            }; // global_method
-
-          } else if (content.indexOf("user_id") >= 0) {
-            $("#tab-dashboard").addClass("active");
-            var sst = decodeURI(content).split("&");
-            var first = sst[0].split("=");
-            var user_id = first[1];
-            // Show current user dashboard
-            $('[aria-controls="main-dashboard"]').trigger("click");
-            storageApi.searchContent({
-                search: null
-              }, function(content) {
-                showSearchResult({
-                  search: null
-                }, content, "#main-dashboard");
-              },
-              user_id);
-          }; // in that case we know user id and could start search imidiatly
-        }
-        //
-        // Search UI contains tabs
-        //
-        if (isSearch) {
-          $('[aria-controls="main-content"]').click(function() {
-            window.location.href = "/";
-          });
-
-          $('[aria-controls="main-dashboard"]').click(function() {
-            window.location.href = "/?dashboard";
-          });
-        }
-      }
-
-
-      //
-      // Urgly stupid routing
-      //
-      handleRouting(decodeURI(window.location.href));
-
-      //
-      // SEARCH snippet UI part
-      //
-      function getTagsBubbles(search, tags) {
+      },
+      getTagsBubbles: function(search, tags) {
         var result = '';
         for (var x in tags)
           result += '<li href="/?' + encodeURI('tags=' + tags[x] + '&search=' + (search.search ? search.search : '*')) +
           '">' + tags[x] + '</li>';
         return result;
-      }
-
-      function getBranches(search, items) {
+      },
+      getBranches: function(search, items) {
         var uitems = [];
 
         for (var x in items) {
@@ -1369,9 +1430,9 @@
             '">' + branch[1] + '</span></li>';
         }
         return result;
-      }
+      },
 
-      function getDescription(description) {
+      getDescription: function(description) {
         if (!description || description == "") {
           return '<img src="img/sad-face.png">\
                                         <div class="content">\
@@ -1380,18 +1441,16 @@
                                         </div>';
         }
         return '<p>' + description + '</p>';
-      }
-
-      function showAvailableVersions(search, uid, versions) {
+      },
+      showAvailableVersions: function(search, uid, versions) {
         var result = "";
         return result;
 
         for (var y in ["0", "1", "3"])
           result += '<a href="/?open=' + uid + '/' + y + '"><button type="button" class="btn btn-default btn-circle"><i class="glyphicon">' + y + '</i></button></a>';
         return result;
-      }
-
-      function showSearchResult(searchString, searchData, pSel) {
+      },
+      showSearchResult: function(searchString, searchData, pSel) {
         var pselector = pSel || "#main-content";
         $(pselector).empty();
 
@@ -1407,7 +1466,6 @@
           var xxx = x.substr(1);
           var xuid = 0; //versions.length - 1;
 
-
           var panelTemplate2 = getTemplateGlobal("snippet", {
             snippet: {
               title: description.title,
@@ -1420,9 +1478,9 @@
               xuid: xuid,
               user_id: item.user_id,
               has_description: (description.description ? '' : 'no-'),
-              description: getDescription(description.description),
-              tags: getTagsBubbles(searchString, description.tags),
-              branches: getBranches(searchString, description.items)
+              description: this.getDescription(description.description),
+              tags: this.getTagsBubbles(searchString, description.tags),
+              branches: this.getBranches(searchString, description.items)
             }
           });
 
@@ -1446,31 +1504,306 @@
           payload.isOpened = true;
 
           console.dir(payload);
-          extensionRemoteApi.openSnippet(payload);
+          snippetorExtensionService.openSnippet(payload);
         });
       }
+    };
 
+    // component which is responsible for the list of snippets
+    // showing and update.
+    // @depends - depends on login and routing services
+    // @required - uses firebase storage service and extension api service
+    //
+    var snippetDetailsComponent = {
+      init: function(routingService, loginService, storageService, extensionService) {
+        // cache the storage and extension services
+        this.storageService = storageService;
+        this.extensionService = extensionService;
+        this.routingService = routingService;
+        // subscribe on login change and routing change
+        routingService.addObserver(this);
+        loginService.addObserver(this);
+        extensionService.addObserver(this);
+      },
+      storageService: null,
+      routingAction: null,
+      userId: undefined,
+      //
+      // Routing service callback method
+      //
+      onRoutingChanged: function(oldRouting, routingAction, payload) {
+        this.routingAction = routingAction;
+        this.payload = payload;
 
+        console.log("PAYLOAD IS: ");
+        console.dir(payload);
+        this._updateComponent();
+      },
       //
-      // Save snippet UI part
+      // Authenticatoin service callback method
       //
-      function addSaveForm(payload, idx, pselector) {
+      onAuthChanged: function(currentUser) {
+        this.userId = currentUser ? currentUser.uid : null;
+        this._updateComponent();
+      },
+      //
+      // Load snippet data or update snippet
+      //
+      _updateComponent: function() {
+        // There are only 3 routing actions supported
+        if (this.routingAction != "edit-snippet" &&
+          this.routingAction != "view-snippet" &&
+          this.routingAction != "save-snippet")
+          return;
+        if (!this.extensionService.isInitialized() || this.userId == undefined)
+          return;
+
+        var that = this;
+        //
+        // Check if it is draft
+        //
+        if (this.routingAction == "save-snippet" && (!this.payload || !this.payload.uid)) {
+          if (this.extensionService.isInitialized()) {
+            var working_snippet = this.extensionService.getWorkingSnippet();
+            if (working_snippet != undefined) {
+              this.showContent(working_snippet, null, "#main-dashboard");
+            }
+            else {
+              $("#main-dashboard").append("THERE IS NO SNIPPET DRAFT TO SAVE");
+            }
+          }
+          else {
+            console.log("waiting for extension initialization");
+          }
+        }
+        //
+        // Load content and edit it
+        //
+        else {
+          var snippet = this.extensionService.getSnippetByUid(this.payload.uid);
+          if (snippet) {
+            that.showContent(snippet, null, "#main-dashboard");
+            that.extensionService.subscribeSnippet(this.payload.uid, this);
+          }
+          else {
+          this.storageService.loadContent(this.payload.uid, this.payload.version, function(data) {
+            console.dir(data);
+            if (data) data.uid = that.payload.uid;
+            that.showContent(data, null, "#main-dashboard");
+          });
+          }
+        }
+      },
+      //
+      // Show the UI snippet list item (comment and information)
+      //
+      showContentItem: function(item, index, extApi) {
+
+        var gh_prefix = "https://github.com/";
+        var bb_prefix = "https://bitbucket.org/";
+        var cs_prefix = "https://cs.chromium.org/";
+        var uml_prefix = "https://umlsync-6e2da.firebaseapp.com/";
+        var prefix = "";
+        var img = "";
+
+        if (item.url.indexOf(gh_prefix) == 0) {
+          prefix = gh_prefix;
+          img = "github";
+        } else if (item.url.indexOf(cs_prefix) == 0) {
+          prefix = cs_prefix;
+          img = "google";
+        } else if (item.url.indexOf(bb_prefix) == 0) {
+          prefix = bb_prefix;
+          img = "bitbucket";
+        } else if (item.url.indexOf(uml_prefix) == 0) {
+          prefix = uml_prefix;
+          img = "puzzle-piece";
+        }
+
+        var url_path = item.url.substr(prefix.length);
+
+        var panelTemplate = "";
+        if (img != "google" && img != "puzzle-piece") {
+          var user = url_path.substr(0, url_path.indexOf("/"));
+          url_path = url_path.substr(url_path.indexOf("/") + 1);
+
+          var repo = url_path.substr(0, url_path.indexOf("/"));
+          url_path = url_path.substr(url_path.indexOf("/") + 1);
+
+          panelTemplate = getTemplateGlobal("save-view-item", {
+            item: {
+              source: img,
+              prefix: prefix,
+              img: img,
+              username: user,
+              repo: repo,
+              path: url_path,
+              lineprefix: (img == "github" ? "#L" : "?fileviewer=file-view-default#-"),
+              line: item.line,
+              comment: item.comment,
+              save_vis: (this.routingAction == "save-snippet" ? "block" : "none"),
+              view_vis: (this.routingAction != "save-snippet" ? "block" : "none")
+            }
+          });
+        } else if (img == "google") {
+          panelTemplate = getTemplateGlobal("save-view-item-google", {
+            item: {
+              source: img,
+              prefix: prefix,
+              img: img,
+              lineprefix: "?l=",
+              line: item.line,
+              path: url_path,
+              comment: item.comment,
+              save_vis: (this.routingAction == "save-snippet" ? "block" : "none"),
+              view_vis: (this.routingAction != "save-snippet" ? "block" : "none")
+            }
+          });
+        } // elese if bitbucket or github
+        else {
+          panelTemplate = getTemplateGlobal("save-view-item-uml", {
+            item: {
+              source: img,
+              prefix: prefix,
+              img: img,
+              path: url_path,
+              element: "Class,Package etc..",
+              comment: item.comment,
+              save_vis: (this.routingAction == "save-snippet" ? "block" : "none"),
+              view_vis: (this.routingAction != "save-snippet" ? "block" : "none")
+            }
+          });
+        }
+        //
+        var item = $(panelTemplate).appendTo("#snipettor-save-form");
+        //
+        //  Snippet comment handlers
+        //  remove and edit broadcast and synchronization
+        //
+        item.find(".close-snippet-item-icon").click(function() {
+          var parent = $(this).parent().parent().parent().parent();
+          var idx = $(".panel-default").index(parent);
+
+          extApi.updateSnippetItem("delete", {
+            index: idx
+          });
+          parent.remove();
+        });
+        // edit the text of comment
+        item.find(".fa-edit").click(function() {
+          var parent = $(this).parent().parent();
+          var elemIndex = $(".panel-default").index(parent.parent());
+
+          if (parent.find("textarea").length > 0) {
+            parent.find("textarea").trigger("blur");
+            return;
+          }
+
+          var text = parent.find(".snippet-description").html();
+          parent.find(".snippet-description").hide();
+          parent.append("<textarea style='width:100%;'>" + text + "</textarea>");
+          parent.find("textarea").blur(function() {
+            var xxx = parent.find("textarea").val();
+            parent.find("textarea").remove();
+            if (xxx != text) {
+              parent.find(".snippet-description").text(xxx);
+              extApi.updateSnippetItem("update", {
+                idx: elemIndex,
+                item: {
+                  comment: xxx
+                }
+              });
+            }
+            parent.find(".snippet-description").show();
+          });
+        });
+      },
+      addSaveForm: function(payload, idx, pselector) {
         // remove the previous form and create a new one
         $("#snipettor-save-form").remove();
+        // INITIALIZE TEMPLATE
         var saveTemplate = getTemplateGlobal("save-view", {
           snippet: {
             uid: (payload.uid || ''),
             title: payload.title,
-            tags: (payload.tags ? payload.tags.join(";") : ""),
-            desc: (payload.description || "")
+            tags: (payload.tags ? payload.tags.join(",") : ""),
+            desc: (payload.description || ""),
+            editable: (this.routingAction == "view-snippet" ? "not-editable" : ""),
+            disabled: (this.routingAction == "view-snippet" ? "disabled" : "")
           }
         });
-
+        // Add template to DOM
         $(saveTemplate).appendTo(pselector);
+        // HANDLE FOCUS
+        if (this.routingAction == "save-snippet")
+          $("#snippetor-save-title")
+          .focus()
+          .val($("#snippetor-save-title").val());
+        // Input tags
+        $("#snippetor-save-tags").tagsinput({});
 
+        // configure and initialize buttons
+        this._configureButtonsVisiblity(payload);
+        this._requestLikeAndWatchDetails(payload);
+        this._addButtonsActions(payload);
+      },
+      _requestLikeAndWatchDetails: function(payload) {
+        // there is no like and watch buttons for save mode
+        if (this.routingAction != "view-snippet")
+          return;
+        //
+        // hide like and watch options if user
+        // not authorized
+        //
+        if (!this.userId) {
+          $("[name='like']").hide();
+          $("[name='watch']").hide();
+          return;
+        }
+
+        this.storageService.requestLikeAndWatch(this.userId + payload.uid,
+          function(data) {
+            if (data) {
+              $("[name='like']").attr("status", data.like);
+              $("[name='watch']").attr("status", data.watch);
+            }
+            else {
+              // first time user opened current snippet
+              // or never liked or watched it
+              $("[name='like']").attr("status", false);
+              $("[name='watch']").attr("status", false);
+            }
+          });
+        //
+        // HAndle like and watch
+        var that = this;
+        function handleLW(e) {
+          var like = $("[name='like']").attr("status") == "true",
+          watch = $("[name='watch']").attr("status") == "true";
+          // toggle current like/watch status
+          if ($(this).attr("name") == "like") {
+            like = !like;
+            $("[name='like']").attr("status", like);
+          }
+          else {
+            watch = !watch;
+            $("[name='watch']").attr("status", watch);
+          }
+          that.storageService.setLikeAndWatch(that.userId + payload.uid, {like: like, watch:watch});
+        };
+        //
+        // common handler for like and watch
+        $("[name='like']").click(handleLW);
+        $("[name='watch']").click(handleLW);
+      },
+      _configureButtonsVisiblity: function(payload) {
         // Configure the buttons visibility
-        if (payload.uid) {
+        if (payload.uid && this.routingAction == "view-snippet") {
+          // nothing change therefore nothing to cancel
+          // or delete
           $("[name='delete']").hide();
+          $("[name='cancel']").hide();
+          // it should be possible to fork current snippet
           $("[name='fork']").show();
           if (payload.isModified) {
             $("[name='revert']").show();
@@ -1487,33 +1820,40 @@
             if (payload.isModified)
               alert("SOMETHING GO WRONG: NOT OPENED CONTENT COULD NOT BE MODIFIED.");
           }
-        } else {
+        } else if (this.routingAction == "save-snippet") {
           // There is no support of isModified state for a draft snippet
           $("[name='save']").show();
+          // Cancel cahnge or Delete draft
+          if (this.payload && this.payload.uid) {
+            $("[name='delete']").hide();
+          } else {
+            $("[name='cancel']").hide();
+          }
           $("[name='close']").hide();
+          $("[name='watch']").hide();
+          $("[name='like']").hide();
         }
+      },
+      _addButtonsActions: function(payload) {
+        var that = this;
+        //
+        // Open snippet via extension remote API
+        //
 
-        $("#snipettor-save-form .snippetor-details-play").click(function() {
+        $("[name='play']").click(function() {
           payload.isOpened = true;
-          extensionRemoteApi.openSnippet(payload, idx);
-          $("snipettor-details-page").show();
-          $("snipettor-search-tabs").hide();
+          that.extensionService.openSnippet(payload, 0);
         });
-      }
-
-      function showContent(payload, idx, pselector) {
-        $(pselector).empty();
-
-        addSaveForm(payload, idx, pselector);
-        for (var r = 0; r < payload.items.length; ++r) {
-          showContentItem(payload.items[r], null, extensionRemoteApi);
-
-        } // for
-
+        //
+        // switch snippet to the edit mode
+        //
+        $("[name='edit'").click(function() {
+          that.routingService.changeUrl("/?save=" + payload.uid, true);
+        });
         //
         // Save content to the firebase storage
         //
-        $("#snipettor-save-form>button").click(function(e) {
+        function _forkOrSaveHAndler(e) {
           e.preventDefault();
           e.stopPropagation();
           var action = $(this).attr("name");
@@ -1522,26 +1862,14 @@
             // Update title tags and description
             payload.title = $("#snippetor-save-title").val();
             payload.tags = $("#snippetor-save-tags").val();
-            payload.tags = payload.tags.split(";");
+            payload.tags = payload.tags ? payload.tags.split(";") : [];
             payload.description = $("#snippetor-save-description").val();
 
-            ////////////////  UPDATE THE LIST OF BRANCHES --------
-            var branches = [];
-            for (var x in payload.items) {
-              var item = payload.items[x];
-              if (item.url.indexOf("https://github.com") >= 0) {
-                var z = item.url.split("/");
-                z = z[3] + "/" + z[4];
-                // add unique branch name
-                if (!(z in branches))
-                  branches.push(z);
-              }
-            }
             // make dedicated list of branches
-            payload.branches = branches;
-            ////////////////  UPDATE THE LIST OF BRANCHES --------
+            payload.branches = that._updateListOfBranches(payload);
 
-            var uid = $(this).attr("uid");
+            var uid = $(this).attr("uid") || payload.uid;
+            //var that = this;
             if (!uid || uid == "" || action == "fork") {
               // reset values for a fork
               payload.uid = undefined;
@@ -1549,30 +1877,28 @@
               // reset is modified before save
               payload.isModified = undefined;
               // SAVE CONTENT
-              console.log("SAVE CONTENTNNNNNNNNNNNNNN");
-
-              storageApi.saveContent(payload, function(path) {
+              that.storageService.saveContent(payload, function(path) {
                 var uniquePath = path;
                 uniquePath = path.toString().split("/")[2];
                 uniquePath = uniquePath.substr(1);
 
                 // handle snippet save
-                extensionRemoteApi.onSavedSnippet({
+                that.extensionService.onSavedSnippet({
                   uid: uniquePath
                 });
 
                 setTimeout(function() {
-                  window.location.href = "/?open=" + uniquePath;
+                  window.location.href = "/?save=" + uniquePath;
                 }, 100);
               });
             } else {
-              storageApi.updateContent(uid, payload, function(path) {
+              that.storageService.updateContent(uid, payload, function(path) {
                 var uniquePath = path.uid;
                 uniquePath = path.toString().split("/")[2];
                 uniquePath = uniquePath.substr(1);
 
                 // handle snippet saved
-                extensionRemoteApi.onSavedSnippet({
+                that.extensionService.onSavedSnippet({
                   uid: uniquePath,
                   version: path.version
                 });
@@ -1582,92 +1908,300 @@
                 }, 100);
               }); // update content API
             }
-          } else if (action == "close" || action == "delete") {
-            // Unsubscribed all opened items from snippet
-            // and redirect on the main page
-            // TODO: think about closing of not opened snippet (which was opened for view only and never played)
-            extensionRemoteApi.onSavedSnippet({
-              uid: ""
-            });
-            setTimeout(function() {
-              window.location.href = "/";
-            }, 100);
-          } else if (action == "revert") {
-            alert("DO SOME MAGIC WITH ITEM REVERT TO THE SAME VERSION:");
-          } else if (action == "edit") {
-            payload.isModified = true;
-            if (payload.isOpened)
-              extensionRemoteApi.onEditCurrentSnippet(payload);
-
-            // make it possible to save dialog
-            $("[name='save']").show();
-            $("[name='edit']").hide();
           }
           return false;
-        }); // on sumbit method
-      } // show Content method
+        }; // on sumbit method
+        $("[name='save']").click(_forkOrSaveHAndler);
+        $("[name='fork']").click(_forkOrSaveHAndler);
+        //
+        // cancel current changes
+        //
+        $("[name='cancel'").click(function() {
+          if (that.routingAction == "save-snippet") {
+            that.extensionService.onSavedSnippet({payload: {
+              uid: payload.uid
+            }});
+            setTimeout(function() {
+               window.location.href = "/?open=" + payload.uid;
+             }, 100);
+          }
+        });
+        //
+        // close current snippet
+        //
+        $("[name='close']").click(function() {
+          //
+          // If snippet was opened with extension
+          // then we should notify extension about
+          // snippet is closing
+          that.extensionService.onSavedSnippet({payload: {
+            uid: payload.uid
+          }});
+
+          // close snippet if it was opened
+          if (that.routingAction == "view-snippet") {
+            setTimeout(function() {
+               window.location.href = "/";
+             }, 100);
+          }
+        });
+        //
+        // delete current draft
+        //
+        $("[name='delete'").click(function() {
+          if (that.routingAction == "save-snippet") {
+            that.extensionService.onSavedSnippet(payload);
+            setTimeout(function() {
+               window.location.href = "/";
+             }, 100);
+          }
+        });
+
+      },
+      //
+      // Update list of branches
+      // Note: work-around method to provide the list of branches
+      //       on snippet preview in the list search
+      //
+      _updateListOfBranches: function(payload){
+        var branches = [];
+        for (var x in payload.items) {
+          var item = payload.items[x];
+          if (item.url.indexOf("https://github.com") >= 0) {
+            var z = item.url.split("/");
+            z = z[3] + "/" + z[4];
+            // add unique branch name
+            if (!(z in branches))
+              branches.push(z);
+          }
+        }
+        return branches;
+      },
+      //
+      //  Show content of the snippet
+      //
+      showContent: function(payload, idx, pselector) {
+        $(pselector).empty();
+        //
+        // configure edit/view form based on the user
+        // capabilities
+        this.addSaveForm(payload, idx, pselector);
+        //
+        // list all snippets comment
+        for (var r = 0; r < payload.items.length; ++r) {
+          this.showContentItem(payload.items[r], null, this.extensionService);
+        } // for
+
+        // Toggle tooltips showing
+        $('[data-toggle="tooltip"]').tooltip();
+
+      }, // show Content method
+      //
+      // Snippet extension observer
+      //
+      initCallback: function(response) {
+        this._updateComponent();
+      },
+      handleWorkingSnippet: function(id, force) {
+        if (this.snippets.length > id) {
+          this.working = id;
+          if (this.routingAction == "save-snippet")
+            this.showContent(this.snippets[id], id, "#main-dashboard");
+          else if (force) {
+            window.location.href = "/?save=DRAFT";
+          }
+        }
+      },
+      onSaveCurrentSnippet: function() {
+        window.location.href = "/";
+      },
+      doSwapItems: function(action) {
+        if (action.oldIndex == action.newIndex)
+          return;
+
+        var lis = $('div.panel-default');
+        console.dir(action);
+        console.dir(lis);
+        var ttt = lis.eq(action.oldIndex);
+        var new_ttt = lis.eq(action.newIndex);
+        console.dir(ttt);
+        if (action.newIndex < action.oldIndex) {
+          new_ttt.before(ttt);
+        } else {
+          new_ttt.after(ttt);
+        }
+      }
+    };
+
+    //
+    // List of working snippets
+    //
+    var dropdownListOfSnippetsComponent = {
+      extensionService: null,
+      init: function(extensionService) {
+        this.extensionService = extensionService;
+        // subscribe for an extension service events
+        extensionService.addObserver(this);
+      },
+      //
+      // Snippetor extension observer methods
+      //
+      initialized: false,
+      initCallback: function(response) {
+        this.snippets = response.snippets;
+        this.initialized = true;
+        this.updateWorkingSnippets(response.snippets);
+      },
+      onSaveSnippet: function(payload) {
+        if (!this.initialized)
+          return;
+        /*
+                if (payload.working == this.working) {
+                  this.onSaveCurrentSnippet(payload.working);
+                }
+                // send unsubscribe from the current snippet
+                snippetorExtensionService.onUnsubscribeSnippet(payload.working);
+                setTimeout(function() {
+                  window.location.href = "/";
+                }, 100);
+        */
+        this.snippets[payload.working] = null;
+        this.updateWorkingSnippets(this.snippets);
+
+      },
+      onCreateSnippet: function(payload) {
+        if (!this.initialized)
+          return;
+
+        this.snippets[payload.working] = payload.snippet;
+        this.updateWorkingSnippets(this.snippets);
+      },
+      onOpenSnippet: function(payload) {
+        if (!this.initialized)
+          return;
+
+        this.snippets[payload.working] = payload.snippet;
+        this.updateWorkingSnippets(this.snippets);
+      },
+      snippets: [],
+      working: -1,
+      updateWorkingSnippets: function(snippets) {
+        $("ul#snippetor-select-menu>li.snippet-draft").remove();
+        for (var i in snippets) {
+          var sn = snippets[i];
+          if (sn)
+            $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="' + i + '"><a href="#">' + sn.title + '</a></li>');
+        }
+        var that = this;
+        $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
+          var idx = $(this).attr("idx");
+          idx = parseInt(idx);
+          // Select/open concreate snippet
+          that.extensionService.selectSnippet(idx);
+          //that.handleWorkingSnippet(idx, true);
+        });
+        this.snippets = snippets;
+      }
+    };
+
+    //
+    // Right site user details view
+    //
+    var userDetailsComponent = {
+      init: function(loginService, storageService, routingService) {
+        this.storageService = storageService;
+        loginService.addObserver(this);
+        routingService.addObserver(this);
+      },
+      authInitialized: false,
+      onAuthChanged: function(newUser) {
+        this.authInitialized = true;
+        this.currentUser = newUser;
+        this._updateComponent();
+
+      },
+      onRoutingChanged: function(oldR, newR, payload) {
+        this.routingAction = newR;
+        this.routingPayload = payload;
+        this._updateComponent();
+      },
+      _updateComponent: function() {
+          var that = this;
+        if (this.routingAction == "dashboard" && this.routingPayload && this.routingPayload.uid) {
+          //
+          // Request user information from the firebase storage
+          //
+          this.storageService.getUserInfo(this.routingPayload.uid, function(newUser) {
+            that.showUserDetails(newUser);
+          });
+        }
+        else if (this.routingAction && this.authInitialized && this.currentUser) {
+          this.storageService.getUserInfo(this.currentUser.uid, function(newUser) {
+             that.showUserDetails(newUser);
+           });
+        }
+      },
+      shown: false,
+      showUserDetails: function(user) {
+        if (this.shown || !user) return; this.shown = true;
+        var template = getTemplateGlobal("user-profile-details", {
+          profile: {
+            username: user.name,
+            avatar: user.photo,
+            followers: user.followers,
+            following: user.following
+          }
+        });
+        console.log("MMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+        console.dir(user);
+
+        $(template).prependTo("#snippetor-sidebar-profile");
+      }
+    };
+
+    var container = null;
+    $(document).ready(function() {
+      //
+      // Authentication part
+      //
+      singInMenuComponent.init(firebase, storageApi);
+      tabsController.init(storageApi, routingServiceApi);
+      userDetailsComponent.init(storageApi, storageApi, routingServiceApi);
+
+      // initialize components
+      searchListComponent.init(routingServiceApi, storageApi, storageApi, snippetorExtensionService);
+      snippetDetailsComponent.init(routingServiceApi, storageApi, storageApi, snippetorExtensionService);
+
+
+      // right side menu of the user
+      // userDetailsComponent.init(routingServiceApi, storageApi, storageApi);
+
+      // active snippets dropdown menu
+      // activeSnippetsComponent.init(extensionService);
+
+
+      //
+      // Connect to the firebase storage
+      //
+      storageApi.init();
+
+      // initialize routing information
+      routingServiceApi.init(decodeURI(window.location.href));
 
       //
       // Update snippet navigation tool-bar
       //
       uiHandler = {
-        snippets: [],
-        working: -1,
-        updateWorkingSnippets: function(snippets) {
-          $("ul#snippetor-select-menu>li.snippet-draft").remove();
-          for (var i in snippets) {
-            var sn = snippets[i];
-            if (sn)
-              $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="' + i + '"><a href="#">' + sn.title + '</a></li>');
-          }
-          $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
-            var idx = $(this).attr("idx");
-            idx = parseInt(idx);
-            extensionRemoteApi.selectSnippet(idx);
-            uiHandler.handleWorkingSnippet(idx, true);
-          });
-          uiHandler.snippets = snippets;
-        },
-        handleWorkingSnippet: function(id, force) {
-          if (uiHandler.snippets.length > id) {
-            uiHandler.working = id;
-            if (global_action == "SAVE")
-              showContent(uiHandler.snippets[id], id, "#main-dashboard");
-            else if (force) {
-              window.location.href = "/?save=DRAFT";
-            }
-          }
-        },
-        onSaveCurrentSnippet: function() {
-          window.location.href = "/";
-        },
-        doSwapItems: function(action) {
-          if (action.oldIndex == action.newIndex)
-            return;
-
-          var lis = $('div.panel-default');
-          console.dir(action);
-          console.dir(lis);
-          var ttt = lis.eq(action.oldIndex);
-          var new_ttt = lis.eq(action.newIndex);
-          console.dir(ttt);
-          if (action.newIndex < action.oldIndex) {
-            new_ttt.before(ttt);
-          } else {
-            new_ttt.after(ttt);
-          }
-        },
         updateSearchForm: function(query) {
           $("[name='search']").val(query.search || "");
           $("[name='branches']").val(query.branches || "");
           $("[name='tags']").val(query.tags || "");
         }
       };
-      extensionRemoteApi.addObserver(handlers);
-      extensionRemoteApi.init();
+
+      snippetorExtensionService.init();
     }); // document ready
   </script>
-
 
 </body>
 
