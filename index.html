@@ -485,7 +485,7 @@
         </div>';
       } else if (name == "user-profile-details") {
         template =
-        '<div class="box-shadow-area">\
+          '<div class="box-shadow-area">\
           <div class="avatar-area" style="background: url(\'{profile.avatar}\') center no-repeat">\
             <div class="avatar-bg"></div>\
           </div>\
@@ -706,20 +706,20 @@
                 callback(null, text);
               });
           }); // ref get value
-         }
-        },
-        //
-        // request users's like and watch snippet
-        // details
-        // params:
-        // @request = userUID + snippetUID
-        //
-        requestLikeAndWatch: function(uid, callback) {
-          this.database.ref('likes/'+uid)
-            .once('value')
-            .then(function(complete) {
-              callback(complete.val());
-            });
+        }
+      },
+      //
+      // request users's like and watch snippet
+      // details
+      // params:
+      // @request = userUID + snippetUID
+      //
+      requestLikeAndWatch: function(uid, callback) {
+        this.database.ref('likes/' + uid)
+          .once('value')
+          .then(function(complete) {
+            callback(complete.val());
+          });
       },
       //
       // Update current status of like and watch for the
@@ -774,7 +774,7 @@
       },
       getUserInfo: function(uid, callback) {
         var ref = this.database.ref('user_details/' + uid);
-        ref.once("value").then(function(x1, x2, x3){
+        ref.once("value").then(function(x1, x2, x3) {
           callback(x1.val());
         });
       }
@@ -822,7 +822,11 @@
         window.dispatchEvent(new CustomEvent("onSnipettorAction", {
           detail: {
             action: "subscribe",
-            payload: {payload: {uid:uid}}
+            payload: {
+              payload: {
+                uid: uid
+              }
+            }
           }
         }));
       },
@@ -843,7 +847,7 @@
         //
         // Notify only if we are subscribed on it
         if (payload.working == this.working) {
-        // Handle UI part
+          // Handle UI part
           this.notifyObservers("onAddItem", payload.item, payload.index);
         }
         // Update current cache (TBD: fo future when it will be not necessary to reload all page)
@@ -854,7 +858,7 @@
           return;
         // Handle UI part
         if (payload.working == this.working) {
-          this.notifyObservers("onRemoveItem",  payload.index);
+          this.notifyObservers("onRemoveItem", payload.index);
         }
         this.snippets[payload.working].items.splice(payload.index, 1);
       },
@@ -863,7 +867,7 @@
           return;
         // Handle UI part
         if (payload.working == this.working) {
-          this.notifyObservers("onUpdateItem",  payload.payload.idx, payload.payload.item);
+          this.notifyObservers("onUpdateItem", payload.payload.idx, payload.payload.item);
         }
         this.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
       },
@@ -872,7 +876,7 @@
           return;
         // Handle UI part
         if (payload.working == this.working) {
-          this.notifyObservers("onMoveItem",  payload.payload.oldIndex, payload.payload.newIndex);
+          this.notifyObservers("onMoveItem", payload.payload.oldIndex, payload.payload.newIndex);
         }
         var item = this.snippets[payload.working].items[payload.payload.oldIndex];
         this.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
@@ -890,7 +894,7 @@
       },
       snippets: [],
       working_snippet: -1,
-      initialized : false,
+      initialized: false,
       isInitialized: function() {
         return this.initialized;
       },
@@ -898,7 +902,7 @@
       // Get current working snippet
       //
       getWorkingSnippet: function() {
-        if (this.initialized && this.working_snippet >=0 && this.snippets.length >0) {
+        if (this.initialized && this.working_snippet >= 0 && this.snippets.length > 0) {
           return this.snippets[this.working_snippet];
         }
         return null;
@@ -1228,10 +1232,10 @@
 
         for (var x in this.extensionService.snippets) {
           var item = this.extensionService.snippets[x];
-//          <li><a href="#"><i class="fa fa-fw fa-floppy-o"></i> Draft Snippets</a></li>
-//          <li><a href="#"><i class="fa fa-fw fa-files-o"></i> Opened Snippets</a></li>
-if (item)
-          $('<li class="working_snippet_item"><a href="#"><i class="fa fa-fw fa-edit"></i> ' + item.title.substr(0, 20)+ '</a></li>').prependTo("#working_snippets_list");
+          //          <li><a href="#"><i class="fa fa-fw fa-floppy-o"></i> Draft Snippets</a></li>
+          //          <li><a href="#"><i class="fa fa-fw fa-files-o"></i> Opened Snippets</a></li>
+          if (item)
+            $('<li class="working_snippet_item"><a href="#"><i class="fa fa-fw fa-edit"></i> ' + item.title.substr(0, 20) + '</a></li>').prependTo("#working_snippets_list");
 
         }
         // handle select
@@ -1593,12 +1597,10 @@ if (item)
             var working_snippet = this.extensionService.getWorkingSnippet();
             if (working_snippet != undefined) {
               this.showContent(working_snippet, null, "#main-dashboard");
-            }
-            else {
+            } else {
               $("#main-dashboard").append("THERE IS NO SNIPPET DRAFT TO SAVE");
             }
-          }
-          else {
+          } else {
             console.log("waiting for extension initialization");
           }
         }
@@ -1610,13 +1612,12 @@ if (item)
           if (snippet) {
             that.showContent(snippet, null, "#main-dashboard");
             that.extensionService.subscribeSnippet(this.payload.uid, this);
-          }
-          else {
-          this.storageService.loadContent(this.payload.uid, this.payload.version, function(data) {
-            console.dir(data);
-            if (data) data.uid = that.payload.uid;
-            that.showContent(data, null, "#main-dashboard");
-          });
+          } else {
+            this.storageService.loadContent(this.payload.uid, this.payload.version, function(data) {
+              console.dir(data);
+              if (data) data.uid = that.payload.uid;
+              that.showContent(data, null, "#main-dashboard");
+            });
           }
         }
       },
@@ -1792,8 +1793,7 @@ if (item)
             if (data) {
               $("[name='like']").attr("status", data.like);
               $("[name='watch']").attr("status", data.watch);
-            }
-            else {
+            } else {
               // first time user opened current snippet
               // or never liked or watched it
               $("[name='like']").attr("status", false);
@@ -1803,19 +1803,22 @@ if (item)
         //
         // HAndle like and watch
         var that = this;
+
         function handleLW(e) {
           var like = $("[name='like']").attr("status") == "true",
-          watch = $("[name='watch']").attr("status") == "true";
+            watch = $("[name='watch']").attr("status") == "true";
           // toggle current like/watch status
           if ($(this).attr("name") == "like") {
             like = !like;
             $("[name='like']").attr("status", like);
-          }
-          else {
+          } else {
             watch = !watch;
             $("[name='watch']").attr("status", watch);
           }
-          that.storageService.setLikeAndWatch(that.userId + payload.uid, {like: like, watch:watch});
+          that.storageService.setLikeAndWatch(that.userId + payload.uid, {
+            like: like,
+            watch: watch
+          });
         };
         //
         // common handler for like and watch
@@ -1944,12 +1947,14 @@ if (item)
         //
         $("[name='cancel'").click(function() {
           if (that.routingAction == "save-snippet") {
-            that.extensionService.onSavedSnippet({payload: {
-              uid: payload.uid
-            }});
+            that.extensionService.onSavedSnippet({
+              payload: {
+                uid: payload.uid
+              }
+            });
             setTimeout(function() {
-               window.location.href = "/?open=" + payload.uid;
-             }, 100);
+              window.location.href = "/?open=" + payload.uid;
+            }, 100);
           }
         });
         //
@@ -1960,15 +1965,17 @@ if (item)
           // If snippet was opened with extension
           // then we should notify extension about
           // snippet is closing
-          that.extensionService.onSavedSnippet({payload: {
-            uid: payload.uid
-          }});
+          that.extensionService.onSavedSnippet({
+            payload: {
+              uid: payload.uid
+            }
+          });
 
           // close snippet if it was opened
           if (that.routingAction == "view-snippet") {
             setTimeout(function() {
-               window.location.href = "/";
-             }, 100);
+              window.location.href = "/";
+            }, 100);
           }
         });
         //
@@ -1978,8 +1985,8 @@ if (item)
           if (that.routingAction == "save-snippet") {
             that.extensionService.onSavedSnippet(payload);
             setTimeout(function() {
-               window.location.href = "/";
-             }, 100);
+              window.location.href = "/";
+            }, 100);
           }
         });
 
@@ -1989,7 +1996,7 @@ if (item)
       // Note: work-around method to provide the list of branches
       //       on snippet preview in the list search
       //
-      _updateListOfBranches: function(payload){
+      _updateListOfBranches: function(payload) {
         var branches = [];
         for (var x in payload.items) {
           var item = payload.items[x];
@@ -2152,7 +2159,7 @@ if (item)
         this._updateComponent();
       },
       _updateComponent: function() {
-          var that = this;
+        var that = this;
         if (this.routingAction == "dashboard" && this.routingPayload && this.routingPayload.uid) {
           //
           // Request user information from the firebase storage
@@ -2160,16 +2167,16 @@ if (item)
           this.storageService.getUserInfo(this.routingPayload.uid, function(newUser) {
             that.showUserDetails(newUser);
           });
-        }
-        else if (this.routingAction && this.authInitialized && this.currentUser) {
+        } else if (this.routingAction && this.authInitialized && this.currentUser) {
           this.storageService.getUserInfo(this.currentUser.uid, function(newUser) {
-             that.showUserDetails(newUser);
-           });
+            that.showUserDetails(newUser);
+          });
         }
       },
       shown: false,
       showUserDetails: function(user) {
-        if (this.shown || !user) return; this.shown = true;
+        if (this.shown || !user) return;
+        this.shown = true;
         var template = getTemplateGlobal("user-profile-details", {
           profile: {
             username: user.name,
