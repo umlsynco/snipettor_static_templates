@@ -49,14 +49,14 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Working Snippets <span class="caret"></span></a>
             <ul id="working_snippets_list" class="dropdown-menu">
-              <li class="dropdown-submenu">
+              <!-- li class="dropdown-submenu">
                 <a href="#"><i class="fa fa-fw fa-plus-circle"></i> Create new Snippet</a>
                 <ul class="dropdown-menu">
                   <li><a href="#"><i class="fa fa-fw fa-github"></i> Github Snippet</a></li>
                   <li><a href="#"><i class="fa fa-fw fa-bitbucket"></i> Bitbucket Snippet</a></li>
                   <li><a href="#"><i class="fa fa-fw fa-google"></i> Chromium Snippet</a></li>
                 </ul>
-              </li>
+              </li -->
             </ul>
           </li>
           <li class="search">
@@ -344,16 +344,6 @@
                             </div>\
                             <div class="clearfix"></div>\
                         </div>\
-                        {n_labels}\
-                        <ul class="panel-labels">\
-                            <li>Label 1</li><!--\
-                         --><li>\
-                             SubLabel 1\
-                            </li><!--\
-                         --><li>\
-                             SubLabel 2\
-                            </li>\
-                        </ul>\
                         <div class="panel-body">\
                             <div class="row">\
                                 <div class="col-sm-4 vcenter">\
@@ -829,6 +819,10 @@
             }
           }
         }));
+        // setup working snippet if it was opend via regual web API for view
+        for (var x in this.snippets)
+          if (this.snippets[x] && this.snippets[x].uid == uid)
+            this.working_snippet = x;
       },
       onUnsubscribeSnippet: function(payload) {
         window.dispatchEvent(new CustomEvent("onSnipettorAction", {
@@ -844,43 +838,48 @@
       onAddItem: function(payload) {
         if (!this.initialized)
           return;
-        //
-        // Notify only if we are subscribed on it
-        if (payload.working == this.working) {
-          // Handle UI part
-          this.notifyObservers("onAddItem", payload.item, payload.index);
-        }
         // Update current cache (TBD: fo future when it will be not necessary to reload all page)
         this.snippets[payload.working].items.splice(payload.index, 0, payload.item);
+
+        //
+        // Notify only if we are subscribed on it
+        if (payload.working == this.working_snippet) {
+          // Handle UI part
+          this.notifyObservers("onAddItem", payload);
+        }
       },
       onRemoveItem: function(payload) {
         if (!this.initialized)
           return;
+        this.snippets[payload.working].items.splice(payload.index, 1);
+
         // Handle UI part
         if (payload.working == this.working) {
-          this.notifyObservers("onRemoveItem", payload.index);
+          this.notifyObservers("onRemoveItem", payload);
         }
-        this.snippets[payload.working].items.splice(payload.index, 1);
       },
       onUpdateItem: function(payload) {
         if (!this.initialized)
           return;
+
+       this.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
         // Handle UI part
         if (payload.working == this.working) {
-          this.notifyObservers("onUpdateItem", payload.payload.idx, payload.payload.item);
+          this.notifyObservers("onUpdateItem", payload.payload);
         }
-        this.snippets[payload.working].items[payload.payload.idx].comment = payload.payload.item.comment;
       },
       onMoveItem: function(payload) {
         if (!this.initialized)
           return;
-        // Handle UI part
-        if (payload.working == this.working) {
-          this.notifyObservers("onMoveItem", payload.payload.oldIndex, payload.payload.newIndex);
-        }
+
         var item = this.snippets[payload.working].items[payload.payload.oldIndex];
         this.snippets[payload.working].items.splice(payload.payload.oldIndex, 1);
         this.snippets[payload.working].items.splice(payload.payload.newIndex, 0, item);
+
+        // Handle UI part
+        if (payload.working == this.working) {
+          this.notifyObservers("onMoveItem", payload.payload);
+        }
       },
       //
       // Notify all observers whic has "method"
@@ -899,6 +898,12 @@
         return this.initialized;
       },
       //
+      // Indicates is extension was installed
+      //
+      hasExtension: function() {
+        return true;
+      },
+      //
       // Get current working snippet
       //
       getWorkingSnippet: function() {
@@ -914,7 +919,7 @@
         if (!this.initialized)
           return;
         for (var r in this.snippets) {
-          if (this.snippets[r].uid == uid)
+          if (this.snippets[r] && this.snippets[r].uid == uid)
             return this.snippets[r];
         }
         return null;
@@ -927,17 +932,23 @@
         window.addEventListener("onInit", function(evt) {
           that.initialized = true;
           that.snippets = evt.detail.snippets;
-          that.working_snippet = evt.detail.working_snippet;
+          that.working_snippet = evt.detail.working;
           snippetorExtensionService.notifyObservers("initCallback", evt.detail);
         });
         window.addEventListener("onSnippetChange", function(evt) {
           var payload = evt.detail;
           if (payload.action == "save") {
+            // SAVED SNIPPET NOT LONGER AVAILABLE
+            that.snippets[payload.working] = null;
             snippetorExtensionService.notifyObservers("onSaveSnippet", payload);
           } else if (payload.action == "create") {
+            // CREATE DRAFT FROM SCRATCH
+            that.snippets[payload.working] = payload.snippets;
             snippetorExtensionService.notifyObservers("onCreateSnippet", payload);
           } else if (payload.action == "open") {
-            snippetorExtensionService.notifyObservers("onOpenSnippet", payload);
+            // OPEN SNIPPET FROM THE WEB
+            that.snippets[payload.working] = payload.snippets;
+          snippetorExtensionService.notifyObservers("onOpenSnippet", payload);
           } else if (payload.action == "edit-state") {
             console.log("TODO: ADD edit state handling");
           } else {
@@ -948,13 +959,13 @@
         window.addEventListener("onSnippetItemChange", function(evt) {
           var payload = evt.detail;
           if (payload.action == "add") {
-            snippetorExtensionService.notifyObservers("onAddItem", payload);
+            that.onAddItem(payload);
           } else if (payload.action == "remove") {
-            snippetorExtensionService.notifyObservers("onRemoveItem", payload);
+            that.onRemoveItem(payload);
           } else if (payload.action == "update") {
-            snippetorExtensionService.notifyObservers("onUpdateItem", payload);
+            that.onUpdateItem(payload);
           } else if (payload.action == "move") {
-            snippetorExtensionService.notifyObservers("onMoveItem", payload);
+            that.onMoveItem(payload);
           } else {
             alert("Unknow snippet action: " + payload.action);
           }
@@ -974,7 +985,7 @@
       // Assign current tab to the concreate snippet or snippet draft
       // @param payload - index of the selected item, (-1) is to unsubscribe
       //
-      selectSnippet: function(index) {
+      selectSnippetByIndex: function(index) {
         window.dispatchEvent(new CustomEvent("onSnipettorAction", {
           detail: {
             action: "select-snippet",
@@ -1222,7 +1233,18 @@
         extensionService.addObserver(this);
         this.extensionService = extensionService;
       },
+      //
+      // Update component on all actions
       initCallback: function(response) {
+        this._updateComponent();
+      },
+      onSaveSnippet: function(payload) {
+        this._updateComponent();
+      },
+      onCreateSnippet: function(payload) {
+        this._updateComponent();
+      },
+      onOpenSnippet: function(payload) {
         this._updateComponent();
       },
       _updateComponent: function() {
@@ -1235,12 +1257,30 @@
           //          <li><a href="#"><i class="fa fa-fw fa-floppy-o"></i> Draft Snippets</a></li>
           //          <li><a href="#"><i class="fa fa-fw fa-files-o"></i> Opened Snippets</a></li>
           if (item)
-            $('<li class="working_snippet_item"><a href="#"><i class="fa fa-fw fa-edit"></i> ' + item.title.substr(0, 20) + '</a></li>').prependTo("#working_snippets_list");
+            $('<li class="working_snippet_item" idx="' + x +'">\
+               <a href="#"><i class="fa fa-fw fa-edit"></i>'
+                + item.title.substr(0, 20) + '</a></li>')
+            .prependTo("#working_snippets_list");
 
         }
         // handle select
+        var that = this;
         $("li.working_snippet_item").click(function(e) {
-          alert("HANDLE SELECT SNIPPET PLEASE");
+          if (!that.extensionService.isInitialized()) {
+            return;
+          }
+          if (!that.extensionService.hasExtension()) {
+            alert("You need to install extension");
+            return;
+          }
+          var idx = $(this).attr("idx");
+          idx = parseInt(idx);
+          // Select/open concreate snippet
+          that.extensionService.selectSnippetByIndex(idx);
+          // Reload page with data from extenion
+          setTimeout(function() {
+            window.location.href = "/?save=draft";
+          }, 100);
         });
       }
     };
@@ -1387,7 +1427,7 @@
         // TODO: identify if user callback not got or wrong url
         if (!this.userId &&
           (this.routingAction == "dashboard" || this.routingAction == "feed")) {
-          alert("Wrong sequence or not loginned user");
+          // alert("Wrong sequence or not loginned user");
           return;
         }
 
@@ -1702,7 +1742,16 @@
           });
         }
         //
-        var item = $(panelTemplate).appendTo("#snipettor-save-form");
+
+        var item = $(panelTemplate).addClass("snippet-item");
+        if (index <0 ) {
+          item.appendTo("#snipettor-save-form");
+        }
+        else {
+          var l = $('div.snippet-item:eq('+ (index -1) +')');
+          l.after(item);
+        }
+
         //
         //  Snippet comment handlers
         //  remove and edit broadcast and synchronization
@@ -1744,6 +1793,10 @@
             parent.find(".snippet-description").show();
           });
         });
+
+        // Toggle tooltips showing
+        $('[data-toggle="tooltip"]').tooltip();
+
       },
       addSaveForm: function(payload, idx, pselector) {
         // remove the previous form and create a new one
@@ -1853,7 +1906,7 @@
           // There is no support of isModified state for a draft snippet
           $("[name='save']").show();
           // Cancel cahnge or Delete draft
-          if (this.payload && this.payload.uid) {
+          if ((this.payload && this.payload.uid) || payload.uid) {
             $("[name='delete']").hide();
           } else {
             $("[name='cancel']").hide();
@@ -1891,7 +1944,7 @@
             // Update title tags and description
             payload.title = $("#snippetor-save-title").val();
             payload.tags = $("#snippetor-save-tags").val();
-            payload.tags = payload.tags ? payload.tags.split(";") : [];
+            payload.tags = payload.tags ? payload.tags.split(",") : [];
             payload.description = $("#snippetor-save-description").val();
 
             // make dedicated list of branches
@@ -2022,18 +2075,38 @@
         //
         // list all snippets comment
         for (var r = 0; r < payload.items.length; ++r) {
-          this.showContentItem(payload.items[r], null, this.extensionService);
+          this.showContentItem(payload.items[r], -1, this.extensionService);
         } // for
-
-        // Toggle tooltips showing
-        $('[data-toggle="tooltip"]').tooltip();
-
       }, // show Content method
       //
       // Snippet extension observer
       //
       initCallback: function(response) {
         this._updateComponent();
+      },
+      onSaveSnippet: function(payload) {
+        // Closed current snippet
+        if (payload.working == this.extensionService.working_snippet) {
+          window.location.href = "/";
+        }
+      },
+      // we can get item callback
+      // for the current snippet only
+      onAddItem: function(payload) {
+        this.showContentItem(payload.item, payload.index, this.extensionService);
+      },
+      onRemoveItem: function(payload) {
+        $('li.snippet-item:eq('+ payload.index +')').remove();
+      },
+      onMoveItem: function(payload) {
+        var item = $('li.snippet-item:eq('+ payload.oldIndex +')');
+        $('li.snippet-item:eq('+ payload.newIndex +')').after(item);
+      },
+      onUpdateItem: function(payload) {
+        // Update text area for the corresponding item
+        $('li.snippet-item:eq('+ payload.index +')')
+        .find("textarea")
+        .val(payload.item.comment);
       },
       handleWorkingSnippet: function(id, force) {
         if (this.snippets.length > id) {
@@ -2063,77 +2136,6 @@
         } else {
           new_ttt.after(ttt);
         }
-      }
-    };
-
-    //
-    // List of working snippets
-    //
-    var dropdownListOfSnippetsComponent = {
-      extensionService: null,
-      init: function(extensionService) {
-        this.extensionService = extensionService;
-        // subscribe for an extension service events
-        extensionService.addObserver(this);
-      },
-      //
-      // Snippetor extension observer methods
-      //
-      initialized: false,
-      initCallback: function(response) {
-        this.snippets = response.snippets;
-        this.initialized = true;
-        this.updateWorkingSnippets(response.snippets);
-      },
-      onSaveSnippet: function(payload) {
-        if (!this.initialized)
-          return;
-        /*
-                if (payload.working == this.working) {
-                  this.onSaveCurrentSnippet(payload.working);
-                }
-                // send unsubscribe from the current snippet
-                snippetorExtensionService.onUnsubscribeSnippet(payload.working);
-                setTimeout(function() {
-                  window.location.href = "/";
-                }, 100);
-        */
-        this.snippets[payload.working] = null;
-        this.updateWorkingSnippets(this.snippets);
-
-      },
-      onCreateSnippet: function(payload) {
-        if (!this.initialized)
-          return;
-
-        this.snippets[payload.working] = payload.snippet;
-        this.updateWorkingSnippets(this.snippets);
-      },
-      onOpenSnippet: function(payload) {
-        if (!this.initialized)
-          return;
-
-        this.snippets[payload.working] = payload.snippet;
-        this.updateWorkingSnippets(this.snippets);
-      },
-      snippets: [],
-      working: -1,
-      updateWorkingSnippets: function(snippets) {
-        $("ul#snippetor-select-menu>li.snippet-draft").remove();
-        for (var i in snippets) {
-          var sn = snippets[i];
-          if (sn)
-            $("ul#snippetor-select-menu").prepend('<li class="snippet-draft" idx="' + i + '"><a href="#">' + sn.title + '</a></li>');
-        }
-        var that = this;
-        $("ul#snippetor-select-menu>li.snippet-draft").click(function() {
-          var idx = $(this).attr("idx");
-          idx = parseInt(idx);
-          // Select/open concreate snippet
-          that.extensionService.selectSnippet(idx);
-          //that.handleWorkingSnippet(idx, true);
-        });
-        this.snippets = snippets;
       }
     };
 
